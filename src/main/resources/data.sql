@@ -10,6 +10,8 @@ values (1, 'Spark Plug 1', 'SP123', 9.99, 10, 14, 'Good', 200, 50.0, 20, 1),
        (2, 'Spark Plug 2', 'SP456', 8.99, 12, 16, 'Excellent', 180, 55.0, 18, 2),
        (3, 'Spark Plug 3', 'SP789', 7.99, 8, 12, 'Average', 220, 48.5, 22, 3);
 
+insert into "cars" ()
+
 insert into "users" (username, password, email, enabled)
 values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a', 'admin@test.nl', true ),
        ('Ad', '$2a$12$9GHM0tml7Q0V8hhLzsuSS.CEx47rqHT/OzUPpMda97VMeyFGyGrB2', 'user@test.nl', true);

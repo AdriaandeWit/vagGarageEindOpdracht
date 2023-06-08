@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Setter
 
 @Entity
-@Table(name = "car")
+@Table(name = "cars")
 public class Car {
 
 
