@@ -13,9 +13,9 @@ public enum Body {
     COUPE("b6"),
     CABRIOLET("b7");
 
-    private String bodyCode;
+    private final String bodyCode;
 
-    private Body(String bodyCode) {
+    Body(String bodyCode) {
         this.bodyCode = bodyCode;
     }
 
