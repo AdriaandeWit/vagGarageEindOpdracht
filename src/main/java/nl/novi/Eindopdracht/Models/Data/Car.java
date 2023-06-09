@@ -35,10 +35,9 @@ public class Car {
     private Colors color;
     @Id
     @Column(unique = true,nullable = false)
-    @Pattern(regexp = "[A-Za-z0-9]{2}-[A-Za-z0-9]{3}-[A-Za-z0-9]{2}")
+    @Pattern(regexp = "[A-Za-z0-9]{1,2}-[A-Za-z0-9]{2,3}-[A-Za-z0-9]{2}")
     private String licensePlate;
     @Column
-    @Enumerated(EnumType.STRING)
     private Integer mileAge;
     @Column
     @Enumerated(EnumType.STRING)

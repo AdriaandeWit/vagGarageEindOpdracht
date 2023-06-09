@@ -10,8 +10,15 @@ values (1, 'Spark Plug 1', 'SP123', 9.99, 10, 14, 'Good', 200, 50.0, 20, 1),
        (2, 'Spark Plug 2', 'SP456', 8.99, 12, 16, 'Excellent', 180, 55.0, 18, 2),
        (3, 'Spark Plug 3', 'SP789', 7.99, 8, 12, 'Average', 220, 48.5, 22, 3);
 
-insert into "cars" (id, brand, model, year_of_build, color, license_plate, mile_age, engine_type, body, transmission, fuel)
-values (1, '1cb', '1cr', '2020-07-10', 'c1', 'G-943-JD', 10999, 'et1', 'b1', 't2', 'f2');
+insert into "cars" (id, brand, model, year_of_build, color, license_plate, mile_age, engine_type, body, transmission,
+                    fuel)
+values (1, '1cb', '1cm', '2020-07-10', 'c1', 'G-943-JD', 10999, 'et1', 'b1', 't2', 'f2'),
+       (2, '2cb', '2cm', '2019-09-12', 'c1', 'f-124-JD', 32111, 't2', 'b3', 't1 ', 'f3');
+
+insert into "car_inspection"(id, mile_age, license_plate, inspection_date, car_is_Correct, car_is_fine, has_problem)
+values (1, 10999, 'G-943-JD', '2023-06-09', true, null, 'car has problems with the brakes'),
+       (2, 10999, 'G-943-JD', '2023-06-12', true, 'car has new brakes and is now good to go', null);
+
 insert into "users" (username, password, email, enabled)
 values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a', 'admin@test.nl', true),
        ('Ad', '$2a$12$9GHM0tml7Q0V8hhLzsuSS.CEx47rqHT/OzUPpMda97VMeyFGyGrB2', 'user@test.nl', true);

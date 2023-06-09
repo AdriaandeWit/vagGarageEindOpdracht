@@ -2,6 +2,7 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
+import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 
 @Getter
 public enum Transmission {
@@ -22,7 +23,7 @@ public enum Transmission {
                 return t;
             }
         }
-        return null;
+        throw new EnumNotFoundException("Enum", "transmission", value);
 
     }
 

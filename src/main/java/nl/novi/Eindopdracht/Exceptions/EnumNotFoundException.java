@@ -13,7 +13,11 @@ public class EnumNotFoundException extends RuntimeException{
     public EnumNotFoundException(){
     }
 
-    public EnumNotFoundException(String message, String resourceName, String fieldName, String fieldValue) {
+    public EnumNotFoundException(String message) {
+        super(message);
+    }
+
+    public EnumNotFoundException( String resourceName, String fieldName, String fieldValue) {
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
         this.resourceName = resourceName;
         this.fieldName = fieldName;
