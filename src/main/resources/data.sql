@@ -23,5 +23,5 @@ insert into "users" (username, password, email, enabled)
 values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a', 'admin@test.nl', true),
        ('Ad', '$2a$12$9GHM0tml7Q0V8hhLzsuSS.CEx47rqHT/OzUPpMda97VMeyFGyGrB2', 'user@test.nl', true);
 insert into "authorities" (username, authority)
-values ('admin', 'ADMIN'),
-       ('Ad', 'MECHANIC');
+values ('admin', 'ROLE_ADMIN'),
+       ('Ad', ' ROLE_MECHANIC');

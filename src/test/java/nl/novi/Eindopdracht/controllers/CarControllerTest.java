@@ -100,10 +100,10 @@ public class CarControllerTest {
         customerAccount3.setBankAccountNumber("nl21 INGB 343321");
 
 
-        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.Automatic, Fuel.Petrol, account1, null);
+        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
         car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
         car3 = new Car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.Petrol, account3, null);
-        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.Automatic, Fuel.Petrol, account1, null);
+        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
 
         carDto1 = new CarDto();
         carDto1.setBrand(CarBrand.VOLKSWAGEN);
@@ -114,7 +114,7 @@ public class CarControllerTest {
         carDto1.setMileAge(10202);
         carDto1.setEngineType(EngineType.TSI);
         carDto1.setBody(Body.HATCHBACK);
-        carDto1.setTransmission(Transmission.Automatic);
+        carDto1.setTransmission(Transmission.AUTOMATIC);
         carDto1.setFuel(Fuel.Petrol);
         carDto1.setAccount(account1);
 
@@ -153,7 +153,7 @@ public class CarControllerTest {
         carDto4.setMileAge(23761);
         carDto4.setEngineType(EngineType.TSI);
         carDto4.setBody(Body.STATIONWAGON);
-        carDto4.setTransmission(Transmission.Automatic);
+        carDto4.setTransmission(Transmission.AUTOMATIC);
         carDto4.setFuel(Fuel.Petrol);
         carDto4.setAccount(account1);
 

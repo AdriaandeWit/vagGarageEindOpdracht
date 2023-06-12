@@ -3,6 +3,7 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
+import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 
 @Getter
 public enum CarModel {
@@ -48,15 +49,14 @@ public enum CarModel {
 
     @JsonCreator
     public static CarModel getBodyFormCode(String value) {
-        for (CarModel cM: CarModel.values()) {
+        for (CarModel cM : CarModel.values()) {
             if (cM.getCarModelCode().equals(value)) {
                 return cM;
             }
         }
-        return null;
-
+        throw new EnumNotFoundException("CarModel", "body code", value);
     }
-    }
+}
 
 
 

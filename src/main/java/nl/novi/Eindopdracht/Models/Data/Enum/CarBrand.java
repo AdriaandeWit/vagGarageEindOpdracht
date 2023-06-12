@@ -23,7 +23,7 @@ public enum CarBrand {
                 return cb;
             }
         }
-        throw new EnumNotFoundException("CarBrand ", "car brand Code" ,value);
+        throw new EnumNotFoundException("CarBrand ", "car brand Code", value);
 
 
     }

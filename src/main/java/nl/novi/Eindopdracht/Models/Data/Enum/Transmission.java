@@ -7,7 +7,7 @@ import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 @Getter
 public enum Transmission {
         Manual("t1"),
-        Automatic("t2"),
+        AUTOMATIC("t2"),
         SEMIAUTOMATIC("t3");
 
         private final String transmissionTypeCode;

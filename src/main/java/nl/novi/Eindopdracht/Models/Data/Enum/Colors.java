@@ -2,6 +2,7 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
+import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 
 @Getter
 public enum Colors {
@@ -21,14 +22,15 @@ public enum Colors {
     Colors(String ColorCode) {
         this.ColorCode = ColorCode;
     }
-@JsonCreator
-    public static Colors getColorsFromColorCode(String value){
-        for (Colors c:Colors.values()){
-            if (c.getColorCode().equals(value)){
+
+    @JsonCreator
+    public static Colors getColorsFromColorCode(String value) {
+        for (Colors c : Colors.values()) {
+            if (c.getColorCode().equals(value)) {
                 return c;
             }
         }
-        return null;
+        throw new EnumNotFoundException("Color ", "Color Code", value);
     }
 
 }

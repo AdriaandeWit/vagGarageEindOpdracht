@@ -38,26 +38,6 @@ public class SecurityConfig {
     }
 
 
-/*
-    @Bean //Aithorizatie met jwt
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth").permitAll()
-                .requestMatchers("/secret").hasAuthority("ADMIN")
-                .requestMatchers("/**").hasAnyAuthority("USER", "ADMIN")
-                .anyRequest().denyAll()
-                .and()
-                .addFilterBefore(new JwtRequestFilter( uDService,jwtService), UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        return http.build();
-    }
-
- */
 @Bean //Aithorizatie met jwt
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -66,19 +46,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
                 .requestMatchers(HttpMethod.POST,"/authenticate").permitAll()
-                .requestMatchers("/secret").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/carRepair/**").hasAuthority("MECHANIC")
-                .requestMatchers(HttpMethod.PUT, "/inspection/**").hasAuthority("MECHANIC")
-                .requestMatchers(HttpMethod.GET, "/customer/**").hasAuthority("MECHANIC")
-                .requestMatchers(HttpMethod.GET, "/customer/**").hasAuthority("MECHANIC")
-                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAuthority("MECHANIC")
-                .requestMatchers(HttpMethod.POST, "/car").hasAuthority("SERVICE_SPECIALIST")
-                .requestMatchers(HttpMethod.DELETE, "/car").hasAuthority("SERVICE_SPECIALIST")
-                .requestMatchers(HttpMethod.POST,"/customer/**").hasAuthority("SERVICE_SPECIALIST")
-                .requestMatchers(HttpMethod.PUT,"/customer/**").hasAuthority("SERVICE_SPECIALIST")
-                .requestMatchers(HttpMethod.POST, "/parts").hasAuthority("BACK_OFFICE_EMPLOYEE")
-                .requestMatchers(HttpMethod.PUT, "/parts/**").hasAuthority("BACK_OFFICE_EMPLOYEE")
-                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAuthority("BACK_OFFICE_EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/carRepair/**").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/inspection/**").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.POST, "/car").hasAnyRole("SERVICE_SPECIALIST","ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/car").hasAnyRole("SERVICE_SPECIALIST","ADMIN")
+                .requestMatchers(HttpMethod.POST,"/customer/**").hasAnyRole("SERVICE_SPECIALIST","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/customer/**").hasAnyRole("SERVICE_SPECIALIST","ADMIN")
+                .requestMatchers(HttpMethod.POST, "/parts").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parts/**").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
                 .anyRequest().denyAll()
                 .and()
                 .addFilterBefore(new JwtRequestFilter(myUserDetailService, jwtService), UsernamePasswordAuthenticationFilter.class)
@@ -86,7 +65,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 
-    return http.build();
+        return http.build();
     }
 
 }
