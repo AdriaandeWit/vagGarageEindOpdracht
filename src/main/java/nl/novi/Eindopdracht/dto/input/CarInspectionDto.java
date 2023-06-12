@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class CarInspectionDto {
 
-
+    public  Long id;
 
     public int mileAge;
 

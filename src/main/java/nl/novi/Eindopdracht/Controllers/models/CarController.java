@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
 @RequestMapping("/car")
 @RestController
 @AllArgsConstructor
@@ -25,60 +26,61 @@ public class CarController {
 
 
     @PostMapping("/create/car")
-    public ResponseEntity<Object> createCar(@RequestBody CarDto carDto){
+    public ResponseEntity<Object> createCar(@RequestBody CarDto carDto) {
         carService.createCar(carDto);
 
         URI uri = URI.create(ServletUriComponentsBuilder.
-                fromCurrentRequest().path("/"+ carDto.licensePlate).toUriString());
+                fromCurrentRequest().path("/" + carDto.licensePlate).toUriString());
 
         return ResponseEntity.created(uri).body(carDto);
     }
 
     @GetMapping("find/all-cars")
-    public ResponseEntity<List<CarOutputDto>> getAllCars(){
+    public ResponseEntity<List<CarOutputDto>> getAllCars() {
         List<CarOutputDto> carOutputDto = carService.getAllCars();
         return ResponseEntity.ok(carOutputDto);
     }
 
     @GetMapping("/find/car")
-    public ResponseEntity<CarOutputDto > getCarById(@RequestParam String licensePlate ){
+    public ResponseEntity<CarOutputDto> getCarById(@RequestBody String licensePlate) {
         CarOutputDto carOutputDto = carService.getCarByCarLicensePlate(licensePlate);
         return ResponseEntity.ok(carOutputDto);
     }
 
     @GetMapping("/find/owner")
-    public ResponseEntity<CustomerAccountOutputDto> getAccountByLicensePlate(@RequestParam String licensePlate){
+    public ResponseEntity<CustomerAccountOutputDto> getAccountByLicensePlate(@RequestParam String licensePlate) {
         CustomerAccountOutputDto account = cAService.getAccountByLicensePlate(licensePlate);
         return ResponseEntity.ok(account);
     }
 
     @PutMapping("/update/mileage")
-    public ResponseEntity<CarOutputDto> updateCarMileage(@RequestParam  String licensePlate ,@RequestParam Integer mileage   ){
+    public ResponseEntity<CarOutputDto> updateCarMileage(@RequestParam String licensePlate, @RequestParam Integer mileage) {
 
-        CarOutputDto carDto =  carService.updateCarMileage(licensePlate ,mileage);
+        CarOutputDto carDto = carService.updateCarMileage(licensePlate, mileage);
         return ResponseEntity.ok(carDto);
     }
 
     @PutMapping("/update/engineType")
-    public ResponseEntity<CarOutputDto> updateEngineType(@RequestParam String licensePlate, @RequestParam EngineType engineType){
-        CarOutputDto carDto = carService.updateEngineType(licensePlate,engineType);
+    public ResponseEntity<CarOutputDto> updateEngineType(@RequestParam String licensePlate, @RequestParam EngineType engineType) {
+        CarOutputDto carDto = carService.updateEngineType(licensePlate, engineType);
         return ResponseEntity.ok(carDto);
 
     }
+
     @PutMapping("/car/owner")
-    public ResponseEntity<Object>addAccountToCar(@RequestParam String licensePlate, @RequestParam String customerName){
-        carService.addAccountToCar(licensePlate,customerName);
+    public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate, @RequestParam String customerName) {
+        carService.addAccountToCar(licensePlate, customerName);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteCarById(@RequestParam String licensePlate){
+    public ResponseEntity<String> deleteCarById(@RequestParam String licensePlate) {
         carService.deleteCarByLicensePlate(licensePlate);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/all")
-    public ResponseEntity<String> deleteAllCars(){
+    public ResponseEntity<String> deleteAllCars() {
         carService.deleteAllCars();
         return ResponseEntity.noContent().build();
 

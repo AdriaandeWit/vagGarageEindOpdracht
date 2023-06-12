@@ -21,7 +21,7 @@ public class SparkPlugController {
 
 
     @PostMapping("create")
-    public ResponseEntity<Object> createBrake(@RequestBody SparkPlugDto sparkPlugDto) {
+    public ResponseEntity<Object> createSparkPlug(@RequestBody SparkPlugDto sparkPlugDto) {
         Long id = sparkPlugService.createSparkPlug (sparkPlugDto);
         sparkPlugDto.id = id;
 
@@ -29,13 +29,13 @@ public class SparkPlugController {
                 fromCurrentRequest().path("/" + id).toUriString());
         return ResponseEntity.created(uri).body(sparkPlugDto);
     }
-    @GetMapping("find/all")
-    public ResponseEntity<List<SparkPlugOutputDto>>getAllTyres(){
+    @GetMapping("/find/all")
+    public ResponseEntity<List<SparkPlugOutputDto>>getAllSparkPlugs(){
         List<SparkPlugOutputDto> sparkPlugOutputDtoList = sparkPlugService.getAllSparkPlugs();
         return ResponseEntity.ok(sparkPlugOutputDtoList);
     }
-    @GetMapping("find/{id}")
-    public ResponseEntity<SparkPlugOutputDto>getTyresByID(@PathVariable long id){
+    @GetMapping("/find/{id}")
+    public ResponseEntity<SparkPlugOutputDto>getSparkPlugById(@PathVariable long id){
         SparkPlugOutputDto sparkPlugOutputDto = sparkPlugService.getSparkPlugById(id);
         return ResponseEntity.ok(sparkPlugOutputDto);
     }
