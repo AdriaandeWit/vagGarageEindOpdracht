@@ -50,28 +50,23 @@ public class BrakeController {
     }
 
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id, @RequestParam Integer amountOfParts) {
-        brakeService.updateAmountOfParts(id, amountOfParts);
+    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id, @RequestBody BrakesDto brakesDto) {
+        brakeService.updateAmountOfParts(id, brakesDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/price/{id}/")
-    public ResponseEntity<Object> updatePrice(@PathVariable Long id, @RequestParam Double price) {
-        brakeService.updatePrice(id, price);
+    public ResponseEntity<Object> updatePrice(@PathVariable Long id, @RequestBody BrakesDto brakesDto) {
+        brakeService.updatePrice(id, brakesDto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/update/partNumber/{id}")
-    public ResponseEntity<Object> updatePartNumber(@PathVariable Long id, @RequestParam String partNumber) {
-        brakeService.updatePartNumber(id, partNumber);
+    @PutMapping("/update/part-number/{id}")
+    public ResponseEntity<Object> updatePartNumber(@PathVariable Long id, @RequestBody BrakesDto brakesDto) {
+        brakeService.updatePartNumber(id, brakesDto);
         return ResponseEntity.ok().build();
     }
 
-    //  @PutMapping("/add/brake/{carId}/car/{carId}")
-    //  public ResponseEntity<Object>addBrakeToCar(@PathVariable Long carId,@PathVariable ("carId") Long carId){
-    //      brakeService.addBrakeToCar(carId,carId);
-    //      return  ResponseEntity.ok().build();brakes
-    //  }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBrakeById(@PathVariable Long id) {
@@ -79,7 +74,7 @@ public class BrakeController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/All")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteAllBrakes() {
         brakeService.deleteAllBrakes();
         return ResponseEntity.noContent().build();

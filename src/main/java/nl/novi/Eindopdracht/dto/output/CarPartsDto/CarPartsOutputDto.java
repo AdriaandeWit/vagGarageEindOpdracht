@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import lombok.Setter;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
 
 @JsonTypeInfo(
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Setter
 public abstract class CarPartsOutputDto {
     public Long id;
+    public PartType partType;
     public String partName;
     public String partNumber;
     public Double price;

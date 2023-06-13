@@ -21,27 +21,14 @@ public class SecurityConfig {
     public CustomerPasswordEncoder passwordEncoder;
     public final CustomerUserDetailsService customUserDetailsService;
 
-
-
     private final JwtRequestFilter jwtRequestFilter;
 
 
 
     public SecurityConfig(CustomerUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter) {
-
         this.customUserDetailsService = customUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
-//    private final JwtRequestFilter jwtRequestFilter;
-//    private final CustomerUserDetailsService customerUserDetailsService;
-//
-//
-//
-//    public SecurityConfig(JwtRequestFilter jwtRequestFilter, CustomerUserDetailsService customerUserDetailsService, CustomerPasswordEncoder passwordEncoder) {
-//        this.jwtRequestFilter = jwtRequestFilter;
-//        this.customerUserDetailsService = customerUserDetailsService;
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
     @Bean //Authenticatie met customUserDatailService en passwordEncoder
     public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder, CustomerUserDetailsService customerUserDetailsService) throws Exception {
@@ -66,8 +53,44 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/parts/sparkPlugs/find/{id}").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/parts/sparkPlugs/find/all").hasAnyRole("MECHANIC", "ADMIN")
+                //----------------------------------------Endpoints Spark plug--------------------------------------
+                .requestMatchers(HttpMethod.POST,"/parts/sparkPlugs/create").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET, "/parts/sparkPlugs/find/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/parts/sparkPlugs/find/all").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parts/sparkPlugs/update/amountOfParts/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parts/sparkPlugs/update/price/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parts/sparkPlugs/update/part-number/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parts/sparkPlugs/delete/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parts/sparkPlugs/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                //----------------------------------------Endpoints tyres  --------------------------------------
+                .requestMatchers(HttpMethod.POST,"/parts/tyres/create").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/parts/tyres/find/all").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/parts/tyres/find/{id}").hasAnyRole("MECHANIC","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/tyres/update/amountOfParts/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/tyres/update/price/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/tyres/update/part-number/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/parts/tyres/delete/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/parts/tyres/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                //----------------------------------------Endpoints brakes  --------------------------------------
+                .requestMatchers(HttpMethod.POST,"/parts/brakes/create").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/parts/brakes/find/all").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/parts/brakes/find/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/brakes/update/amountOfParts/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/brakes/update/price/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/parts/brakes/update/part-number/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/parts/brakes/delete/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/parts/brakes/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                //----------------------------------------Endpoints car  --------------------------------------
+                .requestMatchers(HttpMethod.POST, "/car/create/car").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/car/find/all-cars").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/car/find/car").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.GET,"/car/find/owner").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/car/update/mileage").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/car/update/engineType").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/car/car/owner").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/car/delete").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/car/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
+                //----------------------------------------Endpoints car  --------------------------------------
                 .requestMatchers(HttpMethod.POST, "/car").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/car/find/**").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/car").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")

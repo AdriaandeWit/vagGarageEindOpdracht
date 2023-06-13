@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
 @JsonTypeInfo(
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Setter
 public abstract class CarPartsDto {
     public Long id;
+    public PartType partType;
     public String partName;
     public String partNumber;
     public Double price;

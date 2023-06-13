@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BrakesDto extends CarPartsDto{
+public class BrakesDto extends CarPartsDto {
 
     public Double outerDiameter;
     public Double centerDiameter;
@@ -17,7 +17,6 @@ public class BrakesDto extends CarPartsDto{
     public Double wheelStudDiameter;
     public Boolean withoutWheelMountingBolts;
     public Boolean withoutWheelHub;
-
 
 
 }

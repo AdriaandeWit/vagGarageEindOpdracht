@@ -22,39 +22,23 @@ public class CustomerUserDetailsService implements UserDetailsService {
         this.userService = userService;
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Optional<User> ou = userService.getUser(username);
-//        if (ou.isPresent()) {
-//            User user = ou.get();
-//            return new MyUserDetails(user);
-//        } else {
-//            throw new UsernameNotFoundException(username);
-//        }
-//    }
-
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserOutputDto userDto = userService.getUser(username);
 
 
-
-
         String password = userDto.getPassword();
-
 
 
         Set<Authority> authorities = userDto.getAuthorities();
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (Authority authority: authorities) {
+        for (Authority authority : authorities) {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
 
-
         return new org.springframework.security.core.userdetails.User(username, password, grantedAuthorities);
     }
-
 
 
 }

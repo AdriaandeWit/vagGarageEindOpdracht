@@ -40,18 +40,18 @@ public class SparkPlugController {
         return ResponseEntity.ok(sparkPlugOutputDto);
     }
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfSparkPlugs(@PathVariable long id, @RequestParam Integer amountOfParts){
-        sparkPlugService.updateAmountOfParts(id,amountOfParts);
+    public ResponseEntity<SparkPlugOutputDto> updateAmountOfSparkPlugs(@PathVariable long id, @RequestBody SparkPlugDto sPDto){
+        sparkPlugService.updateAmountOfParts(id, sPDto);
         return ResponseEntity.ok().build();
     }
     @PutMapping("/update/price/{id}")
-    public ResponseEntity<Object>updatePrice(@PathVariable long id,@RequestParam Double price){
-        sparkPlugService.updatePrice(id,price);
+    public ResponseEntity<SparkPlugOutputDto>updatePrice(@PathVariable long id,@RequestBody SparkPlugDto sPDto){
+        sparkPlugService.updatePrice(id, sPDto);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/update/partnumber{id}")
-    public ResponseEntity<Object>updatePartNumber(@PathVariable long id, @RequestParam String partNumber){
-        sparkPlugService.updatePartNumber(id,partNumber);
+    @PutMapping("/update/part-number{id}")
+    public ResponseEntity<Object>updatePartNumber(@PathVariable long id, @RequestBody SparkPlugDto sPDto){
+        sparkPlugService.updatePartNumber(id, sPDto);
         return ResponseEntity.ok().build();
     }
 
@@ -61,7 +61,7 @@ public class SparkPlugController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/All")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteAllTyres(){
         sparkPlugService.deleteAllBrakes();
         return ResponseEntity.noContent().build();

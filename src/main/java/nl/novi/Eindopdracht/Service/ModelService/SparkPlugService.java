@@ -49,41 +49,41 @@ public class SparkPlugService {
         return mapToSPDto(Sp);
     }
 
-    public Object updateAmountOfParts(Long id, Integer amountOfParts) {
+    public void updateAmountOfParts(Long id, SparkPlugDto sparkPlugDto) {
         Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if (optionalSparkPlug.isPresent()) {
-            SparkPlug sparkPlug = optionalSparkPlug.get();
-            sparkPlug.setAmountOfParts(amountOfParts);
-            SPRepos.save(sparkPlug);
-        } else {
+        if (optionalSparkPlug.isEmpty()) {
             throw new RecordNotFoundException("amountOfParts", "id", id);
+
+        } else {
+            SparkPlug sparkPlug = optionalSparkPlug.get();
+            sparkPlug.setAmountOfParts(sparkPlugDto.amountOfParts);
+            SPRepos.save(sparkPlug);
+
         }
-        return null;
     }
 
-    public Object updatePrice(Long id, Double price) {
+    public void updatePrice(Long id, SparkPlugDto sparkPlugDto) {
         Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if (optionalSparkPlug.isPresent()) {
-            SparkPlug sparkPlug = optionalSparkPlug.get();
-            sparkPlug.setPrice(price);
-            SPRepos.save(sparkPlug);
-        } else {
+        if (optionalSparkPlug.isEmpty()) {
             throw new RecordNotFoundException("price", "id", id);
+        } else {
+            SparkPlug sparkPlug = optionalSparkPlug.get();
+            sparkPlug.setPrice(sparkPlugDto.price);
+            SPRepos.save(sparkPlug);
         }
-        return null;
+
     }
 
 
-    public Object updatePartNumber(Long id, String partNumber) {
+    public void updatePartNumber(Long id, SparkPlugDto sparkPlugDto) {
         Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if (optionalSparkPlug.isPresent()) {
-            SparkPlug sparkPlug = optionalSparkPlug.get();
-            sparkPlug.setPartNumber(partNumber);
-            SPRepos.save(sparkPlug);
-        } else {
+        if (optionalSparkPlug.isEmpty()) {
             throw new RecordNotFoundException("partNumber", "id", id);
+        } else {
+            SparkPlug sparkPlug = optionalSparkPlug.get();
+            sparkPlug.setPartNumber(sparkPlugDto.partNumber);
+            SPRepos.save(sparkPlug);
         }
-        return null;
     }
 
 

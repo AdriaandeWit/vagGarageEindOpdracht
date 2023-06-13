@@ -41,18 +41,18 @@ public class TyresController {
         return ResponseEntity.ok(tyresOutputDto);
     }
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfTyreSets(@PathVariable long id, @RequestParam Integer amountOfParts){
-        tyresService.updateAmountOfParts(id,amountOfParts);
+    public ResponseEntity<Object> updateAmountOfTyreSets(@PathVariable long id, @RequestBody TyresDto tDto){
+        tyresService.updateAmountOfParts(id,tDto);
         return ResponseEntity.ok().build();
     }
     @PutMapping("/update/price/{id}")
-    public ResponseEntity<Object>updatePrice(@PathVariable long id,@RequestParam Double price){
-        tyresService.updatePrice(id,price);
+    public ResponseEntity<Object>updatePrice(@PathVariable long id,@RequestBody TyresDto tDto){
+        tyresService.updatePrice(id,tDto);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/update/partnumber/{id}")
-    public ResponseEntity<Object>updatePartNumber(@PathVariable long id, @RequestParam String partNumber){
-        tyresService.updatePartNumber(id,partNumber);
+    @PutMapping("/update/part-number/{id}")
+    public ResponseEntity<Object>updatePartNumber(@PathVariable long id, @RequestBody TyresDto tDto){
+        tyresService.updatePartNumber(id,tDto);
         return ResponseEntity.ok().build();
     }
 
