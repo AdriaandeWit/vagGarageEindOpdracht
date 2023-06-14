@@ -7,25 +7,20 @@ import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 @Getter
 public enum EngineType {
 
-    TSI("et1"),
-    FSI("et2"),
-    tSFI("et3"),
-    TDI("et4");
+    TSI,
+    FSI,
+    tSFI,
+    TDI,
+    NOT_FOUND_EXCEPTION;
 
-    private final String EngineTypeCode;
 
-    EngineType(String engineTypeCode) {
-        EngineTypeCode = engineTypeCode;
-    }
 
     @JsonCreator
-    public static EngineType getBodyFormCode(String value) {
-        for (EngineType eT : EngineType.values()) {
-            if (eT.getEngineTypeCode().equals(value)) {
-                return eT;
-            }
+    public static EngineType fromString(String value) {
+        try {
+            return EngineType.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return EngineType.NOT_FOUND_EXCEPTION;
         }
-        throw new EnumNotFoundException("Engine ", "Engine Type Code", value);
-
     }
 }

@@ -2,35 +2,30 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
+
 
 @Getter
 public enum Colors {
-    BLACK("c1"),
-    WHITE("c2"),
-    SILVER("c3"),
-    GRAY("c4"),
-    BLUE("c5"),
-    RED("c6"),
-    BROWN("c7"),
-    GREEN("c8"),
-    YELLOW("c9"),
-    ORANGE("c10");
+    BLACK,
+    WHITE,
+    SILVER,
+    GRAY,
+    BLUE,
+    RED,
+    BROWN,
+    GREEN,
+    YELLOW,
+    ORANGE,
+    NOT_FOUND_EXCEPTION;
 
-    private String ColorCode;
-
-    Colors(String ColorCode) {
-        this.ColorCode = ColorCode;
-    }
 
     @JsonCreator
-    public static Colors getColorsFromColorCode(String value) {
-        for (Colors c : Colors.values()) {
-            if (c.getColorCode().equals(value)) {
-                return c;
-            }
+    public static Colors fromString(String value) {
+        try {
+            return Colors.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return Colors.NOT_FOUND_EXCEPTION;
         }
-        throw new EnumNotFoundException("Color ", "Color Code", value);
     }
 
 }

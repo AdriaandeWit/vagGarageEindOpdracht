@@ -6,26 +6,21 @@ import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 
 @Getter
 public enum CarBrand {
-    AUDI("cb1"),
-    VOLKSWAGEN("cb2"),
-    SEAT("cb3");
+    AUDI,
+    VOLKSWAGEN,
+    SEAT,
+    NOT_FOUND_EXCEPTION;
 
-    private final String CarBrandCode;
-
-    CarBrand(String CarBrandCode) {
-        this.CarBrandCode = CarBrandCode;
-    }
 
     @JsonCreator
-    public static CarBrand getCarBrandFormCarCode(String value) {
-        for (CarBrand cb : CarBrand.values()) {
-            if (cb.getCarBrandCode().equals(value)) {
-                return cb;
-            }
+    public static CarBrand fromString(String value) {
+        try {
+            return CarBrand.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return CarBrand.NOT_FOUND_EXCEPTION;
         }
-        throw new EnumNotFoundException("CarBrand ", "car brand Code", value);
-
-
     }
+
 }
+
 

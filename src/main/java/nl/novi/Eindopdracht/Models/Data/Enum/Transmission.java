@@ -2,29 +2,23 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
+
 
 @Getter
 public enum Transmission {
-        Manual("t1"),
-        AUTOMATIC("t2"),
-        SEMIAUTOMATIC("t3");
+    Manual,
+    AUTOMATIC,
+    SEMIAUTOMATIC,
+    NOT_FOUND_EXCEPTION;
 
-        private final String transmissionTypeCode;
-
-        Transmission(String transmissionType) {
-            this.transmissionTypeCode = transmissionType;
-        }
 
     @JsonCreator
-    public static Transmission getBodyFormCode(String value) {
-        for (Transmission t : Transmission.values()) {
-            if (t.getTransmissionTypeCode().equals(value)) {
-                return t;
-            }
+    public static Transmission fromString(String value) {
+        try {
+            return Transmission.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return Transmission.NOT_FOUND_EXCEPTION;
         }
-        throw new EnumNotFoundException("Enum", "transmission", value);
-
     }
 
 

@@ -48,11 +48,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/carRepair/**").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/inspection/**").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("MECHANIC", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAnyRole("MECHANIC", "ADMIN")
                 //----------------------------------------Endpoints Spark plug--------------------------------------
                 .requestMatchers(HttpMethod.POST,"/parts/sparkPlugs/create").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
                 .requestMatchers(HttpMethod.GET, "/parts/sparkPlugs/find/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
@@ -90,15 +85,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/car/car/owner").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/car/delete").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/car/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE","ADMIN")
-                //----------------------------------------Endpoints car  --------------------------------------
-                .requestMatchers(HttpMethod.POST, "/car").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/car/find/**").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/car").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/customer/**").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/customer/**").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/parts").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/parts/**").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/parts/**").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                //----------------------------------------Endpoints   --------------------------------------
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
