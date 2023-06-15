@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import nl.novi.Eindopdracht.Service.SecurityService.CustomUserDetailsService;
 import nl.novi.Eindopdracht.Service.SecurityService.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,11 +20,11 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     private final JwtService jwtService;
 
-    public JwtRequestFilter(UserDetailsService udService, JwtService jwtService) {
+    public JwtRequestFilter(CustomUserDetailsService udService, JwtService jwtService) {
         this.userDetailsService = udService;
         this.jwtService = jwtService;
     }

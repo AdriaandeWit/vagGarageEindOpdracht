@@ -24,6 +24,7 @@ public class CarInspectionDto {
 
     public String hasProblem;
 
+
     private Car Car;
 
     private List<CarRepair> carRepairList;

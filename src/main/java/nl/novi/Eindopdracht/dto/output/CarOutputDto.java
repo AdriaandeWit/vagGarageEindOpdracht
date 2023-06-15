@@ -28,5 +28,7 @@ public class CarOutputDto {
 
     public CustomerAccount account;
 
+    public CarInspection carInspection;
+
 
 }

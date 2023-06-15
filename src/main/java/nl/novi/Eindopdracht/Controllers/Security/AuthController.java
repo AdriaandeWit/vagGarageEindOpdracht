@@ -2,7 +2,7 @@ package nl.novi.Eindopdracht.Controllers.Security;
 
 
 import nl.novi.Eindopdracht.Service.SecurityService.JwtService;
-import nl.novi.Eindopdracht.Service.SecurityService.CustomerUserDetailsService;
+import nl.novi.Eindopdracht.Service.SecurityService.CustomUserDetailsService;
 import nl.novi.Eindopdracht.payload.AuthenticationRequest;
 import nl.novi.Eindopdracht.payload.AuthenticationResponse;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +21,13 @@ public class AuthController {
 
     private final AuthenticationManager authManager;
 
-    private final CustomerUserDetailsService customerUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager man, JwtService service, CustomerUserDetailsService customerUserDetailsService) {
+    public AuthController(AuthenticationManager man, JwtService service, CustomUserDetailsService customUserDetailsService) {
         this.authManager = man;
-        this.customerUserDetailsService = customerUserDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
         this.jwtService = service;
     }
 
@@ -50,7 +50,7 @@ public class AuthController {
             throw new Exception("Incorrect username or password", ex);
         }
 
-        final UserDetails userDetails = customerUserDetailsService
+        final UserDetails userDetails = customUserDetailsService
                 .loadUserByUsername(username);
 
         final String jwt = jwtService.generateToken(userDetails);

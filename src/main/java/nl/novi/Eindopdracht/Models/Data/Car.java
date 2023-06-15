@@ -9,6 +9,7 @@ import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
 
 
+import javax.naming.Name;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -52,7 +53,8 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private Fuel fuel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_accounts")
     private CustomerAccount account;
 
     @OneToOne

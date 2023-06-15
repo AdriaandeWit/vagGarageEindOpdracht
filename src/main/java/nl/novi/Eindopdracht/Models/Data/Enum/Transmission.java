@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum Transmission {
-    Manual,
+    MANUAL,
     AUTOMATIC,
     SEMIAUTOMATIC,
     NOT_FOUND_EXCEPTION;

@@ -25,5 +25,7 @@ public class CarDto {
 
     public CustomerAccount account;
 
+    public CarInspection carInspection;
+
 
 }

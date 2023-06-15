@@ -2,28 +2,19 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 @Getter
 public enum PartType {
-    Brake("brake"),
-    Tyres("tyres"),
-    SparkPlug("Sparkplug");
-
-
-    private final String partTypeCode;
-
-    PartType(String partType) {
-        this.partTypeCode = partType;
-    }
+    BRAKE,
+    TYRES,
+    SPARKPLUG,
+     NOT_FOUND_EXCEPTION;
 
     @JsonCreator
-    public static PartType getBodyFormCode(String value) {
-        for (PartType pt : PartType.values()) {
-            if (pt.getPartTypeCode().equals(value)) {
-                return pt;
-            }
+    public static PartType fromString(String value) {
+        try {
+            return PartType.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return PartType.NOT_FOUND_EXCEPTION;
         }
-        throw new EnumNotFoundException("Fuel ", "Fuel Code" ,value);
-
     }
 }

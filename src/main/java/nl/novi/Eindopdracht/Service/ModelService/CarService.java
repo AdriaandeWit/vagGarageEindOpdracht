@@ -76,27 +76,28 @@ public class CarService {
     public void addAccountToCar(String licensePlate, String customerName) {
         Car car = getCarByLicensePlate(licensePlate);
         CustomerAccount account = getAccountByCustomerName(customerName);
+
         car.setAccount(account);
         carRepos.save(car);
     }
-    public CarOutputDto updateCarMileage(String licensePlate, Integer mileage) {
+    public CarOutputDto updateCarMileage(String licensePlate, CarDto carDto ) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
             throw new RecordNotFoundException("Can find " + optionalCar + " please enter a anther onwername");
         } else {
             Car car = optionalCar.get();
-            car.setMileAge(mileage);
+            car.setMileAge(carDto.mileAge);
             Car car1 = carRepos.save(car);
             return carToDto(car1);
         }
     }
-    public CarOutputDto updateEngineType(String licensePlate, EngineType engineType) {
+    public CarOutputDto updateEngineType(String licensePlate, CarDto carDto) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
             throw new RecordNotFoundException("Can find " + optionalCar + " please enter a anther onwername");
         } else {
             Car car = optionalCar.get();
-            car.setEngineType(engineType);
+            car.setEngineType(carDto.engineType);
             Car car1 = carRepos.save(car);
             return carToDto(car1);
         }

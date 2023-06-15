@@ -143,7 +143,7 @@ class CarServiceTest {
 
         when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.ofNullable(car1));
 
-       CarOutputDto result = carService.getCarByCarLicensePlate(car1.getLicensePlate());
+        CarOutputDto result = carService.getCarByCarLicensePlate(car1.getLicensePlate());
 
         assertEquals(car1.getLicensePlate(), result.getLicensePlate());
         assertEquals(car1.getBrand(), result.getBrand());

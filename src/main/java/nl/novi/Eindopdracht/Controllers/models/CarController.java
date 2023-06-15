@@ -42,7 +42,7 @@ public class CarController {
     }
 
     @GetMapping("/find/car")
-    public ResponseEntity<CarOutputDto> getCarById(@RequestBody String licensePlate) {
+    public ResponseEntity<CarOutputDto> getCarById(@RequestParam String licensePlate) {
         CarOutputDto carOutputDto = carService.getCarByCarLicensePlate(licensePlate);
         return ResponseEntity.ok(carOutputDto);
     }
@@ -54,20 +54,20 @@ public class CarController {
     }
 
     @PutMapping("/update/mileage")
-    public ResponseEntity<CarOutputDto> updateCarMileage(@RequestParam String licensePlate, @RequestParam Integer mileage) {
+    public ResponseEntity<Object> updateCarMileage(@RequestParam String licensePlate, @RequestBody CarDto carDto) {
 
-        CarOutputDto carDto = carService.updateCarMileage(licensePlate, mileage);
-        return ResponseEntity.ok(carDto);
+        carService.updateCarMileage(licensePlate, carDto);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/engineType")
-    public ResponseEntity<CarOutputDto> updateEngineType(@RequestParam String licensePlate, @RequestParam EngineType engineType) {
-        CarOutputDto carDto = carService.updateEngineType(licensePlate, engineType);
-        return ResponseEntity.ok(carDto);
+    public ResponseEntity<Object> updateEngineType(@RequestParam String licensePlate, @RequestBody CarDto carDto) {
+        carService.updateEngineType(licensePlate, carDto);
+        return ResponseEntity.ok().build();
 
     }
 
-    @PutMapping("/car/owner")
+    @PutMapping("/add/owner")
     public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate, @RequestParam String customerName) {
         carService.addAccountToCar(licensePlate, customerName);
         return ResponseEntity.ok().build();

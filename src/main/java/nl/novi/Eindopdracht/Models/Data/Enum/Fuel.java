@@ -7,7 +7,7 @@ import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 @Getter
 public enum Fuel {
     LGP,
-    Petrol,
+    PETROL,
     DIESEL,
     NOT_FOUND_EXCEPTION;
 

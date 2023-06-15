@@ -45,32 +45,32 @@ public class CarInspectionController {
     }
 
     @PutMapping("/update/mileage/{id}")
-    public ResponseEntity<Object> updateMileAge(@PathVariable Long id, @RequestParam int mileAge) {
-        carInspectionService.updateMileAge(id, mileAge);
+    public ResponseEntity<CarInspectionOutputDto> updateMileAge(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
+        carInspectionService.updateMileAge(id, carInspectionDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/inspectionDate/{id}")
-    public ResponseEntity<Object> updateInspectionDate(@PathVariable Long id, @RequestParam LocalDate inspectionDate) {
-        CarInspectionDto inspectionDto = carInspectionService.updateInspectionDate(id, inspectionDate);
-        return ResponseEntity.ok(inspectionDto);
+    public ResponseEntity<CarInspectionOutputDto> updateInspectionDate(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
+        carInspectionService.updateInspectionDate(id, carInspectionDto);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/update/isFine/statusCar/{id}")
-    public ResponseEntity<String> updateCarIsFine(@PathVariable Long id, @RequestParam String carIsFine) {
-        carInspectionService.updateCarIsFine(id, carIsFine);
+    /*@PutMapping("/update/isFine/statusCar/{id}")
+    public ResponseEntity<String> updateCarIsFine(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
+        carInspectionService.updateCarIsFine(id, carInspectionDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/isIncorrect/statusCar/{id}")
-    public ResponseEntity<String> updateHasProblem(@PathVariable Long id, @RequestParam String hasProblem) {
-        carInspectionService.updateHasProblem(id, hasProblem);
+    public ResponseEntity<String> updateHasProblem(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
+        carInspectionService.updateHasProblem(id, carInspectionDto);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
     @PutMapping("/update/carIsCorrect/{id}")
-    public ResponseEntity<Object> updateStatusCar(@PathVariable Long id, @RequestParam boolean carIsCorrect) {
-        carInspectionService.updateCarStatus(id, carIsCorrect);
+    public ResponseEntity<Object> updateStatusCar(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
+        carInspectionService.updateCarStatus(id, carInspectionDto);
         return ResponseEntity.ok().build();
     }
 

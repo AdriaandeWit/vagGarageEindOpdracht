@@ -54,69 +54,95 @@ public class CarInspectionService {
     }
 
 
-    public CarInspectionDto updateMileAge(Long id, int milleAge) {
+    public CarInspectionOutputDto updateMileAge(Long id, CarInspectionDto carInspectionDto) {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isPresent()) {
             CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setMileAge(milleAge);
+            carInspection.setMileAge(carInspectionDto.mileAge);
             carInspectionRepos.save(carInspection);
         } else {
             throw new RecordNotFoundException("Can find " + id + " please enter a anther carId");
         }
-        return null;
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto;
     }
 
 
-    public CarInspectionDto updateInspectionDate(Long id, LocalDate inspectionDate) {
-        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
-        if (optionalCarInspection.isPresent()) {
-            CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setInspectionDate(inspectionDate);
-            carInspectionRepos.save(carInspection);
-        } else {
-            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
-
-        }
-        return null;
-    }
-
-
-    public CarInspectionDto updateCarIsFine(Long id, String carIsFine) {
+    public CarInspectionOutputDto updateInspectionDate(Long id, CarInspectionDto carInspectionDto) {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isEmpty()) {
             throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
 
         } else {
             CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setCarIsFine(carIsFine);
+            carInspection.setInspectionDate(carInspectionDto.inspectionDate);
             carInspectionRepos.save(carInspection);
         }
-        return null;
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto ;
     }
-
-    public CarInspectionDto updateHasProblem(Long id, String hasProblem) {
-        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
-        if (optionalCarInspection.isEmpty()) {
-            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
-        } else {
-            CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setHasProblem(hasProblem);
-            carInspectionRepos.save(carInspection);
-        }
-        return null;
-
-    }
-
-    public void updateCarStatus(Long id, boolean carIsCorrect) {
+    public CarInspectionOutputDto updateCarStatus(Long id, CarInspectionDto carInspectionDto) {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isEmpty()) {
             throw new CarStatusNotFoundException("status", "id", "id");
         } else {
             CarInspection latestInspection = optionalCarInspection.get();
-            latestInspection.setCarIsCorrect(carIsCorrect);
+            latestInspection.setCarIsCorrect(carInspectionDto.carIsCorrect);
+
+            if (carInspectionDto.carIsCorrect) {
+                latestInspection.setCarIsFine(carInspectionDto.carIsFine);
+                latestInspection.setHasProblem(null);
+            } else {
+                latestInspection.setHasProblem(carInspectionDto.hasProblem);
+                latestInspection.setCarIsFine(null);
+            }
+
             carInspectionRepos.save(latestInspection);
         }
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto;
     }
+
+  /*  public CarInspectionOutputDto updateCarIsFine(Long id, CarInspectionDto carInspectionDto) {
+        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
+        if (optionalCarInspection.isEmpty()) {
+            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
+
+        } else {
+            CarInspection carInspection = optionalCarInspection.get();
+            carInspection.setCarIsFine(carInspectionDto.carIsFine);
+            carInspectionRepos.save(carInspection);
+        }
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto;
+    }
+
+    public CarInspectionOutputDto updateHasProblem(Long id,CarInspectionDto carInspectionDto) {
+        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
+        if (optionalCarInspection.isEmpty()) {
+            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
+        } else {
+            CarInspection carInspection = optionalCarInspection.get();
+            carInspection.setHasProblem(carInspectionDto.hasProblem);
+            carInspectionRepos.save(carInspection);
+        }
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto;
+
+    }
+
+    public CarInspectionOutputDto updateCarStatus(Long id, CarInspectionDto carInspectionDto) {
+        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
+        if (optionalCarInspection.isEmpty()) {
+            throw new CarStatusNotFoundException("status", "id", "id");
+        } else {
+            CarInspection latestInspection = optionalCarInspection.get();
+            latestInspection.setCarIsCorrect(carInspectionDto.carIsCorrect);
+            carInspectionRepos.save(latestInspection);
+        }
+        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
+        return outputDto;
+    }*/
 
 
     public String deleteInspectionById(Long id) {

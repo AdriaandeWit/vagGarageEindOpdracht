@@ -14,12 +14,17 @@ values (1, 'SparkPlug', 'Spark Plug 1', 'SP123', 9.99, 10, 14, 'Good', 200, 50.0
 
 insert into "cars" (id, brand, model, year_of_build, color, license_plate, mile_age, engine_type, body, transmission,
                     fuel)
-values (1, '1cb', '1cm', '2020-07-10', 'c1', 'G-943-JD', 10999, 'et1', 'SUV', 't2', 'f2'),
-       (2, '2cb', '2cm', '2019-09-12', 'c1', 'f-124-JD', 32111, 't2', 'b3', 't1 ', 'f3');
+values (1, 'AUDI', 'A4', '2022-01-01', 'BLACK', 'AB-12-34', 10000, 'TSI', 'SEDAN', 'MANUAL', 'PETROL'),
+       (2, 'VOLKSWAGEN', 'GOLF', '2021-12-01', 'BLUE', 'CD-56-78', 5000, 'FSI', 'HATCHBACK', 'AUTOMATIC', 'DIESEL');
+
+insert into "customer_accounts"(id, customer_name, first_name, last_name, address, phone_number, billing_address, bank_account_number)
+values (1, 'Jan de Vries', 'Jan', 'de Vries', 'Kerkstraat 1', '06-12345678', 'Postbus 123', 'NL12ABCD3456789012'),
+       (2, 'Linda Jansen', 'Linda', 'Jansen', 'Dorpsweg 2', '06-98765432', 'Postbus 456', 'NL98EFGH6789012345'),
+       (3, 'Pieter Bakker', 'Pieter', 'Bakker', 'Hoofdstraat 3', '06-55555555', 'Postbus 789', 'NL34IJKL9012345678');
 
 insert into "car_inspection"(id, mile_age, license_plate, inspection_date, car_is_Correct, car_is_fine, has_problem)
-values (1, 10999, 'G-943-JD', '2023-06-09', true, null, 'car has problems with the brakes'),
-       (2, 10999, 'G-943-JD', '2023-06-12', true, 'car has new brakes and is now good to go', null);
+values (1, 10999, 'AB-12-34', '2023-06-09', true, null, 'car has problems with the brakes'),
+       (2, 10999, 'AB-12-34', '2023-06-12', true, 'car has new brakes and is now good to go', null);
 
 insert into "users" (username, password, email, enabled)
 values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a', 'admin@test.nl', true),

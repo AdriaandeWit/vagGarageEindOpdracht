@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "customerAccounts", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"customerName"}),
         @UniqueConstraint(columnNames = {"phoneNumber"})
 })
