@@ -130,8 +130,8 @@ public class CarRepairService {
 
         repairRepos.save(carRepair);
     }
-}
-    public void addBrakeToCarRepair(long id, long brakeId) {
+
+    /*public void addBrakeToCarRepair(long id, long brakeId) {
         Optional<CarRepair> optionalCarRepair = repairRepos.findById(id);
         Optional<Brakes> optionalBrake = brakeRepos.findById(brakeId);
         if (optionalCarRepair.isEmpty()) {
@@ -174,7 +174,7 @@ public class CarRepairService {
             carR.getCarParts().add(tyres);
             repairRepos.save(carR);
         }
-    }
+    }*/
     public String deleteRepairById(long id) {
         if (repairRepos.existsById(id)) {
             long count = repairRepos.count();
