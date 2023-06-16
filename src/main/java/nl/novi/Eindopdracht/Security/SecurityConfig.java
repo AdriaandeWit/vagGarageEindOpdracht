@@ -90,8 +90,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/carRepair/create/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/carRepair/find/all").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/carRepair/find/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/carRepair/totalCost").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/carRepair/update/car-problem/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/carRepair/update/repair-date/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/carRepair/add/brake/{id}/{brakeId}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/carRepair/add/spark-plug/{id}/{sparkPlugId}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "carRepair/add/tyre/{id}/{tyreId}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/carRepair/delete/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/carRepair/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
 

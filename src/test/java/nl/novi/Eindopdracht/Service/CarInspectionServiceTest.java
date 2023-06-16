@@ -71,7 +71,7 @@ class CarInspectionServiceTest {
         car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
         car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
 
-        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the Car", "", car1, null);
+        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the car", "", car1, null);
         carInspection2 = new CarInspection(2L, 15121, "D-899-QQ", LocalDate.of(2023, 3, 6), false, "", "The car has broken spark plugs.", car1, null);
 
         iDto = new CarInspectionDto();
@@ -80,7 +80,7 @@ class CarInspectionServiceTest {
         iDto.setLicensePlate("D-899-PP");
         iDto.setInspectionDate(LocalDate.of(2023, 5, 15));
         iDto.setCarIsCorrect(true);
-        iDto.setCarIsFine("No problem with the Car");
+        iDto.setCarIsFine("No problem with the car");
         iDto.setHasProblem("");
         iDto.setCar(car1);
         iDto.setCarRepairList(null);
@@ -91,7 +91,7 @@ class CarInspectionServiceTest {
         i2Dto.setLicensePlate("A-311-QQ");
         i2Dto.setInspectionDate(LocalDate.of(2016, 2, 15));
         i2Dto.setCarIsCorrect(true);
-        i2Dto.setCarIsFine("No problem with the Car");
+        i2Dto.setCarIsFine("No problem with the car");
         i2Dto.setHasProblem("");
         i2Dto.setCar(car2);
         i2Dto.setCarRepairList(null);
@@ -270,11 +270,11 @@ class CarInspectionServiceTest {
         when(carInpectionRepos.findById(1L)).thenReturn(Optional.of(carInspection1));
         when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
 
-        carInspectionService.updateCarIsFine(1L, "Car is totally fine");
+        carInspectionService.updateCarIsFine(1L, "car is totally fine");
 
         verify(carInpectionRepos, times(1)).save(carInspection1);
         assertEquals(1L, carInspection1.getId());
-        assertEquals("Car is totally fine", carInspection1.getCarIsFine());
+        assertEquals("car is totally fine", carInspection1.getCarIsFine());
     }
 
     @Test
@@ -293,7 +293,7 @@ class CarInspectionServiceTest {
     void updateHasProblem_ValidId() {
 
         Long id = carInspection1.getId();
-        String hasProblem = "Car has a no profile on te tyres and the brakes are to below the min thickness";
+        String hasProblem = "car has a no profile on te tyres and the brakes are to below the min thickness";
 
         when(carInpectionRepos.findById(id)).thenReturn(Optional.of(carInspection1));
         when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);

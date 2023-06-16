@@ -38,7 +38,7 @@ public class CarInspection {
     private String hasProblem;
 
 
-    //  @OneToOne(mappedBy ="Car")
+    //  @OneToOne(mappedBy ="car")
     @OneToOne(mappedBy = "carInspection")
     private Car Car;
 

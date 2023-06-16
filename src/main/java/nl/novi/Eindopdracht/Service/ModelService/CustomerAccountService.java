@@ -119,7 +119,7 @@ public class CustomerAccountService {
 
     public String deleteCustomerByCustomerName(String customerName) {
         if (!cARepos.existsById(customerName)) {
-            throw new CarNotFoundException("Car  off customer:" + customerName + "is not found");
+            throw new CarNotFoundException("car  off customer:" + customerName + "is not found");
         } else {
             long count = cARepos.count();
             cARepos.deleteById(customerName);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import nl.novi.Eindopdracht.Controllers.models.CarController;
-import nl.novi.Eindopdracht.Models.Data.Car;
+import nl.novi.Eindopdracht.Models.Data.car;
 import nl.novi.Eindopdracht.Models.Data.CustomerAccount;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
 import nl.novi.Eindopdracht.Service.ModelService.CarService;
@@ -51,10 +51,10 @@ public class CarControllerTest {
     CustomerAccountDto accountDto2;
     CustomerAccountDto accountDto3;
 
-    Car car1;
-    Car car2;
-    Car car3;
-    Car car4;
+    car car1;
+    car car2;
+    car car3;
+    car car4;
 
     CarDto carDto1;
     CarDto carDto2;
@@ -100,10 +100,10 @@ public class CarControllerTest {
         customerAccount3.setBankAccountNumber("nl21 INGB 343321");
 
 
-        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
-        car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
-        car3 = new Car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.Petrol, account3, null);
-        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
+        car1 = new car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
+        car2 = new car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
+        car3 = new car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.Petrol, account3, null);
+        car4 = new car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
 
         carDto1 = new CarDto();
         carDto1.setBrand(CarBrand.VOLKSWAGEN);

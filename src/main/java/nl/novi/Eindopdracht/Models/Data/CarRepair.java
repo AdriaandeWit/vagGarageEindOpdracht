@@ -1,14 +1,12 @@
 package nl.novi.Eindopdracht.Models.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.CarParts.CarParts;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,15 +19,18 @@ import java.util.List;
 @Entity
 public class CarRepair {
 @Id
+@GeneratedValue
 private Long id;
 private String car;
+//@Enumerated(EnumType.STRING)
+  //  public PartType partType;
 private String carProblem;
 private LocalDate repairDate;
 private Double partCost;
 private Double laborCost;
 private Double totalCost;
 
-@ManyToMany
+@OneToMany
 private List<CarParts> carParts;
 
 

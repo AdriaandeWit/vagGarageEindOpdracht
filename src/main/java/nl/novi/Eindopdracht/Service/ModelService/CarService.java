@@ -65,7 +65,7 @@ public class CarService {
     }
     public Car getCarByLicensePlate(String licensePlate) {
         Optional<Car> optionalCar = Optional.ofNullable(carRepos.findByLicensePlate(licensePlate)
-                .orElseThrow(() -> new CarNotFoundException("Car", "licensePlate", licensePlate)));
+                .orElseThrow(() -> new CarNotFoundException("car", "licensePlate", licensePlate)));
         return optionalCar.get();
     }
     public CustomerAccount getAccountByCustomerName(String customerName) {
@@ -106,7 +106,7 @@ public class CarService {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         long count;
         if (optionalCar.isEmpty()) {
-            throw new CarNotFoundException("Car with carId:" + licensePlate + "is not found");
+            throw new CarNotFoundException("car with carId:" + licensePlate + "is not found");
         } else {
             count = carRepos.count();
             carRepos.deleteByLicensePlate(licensePlate);
