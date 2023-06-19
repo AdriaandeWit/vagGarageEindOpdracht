@@ -14,6 +14,7 @@ import nl.novi.Eindopdracht.Repository.SprakPlugRepository;
 import nl.novi.Eindopdracht.Repository.TyreRepository;
 import nl.novi.Eindopdracht.dto.input.CarRepairDto;
 
+import nl.novi.Eindopdracht.dto.input.PartDto;
 import nl.novi.Eindopdracht.dto.output.CarRepairOutputDto;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +93,9 @@ public class CarRepairService {
         }
 
     }
-    public void addPartToCarRepair(long carRepairId, long partId, PartType partType) {
+    public void addPartToCarRepair(long carRepairId, PartDto partDto) {
+        PartType partType = partDto.partType;
+        Long partId = partDto.partID;
         Optional<CarRepair> optionalCarRepair = repairRepos.findById(carRepairId);
         if (optionalCarRepair.isEmpty()) {
             throw new RecordNotFoundException("Car repair not found");
@@ -109,7 +112,7 @@ public class CarRepairService {
                 Brakes brakes = optionalBrakes.get();
                 carRepair.getCarParts().add(brakes);
             }
-            case SPARK_PLUG -> {
+            case SPARKPLUG -> {
                 Optional<SparkPlug> optionalSparkPlug = sprakPlugRepos.findById(partId);
                 if (optionalSparkPlug.isEmpty()) {
                     throw new RecordNotFoundException("spark plug", "sparkPlugId", partId);
@@ -189,6 +192,7 @@ public class CarRepairService {
         long count = repairRepos.count();
         repairRepos.deleteAll();
         return "You deleted " + count + "cars";
+
 
     }
 

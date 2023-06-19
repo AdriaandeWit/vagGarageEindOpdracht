@@ -25,6 +25,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static nl.novi.Eindopdracht.Models.Data.Enum.CarBrand.VOLKSWAGEN;
+import static nl.novi.Eindopdracht.Models.Data.Enum.Fuel.PETROL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -68,8 +70,8 @@ class CarInspectionServiceTest {
         account1 = new CustomerAccount(1L, "Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
         account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
 
-        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
-        car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
+        car1 = new Car(VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, PETROL, account1, null);
+        car2 = new Car(AUDI, A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
 
         carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the car", "", car1, null);
         carInspection2 = new CarInspection(2L, 15121, "D-899-QQ", LocalDate.of(2023, 3, 6), false, "", "The car has broken spark plugs.", car1, null);

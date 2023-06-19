@@ -14,9 +14,9 @@ import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
         visible = true
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = BrakesOutputDto.class, name = "Brake"),
-        @JsonSubTypes.Type(value = TyresOutputDto.class, name = "Tyres"),
-        @JsonSubTypes.Type(value = SparkPlugOutputDto.class,name = "SparkPlug")
+        @JsonSubTypes.Type(value = BrakesOutputDto.class, name = "BRAKE"),
+        @JsonSubTypes.Type(value = TyresOutputDto.class, name = "TYRES"),
+        @JsonSubTypes.Type(value = SparkPlugOutputDto.class,name = "SPARKPLUG")
 })
 @Getter
 @Setter
@@ -27,7 +27,5 @@ public abstract class CarPartsOutputDto {
     public String partNumber;
     public Double price;
     public Integer amountOfParts;
-
-
 
 }

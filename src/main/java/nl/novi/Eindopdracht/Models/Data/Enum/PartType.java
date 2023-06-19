@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum PartType {
     BRAKE,
     TYRES,
-    SPARK_PLUG,
+    SPARKPLUG,
      NOT_FOUND_EXCEPTION;
 
     @JsonCreator

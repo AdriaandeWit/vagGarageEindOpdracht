@@ -2,14 +2,13 @@ package nl.novi.Eindopdracht.Models.Data.Enum;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import nl.novi.Eindopdracht.Exceptions.EnumNotFoundException;
 
 @Getter
 public enum EngineType {
 
     TSI,
     FSI,
-    tSFI,
+    TSFI,
     TDI,
     NOT_FOUND_EXCEPTION;
 

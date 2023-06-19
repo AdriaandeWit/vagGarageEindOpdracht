@@ -67,10 +67,10 @@ class CarServiceTest {
         account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
         account3 = new CustomerAccount(3L, "Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
 
-        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
-        car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
-        car3 = new Car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.Petrol, account3, null);
-        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.Petrol, account1, null);
+        car1 = new Car("VOLKSWAGEN", "GOLF", LocalDate.of(2020, 4, 12),"BLACK" , "D-899-PP", 10202, "TSI","HATCHBACk ", "AU"Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
+        car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.MANUAL, Fuel.DIESEL, account2, null);
+        car3 = new Car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.PETROL, account3, null);
+        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
 
         carDto = new CarDto();
         carDto.setBrand(CarBrand.SEAT);
@@ -251,7 +251,7 @@ class CarServiceTest {
     void updateEngineType_InvalidLicensePlate() {
         when(carRepos.findByLicensePlate(car2.getLicensePlate())).thenReturn(Optional.empty());
 
-        assertThrows(RecordNotFoundException.class, () -> carService.updateEngineType(car2.getLicensePlate(), EngineType.tSFI));
+        assertThrows(RecordNotFoundException.class, () -> carService.updateEngineType(car2.getLicensePlate(), EngineType.TSFI));
 
     }
 
@@ -263,11 +263,11 @@ class CarServiceTest {
         when(carRepos.findByLicensePlate(car2.getLicensePlate())).thenReturn(Optional.of(car2));
         when(carRepos.save(car2)).thenReturn(car2);
         //act
-        carService.updateEngineType(car2.getLicensePlate(), EngineType.tSFI);
+        carService.updateEngineType(car2.getLicensePlate(), EngineType.TSFI);
 
         verify(carRepos, times(1)).save(car2);
 
-        assertEquals(EngineType.tSFI, car2.getEngineType());
+        assertEquals(EngineType.TSFI, car2.getEngineType());
 
     }
 

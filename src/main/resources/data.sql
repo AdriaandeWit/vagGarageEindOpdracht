@@ -2,15 +2,15 @@ insert into "brakes" (id, part_type, part_name, part_number, price, amount_of_pa
                       height,
                       min_thickness, surface, disc_thickness, bore_type_number_of_holes, wheel_stud_diameter,
                       without_wheel_mounting_bolts, without_wheel_hub)
-values (1, 'Brake', 'Wheel Assembly', 'W123', 99.99, 4, 18.5, 12.3, 4.8, 3.2, 75.0, 5.0, '4x100', 12.0, false, true),
-       (2, 'Brake', 'Wheel Assembly', 'W124', 114.99, 5, 20.5, 13.00, 6.00, 4, 90, 5.5, '5x120', 15.0, true, false);
+values (1, 'BRAKE', 'Wheel Assembly', 'W123', 99.99, 4, 18.5, 12.3, 4.8, 3.2, 75.0, 5.0, '4x100', 12.0, false, true),
+       (2, 'BRAKE', 'Wheel Assembly', 'W124', 114.99, 5, 20.5, 13.00, 6.00, 4, 90, 5.5, '5x120', 15.0, true, false);
 
 insert into "spark_plug" (id, part_Type, part_name, part_number, price, amount_of_parts, spanner_size, quality,
                           warmth_degree,
                           thread_length, torque, spark_position)
-values (1, 'SparkPlug', 'Spark Plug 1', 'SP123', 9.99, 10, 14, 'Good', 200, 50.0, 20, 1),
-       (2, 'SparkPlug', 'Spark Plug 2', 'SP456', 8.99, 12, 16, 'Excellent', 180, 55.0, 18, 2),
-       (3, 'SparkPlug ', 'Spark Plug 3', 'SP789', 7.99, 8, 12, 'Average', 220, 48.5, 22, 3);
+values (1, 'SPARKPLUG', 'Spark Plug 1', 'SP123', 9.99, 10, 14, 'Good', 200, 50.0, 20, 1),
+       (2, 'SPARKPLUG', 'Spark Plug 2', 'SP456', 8.99, 12, 16, 'Excellent', 180, 55.0, 18, 2),
+       (3, 'SPARKPLUG ', 'Spark Plug 3', 'SP789', 7.99, 8, 12, 'Average', 220, 48.5, 22, 3);
 
 insert into "cars" (id, brand, model, year_of_build, color, license_plate, mile_age, engine_type, body, transmission,
                     fuel)
@@ -31,4 +31,4 @@ values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a',
        ('Ad', '$2a$12$9GHM0tml7Q0V8hhLzsuSS.CEx47rqHT/OzUPpMda97VMeyFGyGrB2', 'user@test.nl', true);
 insert into "authorities" (username, authority)
 values ('admin', 'ROLE_ADMIN'),
-       ('Ad', ' ROLE_MECHANIC');
+       ('Ad', 'ROLE_MECHANIC');
