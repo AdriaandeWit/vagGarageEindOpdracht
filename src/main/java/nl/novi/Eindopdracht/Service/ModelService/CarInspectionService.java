@@ -1,15 +1,19 @@
 package nl.novi.Eindopdracht.Service.ModelService;
 
+import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.CarStatusNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.InspectionNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
+import nl.novi.Eindopdracht.Models.Data.Car;
 import nl.novi.Eindopdracht.Models.Data.CarInspection;
+import nl.novi.Eindopdracht.Models.Data.CarRepair;
 import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
+import nl.novi.Eindopdracht.Repository.CarReparationRepository;
+import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.dto.input.CarInspectionDto;
 import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +23,14 @@ public class CarInspectionService {
 
     private final CarInspectionRepository carInspectionRepos;
 
-    public CarInspectionService(CarInspectionRepository carInspectionRepos) {
+    private final CarReparationRepository carRepairRepos;
+
+    private final CarRepository carRepos;
+
+    public CarInspectionService(CarInspectionRepository carInspectionRepos, CarReparationRepository carRepairRepos, CarRepository carRepos) {
         this.carInspectionRepos = carInspectionRepos;
+        this.carRepairRepos = carRepairRepos;
+        this.carRepos = carRepos;
     }
 
 
@@ -33,7 +43,7 @@ public class CarInspectionService {
     public CarInspectionOutputDto getInspectionByID(long id) {
         Optional<CarInspection> inspection = carInspectionRepos.findById(id);
         if (inspection.isEmpty()) {
-            throw new RecordNotFoundException("Cannot find inspcetion please enter a anther carId ");
+            throw new RecordNotFoundException("Cannot find inspection please enter a anther carId ");
         } else {
             CarInspection i = inspection.get();
             return inspectionToDto(i);
@@ -79,8 +89,9 @@ public class CarInspectionService {
             carInspectionRepos.save(carInspection);
         }
         CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
-        return outputDto ;
+        return outputDto;
     }
+
     public CarInspectionOutputDto updateCarStatus(Long id, CarInspectionDto carInspectionDto) {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isEmpty()) {
@@ -103,51 +114,26 @@ public class CarInspectionService {
         return outputDto;
     }
 
-  /*  public CarInspectionOutputDto updateCarIsFine(Long id, CarInspectionDto carInspectionDto) {
+    public void addRepairToInspection(Long id, Long repairId) {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
-        if (optionalCarInspection.isEmpty()) {
-            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
+        Optional<CarRepair> optionalCarRepair = carRepairRepos.findById(repairId);
 
-        } else {
-            CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setCarIsFine(carInspectionDto.carIsFine);
-            carInspectionRepos.save(carInspection);
-        }
-        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
-        return outputDto;
-    }
-
-    public CarInspectionOutputDto updateHasProblem(Long id,CarInspectionDto carInspectionDto) {
-        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isEmpty()) {
-            throw new RecordNotFoundException("cannot find " + id + "please enter a anther carId");
-        } else {
-            CarInspection carInspection = optionalCarInspection.get();
-            carInspection.setHasProblem(carInspectionDto.hasProblem);
-            carInspectionRepos.save(carInspection);
+            throw new RecordNotFoundException("Car inspection", "id ", id);
         }
-        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
-        return outputDto;
+        if (optionalCarRepair.isEmpty()) {
+            throw new RecordNotFoundException("Car repair", "repair id ", repairId);
+        }
+        CarInspection inspection = optionalCarInspection.get();
+        CarRepair repair = optionalCarRepair.get();
+
+        inspection.getCarRepair().add(repair);
 
     }
-
-    public CarInspectionOutputDto updateCarStatus(Long id, CarInspectionDto carInspectionDto) {
-        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
-        if (optionalCarInspection.isEmpty()) {
-            throw new CarStatusNotFoundException("status", "id", "id");
-        } else {
-            CarInspection latestInspection = optionalCarInspection.get();
-            latestInspection.setCarIsCorrect(carInspectionDto.carIsCorrect);
-            carInspectionRepos.save(latestInspection);
-        }
-        CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
-        return outputDto;
-    }*/
-
 
     public String deleteInspectionById(Long id) {
         if (!carInspectionRepos.existsById(id)) {
-            throw new InspectionNotFoundException("Inspection with carId" + id + "is not found");
+            throw new InspectionNotFoundException("Car","CarId", id);
         } else {
             Long count = carInspectionRepos.count();
             carInspectionRepos.deleteById(id);
@@ -190,6 +176,7 @@ public class CarInspectionService {
         return dto;
 
     }
+
 
 
 }

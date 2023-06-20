@@ -17,12 +17,17 @@ insert into "cars" (id, brand, model, year_of_build, color, license_plate, mile_
 values (1, 'AUDI', 'A4', '2022-01-01', 'BLACK', 'AB-12-34', 10000, 'TSI', 'SEDAN', 'MANUAL', 'PETROL'),
        (2, 'VOLKSWAGEN', 'GOLF', '2021-12-01', 'BLUE', 'CD-56-78', 5000, 'FSI', 'HATCHBACK', 'AUTOMATIC', 'DIESEL');
 
-insert into "customer_accounts"(id, customer_name, first_name, last_name, address, phone_number, billing_address, bank_account_number)
+insert into "customer_accounts"(id, customer_name, first_name, last_name, address, phone_number, billing_address,
+                                bank_account_number)
 values (1, 'Jan de Vries', 'Jan', 'de Vries', 'Kerkstraat 1', '06-12345678', 'Postbus 123', 'NL12ABCD3456789012'),
        (2, 'Linda Jansen', 'Linda', 'Jansen', 'Dorpsweg 2', '06-98765432', 'Postbus 456', 'NL98EFGH6789012345'),
        (3, 'Pieter Bakker', 'Pieter', 'Bakker', 'Hoofdstraat 3', '06-55555555', 'Postbus 789', 'NL34IJKL9012345678');
 
-insert into "car_inspection"(id, mile_age, license_plate, inspection_date, car_is_Correct, car_is_fine, has_problem)
+insert into "car_repairs"(id, car, car_problem, repair_date, part_cost, labor_cost, total_cost)
+values (1, 'car1', 'car have two not working spark plug ', '2023-05-12', 140.00, 150.00, null),
+       (2, 'car2', 'car tyres have no profile', '2023-04-10', 300.00, 150.00, null);
+
+insert into "car_inspections"(id, mile_age, license_plate, inspection_date, car_is_Correct, car_is_fine, has_problem)
 values (1, 10999, 'AB-12-34', '2023-06-09', true, null, 'car has problems with the brakes'),
        (2, 10999, 'AB-12-34', '2023-06-12', true, 'car has new brakes and is now good to go', null);
 

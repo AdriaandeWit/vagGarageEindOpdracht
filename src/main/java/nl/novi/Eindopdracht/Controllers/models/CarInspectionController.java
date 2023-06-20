@@ -1,6 +1,8 @@
 package nl.novi.Eindopdracht.Controllers.models;
 
+import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 import nl.novi.Eindopdracht.Service.ModelService.CarInspectionService;
+import nl.novi.Eindopdracht.Service.ModelService.CarService;
 import nl.novi.Eindopdracht.dto.input.CarInspectionDto;
 import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("inspection")
@@ -17,8 +18,11 @@ public class CarInspectionController {
 
     private final CarInspectionService carInspectionService;
 
-    public CarInspectionController(CarInspectionService carInspectionService) {
+    private final CarService carService;
+
+    public CarInspectionController(CarInspectionService carInspectionService, CarService carService) {
         this.carInspectionService = carInspectionService;
+        this.carService = carService;
     }
 
     @PostMapping("/create/")
@@ -56,24 +60,34 @@ public class CarInspectionController {
         return ResponseEntity.ok().build();
     }
 
-    /*@PutMapping("/update/isFine/statusCar/{id}")
-    public ResponseEntity<String> updateCarIsFine(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
-        carInspectionService.updateCarIsFine(id, carInspectionDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/update/isIncorrect/statusCar/{id}")
-    public ResponseEntity<String> updateHasProblem(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
-        carInspectionService.updateHasProblem(id, carInspectionDto);
-        return ResponseEntity.ok().build();
-    }*/
-
     @PutMapping("/update/carIsCorrect/{id}")
     public ResponseEntity<Object> updateStatusCar(@PathVariable Long id, @RequestBody CarInspectionDto carInspectionDto) {
         carInspectionService.updateCarStatus(id, carInspectionDto);
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/add/repair/{id}/{repairId}")
+    public ResponseEntity<String> addRepairToInspection(@PathVariable long id,@PathVariable long repairId){
+        try {
+            carInspectionService.addRepairToInspection(id,repairId);
+            return ResponseEntity.ok("Repair add to inspection");
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    @PutMapping("/add/car/{inspectionId}")
+    public ResponseEntity<String> addInspectionToCar( @PathVariable long inspectionId,@RequestParam String licensePlate){
+     try {
+         carService.addInspectionToCar(inspectionId,licensePlate);
+         return ResponseEntity.ok("car added successfully to inspection")
+     }catch (RecordNotFoundException e){
+         return ResponseEntity.notFound().build();
+     }catch (IllegalArgumentException e){
+         return ResponseEntity.badRequest().body(e.getMessage());
+     }
+    }
 
     @DeleteMapping("/delete/inspection/{id}")
     public ResponseEntity<String> deleteInspectionById(@PathVariable Long id) {

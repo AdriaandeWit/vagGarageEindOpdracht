@@ -30,7 +30,8 @@ public abstract class CarParts {
     private Integer amountOfParts;
 
 
-    @ManyToMany
-    private List<CarRepair> carRepair;
+    @ManyToOne
+    @JoinColumn(name = "car_repair_id")
+    private CarRepair carRepair;
 
 }

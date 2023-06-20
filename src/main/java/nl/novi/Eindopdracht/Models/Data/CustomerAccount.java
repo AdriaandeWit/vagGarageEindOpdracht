@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CustomerAccount{
- @GeneratedValue
+public class CustomerAccount {
+    @GeneratedValue
     private Long id;
     @Id
     private String customerName;
@@ -27,8 +27,7 @@ public class CustomerAccount{
     private String billingAddress;
     private String bankAccountNumber;
 
-    @OneToMany
-    @JsonIgnore
+    @OneToMany(mappedBy = "account")
     List<Car> cars;
 
 

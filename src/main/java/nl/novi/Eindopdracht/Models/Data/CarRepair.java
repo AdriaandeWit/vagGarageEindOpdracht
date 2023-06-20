@@ -8,6 +8,7 @@ import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.CarParts.CarParts;
 import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
+import javax.naming.Name;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,20 +18,19 @@ import java.util.List;
 @Setter
 
 @Entity
+@Table(name = "car_repairs" )
 public class CarRepair {
 @Id
 @GeneratedValue
 private Long id;
 private String car;
-//@Enumerated(EnumType.STRING)
-  //  public PartType partType;
 private String carProblem;
 private LocalDate repairDate;
 private Double partCost;
 private Double laborCost;
 private Double totalCost;
 
-@OneToMany
+@OneToMany(mappedBy = "carRepair" )
 private List<CarParts> carParts;
 
 

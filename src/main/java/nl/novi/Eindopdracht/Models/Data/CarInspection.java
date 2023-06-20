@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table
+@Table(name = "car_inspections")
 public class CarInspection {
     @Id
     @Column
@@ -38,11 +38,13 @@ public class CarInspection {
     private String hasProblem;
 
 
-    //  @OneToOne(mappedBy ="car")
-    @OneToOne(mappedBy = "carInspection")
+
+    @ManyToOne
+    @JoinColumn(name = "car_id")
     private Car Car;
 
     @OneToMany
+    @JoinColumn(name = "car_repair_id")
     private List<CarRepair> carRepair;
 
 

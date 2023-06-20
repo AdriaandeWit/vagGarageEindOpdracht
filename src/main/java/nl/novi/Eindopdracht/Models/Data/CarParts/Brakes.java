@@ -30,7 +30,7 @@ public class Brakes extends CarParts {
     private Boolean withoutWheelHub;
 
     public Brakes( Long id, @NonNull PartType partType, @NonNull String partName, @NonNull String partNumber, @NonNull Double price, @NonNull Integer amountOfParts, List<CarRepair> carRepair, Double outerDiameter, Double centerDiameter, Double height, Double minThickness, Double surface, Double discThickness, String boreTypeNumberOfHoles, Double wheelStudDiameter, Boolean withoutWheelMountingBolts, Boolean withoutWheelHub) {
-        super(id,partType, partName, partNumber, price, amountOfParts, carRepair);
+        super(id,partType, partName, partNumber, price, amountOfParts, (CarRepair) carRepair);
         this.outerDiameter = outerDiameter;
         this.centerDiameter = centerDiameter;
         this.height = height;

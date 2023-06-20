@@ -1,6 +1,15 @@
 package nl.novi.Eindopdracht.Exceptions;
 
-public class InspectionNotFoundException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class InspectionNotFoundException extends RuntimeException {
+
+    private String resourceName;
+    private String fieldName;
+    private Long fieldValue;
+
 
     public InspectionNotFoundException() {
     }
@@ -8,4 +17,14 @@ public class InspectionNotFoundException extends RuntimeException{
     public InspectionNotFoundException(String message) {
         super(message);
     }
+
+
+    public InspectionNotFoundException(String resourceName, String fieldName, Long fieldValue) {
+        super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
+        this.resourceName = resourceName;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+
+    }
+
 }

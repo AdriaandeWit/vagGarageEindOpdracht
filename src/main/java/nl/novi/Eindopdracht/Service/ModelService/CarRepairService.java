@@ -134,50 +134,6 @@ public class CarRepairService {
         repairRepos.save(carRepair);
     }
 
-    /*public void addBrakeToCarRepair(long id, long brakeId) {
-        Optional<CarRepair> optionalCarRepair = repairRepos.findById(id);
-        Optional<Brakes> optionalBrake = brakeRepos.findById(brakeId);
-        if (optionalCarRepair.isEmpty()) {
-            throw new RecordNotFoundException("Repair", "id", id);
-        }
-        if (optionalBrake.isEmpty()) {
-            throw new RecordNotFoundException("brake", "brakeId", brakeId);
-        } else {
-            CarRepair carR = optionalCarRepair.get();
-            Brakes brake = optionalBrake.get();
-            carR.getCarParts().add(brake);
-            repairRepos.save(carR);
-        }
-    }
-        public void addSparkPlugToCarRepair(long id, long sparkPlugId) {
-        Optional<CarRepair> optionalCarRepair1 = repairRepos.findById(id);
-        Optional<SparkPlug> optionalSparkPlug = sprakPlugRepos.findById(sparkPlugId);
-        if(optionalCarRepair1.isEmpty()){
-            throw new RecordNotFoundException("Repair","id",id);
-        }if(optionalSparkPlug.isEmpty()){
-            throw new RecordNotFoundException("Spark-plug","sparkPlugId" ,sparkPlugId);
-        }else {
-            CarRepair carR = optionalCarRepair1.get();
-            SparkPlug sparkPlug = optionalSparkPlug.get();
-            carR.getCarParts().add(sparkPlug);
-            repairRepos.save(carR);
-        }
-    }
-    public void addTyreToCarRepair(long id, long tyreId) {
-        Optional<CarRepair> optionalCarRepair2 = repairRepos.findById(id);
-        Optional<Tyres> optionalTyre  = tyreRepos.findById(tyreId);
-        if(optionalCarRepair2.isEmpty()){
-            throw new RecordNotFoundException("Repair","id",id);
-        }if(optionalTyre.isEmpty()){
-            throw new RecordNotFoundException("Tyre","tyreId" ,tyreId);
-        }else {
-            CarRepair carR = optionalCarRepair2.get();
-
-            Tyres tyres = optionalTyre.get();
-            carR.getCarParts().add(tyres);
-            repairRepos.save(carR);
-        }
-    }*/
     public String deleteRepairById(long id) {
         if (repairRepos.existsById(id)) {
             long count = repairRepos.count();
@@ -195,23 +151,6 @@ public class CarRepairService {
 
 
     }
-
-/*    public  getTotalCostByID(long id) {
-
-        Optional<CarRepair> optionalCarRepair = repairRepos.findById(id);
-        if (optionalCarRepair.isEmpty()) {
-            throw new CarRepairNotFoundException("car Repair", "id", id);
-        }
-        CarRepair carRepair = optionalCarRepair.get();
-        Double totalCost = carRepair.getTotalCost() + carRepair.getLaborCost();
-
-        CarRepairOutputDto outputDto = new CarRepairOutputDto();
-        outputDto.setId(carRepair.getId());
-        outputDto.setTotalCost(totalCost);
-        return outputDto;
-    }*/
-
-
 
 
     public CarRepairOutputDto RepairToDto(CarRepair repair) {

@@ -5,8 +5,9 @@ import nl.novi.Eindopdracht.Exceptions.AccountNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 import nl.novi.Eindopdracht.Models.Data.Car;
+import nl.novi.Eindopdracht.Models.Data.CarInspection;
 import nl.novi.Eindopdracht.Models.Data.CustomerAccount;
-import nl.novi.Eindopdracht.Models.Data.Enum.EngineType;
+import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 import nl.novi.Eindopdracht.dto.input.CarDto;
@@ -22,11 +23,13 @@ public class CarService {
     private final CarRepository carRepos;
 
     private final CustomerAccountRepository cARepos;
+    private final CarInspectionRepository carInspectionRepos;
 
 
-    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos) {
+    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos, CarInspectionRepository carInspectionRepos) {
         this.carRepos = carRepos;
         this.cARepos = cARepos;
+        this.carInspectionRepos = carInspectionRepos;
     }
 
     public Car createCar(CarDto carDto) {
@@ -100,6 +103,24 @@ public class CarService {
             car.setEngineType(carDto.engineType);
             Car car1 = carRepos.save(car);
             return carToDto(car1);
+        }
+    }
+
+    public void addInspectionToCar(long inspectionId, String licensePlate) {
+        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(inspectionId);
+        Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
+
+        if(optionalCarInspection.isEmpty()){
+            throw new RecordNotFoundException("Inspection", "inspectionId", inspectionId);
+        }
+        if (optionalCar.isEmpty()){
+            throw new CarNotFoundException("car","car license plate", licensePlate);
+        }
+        else{
+            CarInspection inspection = optionalCarInspection.get();
+            Car car = optionalCar.get();
+
+            car.getCarInspection().add(inspection);
         }
     }
     public String deleteCarByLicensePlate(String licensePlate) {

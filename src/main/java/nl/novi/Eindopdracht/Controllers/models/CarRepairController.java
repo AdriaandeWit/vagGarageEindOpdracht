@@ -82,25 +82,6 @@ public class CarRepairController {
         }
         }
 
-
-  /*  @PutMapping("/add/brake/{id}/{brakeId}")
-    public ResponseEntity<Object> addBrakeToCarRepair(@PathVariable long id, @PathVariable long brakeId) {
-        reparationService.addBrakeToCarRepair(id, brakeId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/add/spark-plug/{id}/{sparkPlugId}")
-    public ResponseEntity<Object> addSparkPlugToCarRepair(@PathVariable long id, @PathVariable long sparkPlugId) {
-        reparationService.addSparkPlugToCarRepair(id, sparkPlugId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/add/tyre/{id}/{tyreId}")
-    public ResponseEntity<Object> addTyreToCarRepair(@PathVariable long id, @PathVariable long tyreId) {
-        reparationService.addTyreToCarRepair(id, tyreId);
-        return ResponseEntity.ok().build();
-    }*/
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteRepairById(@PathVariable long id) {
         reparationService.deleteRepairById(id);

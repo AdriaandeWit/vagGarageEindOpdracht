@@ -11,6 +11,7 @@ import nl.novi.Eindopdracht.Models.Data.Enum.*;
 
 import javax.naming.Name;
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,8 +58,8 @@ public class Car {
     @JoinColumn(name = "customer_accounts")
     private CustomerAccount account;
 
-    @OneToOne
-    private CarInspection carInspection;
+    @OneToMany(mappedBy = "Car")
+    private List<CarInspection>  carInspection;
 
 
 
