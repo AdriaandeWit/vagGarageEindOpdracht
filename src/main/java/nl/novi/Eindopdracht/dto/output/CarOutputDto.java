@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 public class CarOutputDto {
 
-
+    public Long id;
     public CarBrand brand;
 
     public CarModel model;
@@ -25,7 +25,6 @@ public class CarOutputDto {
     public Body body;
     public Transmission transmission;
     public Fuel fuel;
-
     public CustomerAccount account;
 
     public CarInspection carInspection;

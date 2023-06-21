@@ -37,6 +37,7 @@ public class CarService {
         carRepos.save(car);
         return car;
     }
+
     public List<CarOutputDto> getAllCars() {
         List<CarOutputDto> collection = new ArrayList<>();
         List<Car> list = carRepos.findAll();
@@ -45,6 +46,7 @@ public class CarService {
         }
         return collection;
     }
+
     public CarOutputDto getCarByCarLicensePlate(String licensePlate) {
         Optional<Car> carOptional = carRepos.findByLicensePlate(licensePlate);
         if (carOptional.isEmpty()) {
@@ -54,6 +56,7 @@ public class CarService {
             return carToDto(c);
         }
     }
+
     public List<CarOutputDto> getAllCarsByCustomerName(String customerName) {
         Optional<CustomerAccount> optionalAccount = cARepos.findAccountByCustomerName(customerName);
         if (optionalAccount.isEmpty()) {
@@ -66,16 +69,19 @@ public class CarService {
         }
         return carOutputDtos;
     }
+
     public Car getCarByLicensePlate(String licensePlate) {
         Optional<Car> optionalCar = Optional.ofNullable(carRepos.findByLicensePlate(licensePlate)
                 .orElseThrow(() -> new CarNotFoundException("car", "licensePlate", licensePlate)));
         return optionalCar.get();
     }
+
     public CustomerAccount getAccountByCustomerName(String customerName) {
         Optional<CustomerAccount> optionalAccount = Optional.ofNullable(cARepos.findAccountByCustomerName(customerName)
                 .orElseThrow(() -> new AccountNotFoundException("account", "customerName", customerName)));
         return optionalAccount.get();
     }
+
     public void addAccountToCar(String licensePlate, String customerName) {
         Car car = getCarByLicensePlate(licensePlate);
         CustomerAccount account = getAccountByCustomerName(customerName);
@@ -83,7 +89,8 @@ public class CarService {
         car.setAccount(account);
         carRepos.save(car);
     }
-    public CarOutputDto updateCarMileage(String licensePlate, CarDto carDto ) {
+
+    public CarOutputDto updateCarMileage(String licensePlate, CarDto carDto) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
             throw new RecordNotFoundException("Can find " + optionalCar + " please enter a anther onwername");
@@ -94,6 +101,7 @@ public class CarService {
             return carToDto(car1);
         }
     }
+
     public CarOutputDto updateEngineType(String licensePlate, CarDto carDto) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
@@ -110,19 +118,20 @@ public class CarService {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(inspectionId);
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
 
-        if(optionalCarInspection.isEmpty()){
+        if (optionalCarInspection.isEmpty()) {
             throw new RecordNotFoundException("Inspection", "inspectionId", inspectionId);
         }
-        if (optionalCar.isEmpty()){
-            throw new CarNotFoundException("car","car license plate", licensePlate);
-        }
-        else{
+        if (optionalCar.isEmpty()) {
+            throw new CarNotFoundException("car", "car license plate", licensePlate);
+        } else {
             CarInspection inspection = optionalCarInspection.get();
             Car car = optionalCar.get();
 
             car.getCarInspection().add(inspection);
+            carRepos.save(car);
         }
     }
+
     public String deleteCarByLicensePlate(String licensePlate) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         long count;
@@ -140,6 +149,7 @@ public class CarService {
         carRepos.deleteAll();
         return "You deleted " + count + " cars";
     }
+
     public CarOutputDto carToDto(Car car) {
         CarOutputDto dto = new CarOutputDto();
         dto.brand = car.getBrand();
@@ -156,6 +166,7 @@ public class CarService {
 
         return dto;
     }
+
     public Car transferDtoToCar(CarDto carDto) {
         Car car = new Car();
         car.setBrand(carDto.brand);

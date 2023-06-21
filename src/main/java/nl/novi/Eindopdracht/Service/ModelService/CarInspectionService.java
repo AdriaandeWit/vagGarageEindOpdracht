@@ -128,6 +128,7 @@ public class CarInspectionService {
         CarRepair repair = optionalCarRepair.get();
 
         inspection.getCarRepair().add(repair);
+        carInspectionRepos.save(inspection);
 
     }
 

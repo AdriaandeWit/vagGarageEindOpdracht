@@ -57,11 +57,11 @@ public class BrakeIntergrationTest {
 
     @BeforeEach
     void setUp() {
-        brake1 = new Brakes(1L, 'BRAKE' ,"brake", "1234", 12.00, 4, null, 23.00, 22.00, 10.00, 15.00, 28.00, 43.00, "F8,4", 14.00, true, false);
+        brake1 = new Brakes(1L, PartType.BRAKE ,"brake", "1234", 12.00, 4, null, 23.00, 22.00, 10.00, 15.00, 28.00, 43.00, "F8,4", 14.00, true, false);
         brakeRepos.save(brake1);
     }
 
-    /*
+
         @Test
         void getAllBrakes()throws Exception{
 
@@ -104,7 +104,7 @@ public class BrakeIntergrationTest {
                         .andExpect((ResultMatcher)jsonPath("$[2]. withoutWheelHub").value(true));
 
 
-        }*/
+        }
     @Test
     void getBrakeById() throws Exception {
         mockMvc.perform(get("/parts/brakes/find/" + brake1.getId()))

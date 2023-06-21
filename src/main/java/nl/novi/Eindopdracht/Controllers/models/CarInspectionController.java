@@ -81,7 +81,7 @@ public class CarInspectionController {
     public ResponseEntity<String> addInspectionToCar( @PathVariable long inspectionId,@RequestParam String licensePlate){
      try {
          carService.addInspectionToCar(inspectionId,licensePlate);
-         return ResponseEntity.ok("car added successfully to inspection")
+         return ResponseEntity.ok("car added successfully to inspection");
      }catch (RecordNotFoundException e){
          return ResponseEntity.notFound().build();
      }catch (IllegalArgumentException e){

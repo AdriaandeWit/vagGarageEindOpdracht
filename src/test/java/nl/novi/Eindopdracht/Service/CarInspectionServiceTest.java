@@ -1,5 +1,7 @@
 package nl.novi.Eindopdracht.Service;
 
+
+import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.CarStatusNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.InspectionNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
@@ -10,6 +12,7 @@ import nl.novi.Eindopdracht.Models.Data.CarRepair;
 import nl.novi.Eindopdracht.Models.Data.CustomerAccount;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
 import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
+import nl.novi.Eindopdracht.Repository.CarReparationRepository;
 import nl.novi.Eindopdracht.Service.ModelService.CarInspectionService;
 import nl.novi.Eindopdracht.dto.input.CarInspectionDto;
 import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
@@ -22,11 +25,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static nl.novi.Eindopdracht.Models.Data.Enum.CarBrand.VOLKSWAGEN;
-import static nl.novi.Eindopdracht.Models.Data.Enum.Fuel.PETROL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,6 +39,9 @@ class CarInspectionServiceTest {
 
     @Mock
     CarInspectionRepository carInpectionRepos;
+
+    @Mock
+    CarReparationRepository carRepairRepos;
 
     @InjectMocks
     CarInspectionService carInspectionService;
@@ -70,11 +75,12 @@ class CarInspectionServiceTest {
         account1 = new CustomerAccount(1L, "Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
         account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
 
-        car1 = new Car(VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, PETROL, account1, null);
-        car2 = new Car(AUDI, A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
+        car1 = new Car(1L, CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
+        car2 = new Car(2L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.MANUAL, Fuel.DIESEL, account2, null);
+
 
         carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the car", "", car1, null);
-        carInspection2 = new CarInspection(2L, 15121, "D-899-QQ", LocalDate.of(2023, 3, 6), false, "", "The car has broken spark plugs.", car1, null);
+        carInspection2 = new CarInspection(2L, 15121, "A-311-QQ", LocalDate.of(2016, 2, 15), false, "", "The car has broken spark plugs.", car2, null);
 
         iDto = new CarInspectionDto();
         iDto.setId(1L);
@@ -88,13 +94,13 @@ class CarInspectionServiceTest {
         iDto.setCarRepairList(null);
 
         i2Dto = new CarInspectionDto();
-        i2Dto.setId(3L);
-        i2Dto.setMileAge(115432);
+        i2Dto.setId(2L);
+        i2Dto.setMileAge(15121);
         i2Dto.setLicensePlate("A-311-QQ");
         i2Dto.setInspectionDate(LocalDate.of(2016, 2, 15));
-        i2Dto.setCarIsCorrect(true);
-        i2Dto.setCarIsFine("No problem with the car");
-        i2Dto.setHasProblem("");
+        i2Dto.setCarIsCorrect(false);
+        i2Dto.setCarIsFine(null);
+        i2Dto.setHasProblem("The car has broken spark plugs.");
         i2Dto.setCar(car2);
         i2Dto.setCarRepairList(null);
 
@@ -131,18 +137,17 @@ class CarInspectionServiceTest {
 
         Long inspectionId = carInspectionService.createInspection(iDto);
 
-        assertEquals(carInspection1.getId(),inspectionId);
+        assertEquals(carInspection1.getId(), inspectionId);
 
         verify(carInpectionRepos, times(1)).save(captor.capture());
         CarInspection capturedInspection = captor.getValue();
 
 
-        assertEquals(carInspection1.getId(),capturedInspection.getId());
-        assertEquals(carInspection1.getMileAge(),capturedInspection.getMileAge());
-        assertEquals(carInspection1.getLicensePlate(),capturedInspection.getLicensePlate());
-        assertEquals(carInspection1.getInspectionDate(),capturedInspection.getInspectionDate());
-        assertEquals(carInspection1.getCarIsFine(),capturedInspection.getCarIsFine());
-
+        assertEquals(carInspection1.getId(), capturedInspection.getId());
+        assertEquals(carInspection1.getMileAge(), capturedInspection.getMileAge());
+        assertEquals(carInspection1.getLicensePlate(), capturedInspection.getLicensePlate());
+        assertEquals(carInspection1.getInspectionDate(), capturedInspection.getInspectionDate());
+        assertEquals(carInspection1.getCarIsFine(), capturedInspection.getCarIsFine());
 
 
     }
@@ -199,7 +204,6 @@ class CarInspectionServiceTest {
     }
 
 
-
     @Test
     void updateMileAge_InvalidId() {
         long id = 1L;
@@ -207,7 +211,7 @@ class CarInspectionServiceTest {
 
         when(carInpectionRepos.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateMileAge(id, mileAge));
+        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateMileAge(id, iDto));
 
 
     }
@@ -218,12 +222,12 @@ class CarInspectionServiceTest {
         when(carInpectionRepos.findById(1L)).thenReturn(Optional.of(carInspection1));
         when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
         //act
-        carInspectionService.updateMileAge(1L, 1500);
+        carInspectionService.updateMileAge(1L, iDto);
 
         //asserts
         verify(carInpectionRepos, times(1)).save(carInspection1);
         assertEquals(1L, carInspection1.getId());
-        assertEquals(1500, carInspection1.getMileAge());
+        assertEquals(iDto.getMileAge(), carInspection1.getMileAge());
 
 
     }
@@ -235,7 +239,7 @@ class CarInspectionServiceTest {
 
         when(carInpectionRepos.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateInspectionDate(id, localDate));
+        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateInspectionDate(id, iDto));
 
 
     }
@@ -245,98 +249,81 @@ class CarInspectionServiceTest {
         when(carInpectionRepos.findById(2L)).thenReturn(Optional.of(carInspection2));
         when(carInpectionRepos.save(carInspection2)).thenReturn(carInspection2);
 
-        carInspectionService.updateInspectionDate(2L, LocalDate.of(2023, 5, 30));
+        carInspectionService.updateInspectionDate(2L, i2Dto);
 
         verify(carInpectionRepos, times(1)).save(carInspection2);
         assertEquals(2L, carInspection2.getId());
-        assertEquals(LocalDate.of(2023, 5, 30), carInspection2.getInspectionDate());
+        assertEquals(i2Dto.inspectionDate, carInspection2.getInspectionDate());
 
-
-    }
-
-    @Test
-    void updateCarIsFine_InvalidId() {
-        Long id = 1L;
-        String isFine = "Broken brake pads";
-
-        when(carInpectionRepos.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateCarIsFine(id, isFine));
 
     }
 
 
     @Test
-    void updateCarIsFine_ValidId() {
-
-        when(carInpectionRepos.findById(1L)).thenReturn(Optional.of(carInspection1));
-        when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
-
-        carInspectionService.updateCarIsFine(1L, "car is totally fine");
-
-        verify(carInpectionRepos, times(1)).save(carInspection1);
-        assertEquals(1L, carInspection1.getId());
-        assertEquals("car is totally fine", carInspection1.getCarIsFine());
-    }
-
-    @Test
-    void updateHasProblem_InvalidId() {
-        Long id = 1L;
-        String hasProblem = "Broken brake pads";
-
-        when(carInpectionRepos.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(RecordNotFoundException.class, () -> carInspectionService.updateHasProblem(id, hasProblem));
-
-
-    }
-
-    @Test
-    void updateHasProblem_ValidId() {
-
-        Long id = carInspection1.getId();
-        String hasProblem = "car has a no profile on te tyres and the brakes are to below the min thickness";
-
-        when(carInpectionRepos.findById(id)).thenReturn(Optional.of(carInspection1));
-        when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
-
-        CarInspectionDto result = carInspectionService.updateHasProblem(id, hasProblem);
-
-        verify(carInpectionRepos, times(1)).save(carInspection1);
-
-        assertEquals(1L, carInspection1.getId());
-        assertEquals(hasProblem, carInspection1.getHasProblem());
-        assertNull(result);
-    }
-
-    @Test
-    void updateCarStatus_InvalidId(){
+    void updateCarStatus_InvalidId() {
         Long id = 1L;
         boolean carIsCorrect = true;
 
         when(carInpectionRepos.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(CarStatusNotFoundException.class, ()-> carInspectionService.updateCarStatus(id,carIsCorrect));
+        assertThrows(CarStatusNotFoundException.class, () -> carInspectionService.updateCarStatus(id, iDto));
     }
+
     @Test
     void updateCarStatus_ValidId() {
-        Long id = 1L;
-        boolean carIsCorrect = true;
-
-        CarInspection existingCarInspection = new CarInspection();
-        existingCarInspection.setId(id);
-        existingCarInspection.setCarIsCorrect(!carIsCorrect);
-
-        when(carInpectionRepos.findById(id)).thenReturn(Optional.of(existingCarInspection));
-        when(carInpectionRepos.save(existingCarInspection)).thenReturn(existingCarInspection);
 
 
-        carInspectionService.updateCarStatus(id,carIsCorrect);
 
-        assertTrue(existingCarInspection.isCarIsCorrect());
-        verify(carInpectionRepos,times(1)).findById(id);
-        verify(carInpectionRepos,times(1)).save(existingCarInspection);
+        when(carInpectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
+        when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
+
+
+        carInspectionService.updateCarStatus(carInspection1.getId(), iDto);
+
+        assertTrue(carInspection1.isCarIsCorrect());
+        assertEquals(iDto.carIsFine,carInspection1.getCarIsFine());
+        assertNull(carInspection1.getHasProblem());
+
+
+
+        verify(carInpectionRepos, times(1)).findById(carInspection1.getId());
+        verify(carInpectionRepos, times(1)).save(carInspection1);
     }
+
+    @Test
+    void AddRepairToInspection_InvalidRepairId() {
+        when(carInpectionRepos.findById(carInspection1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> carInspectionService.addRepairToInspection(carInspection1.getId(), carRepair1.getId()));
+
+    }
+
+    @Test
+    void addRepairToInspection_InvalidCarInspectionId() {
+        when(carInpectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
+        when(carRepairRepos.findById(carRepair1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> carInspectionService.addRepairToInspection(carInspection1.getId(), carRepair1.getId()));
+
+    }
+
+    @Test
+    void AddRepairToInspection_ValidRepairIdAndCarInspectionId() {
+        when(carInpectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
+        when(carRepairRepos.findById(carRepair1.getId())).thenReturn(Optional.of(carRepair1));
+        when(carInpectionRepos.save(any(CarInspection.class))).thenReturn(carInspection1);
+
+        // Reset the carInspection list of car1 to an empty list
+        carInspection1.setCarRepair(new ArrayList<>());
+
+        // Call the addInspectionToCar method
+        carInspectionService.addRepairToInspection(carInspection1.getId(), carRepair1.getId());
+
+        // Verify that the save method was called once
+        verify(carInpectionRepos, times(1)).save(carInspection1);
+
+        // Assert that the Car object contains the added CarInspection
+        assertTrue(carInspection1.getCarRepair().contains(carRepair1));
+    }
+
 
     @Test
     void deleteInspectionById_InvalidId() {
@@ -344,11 +331,11 @@ class CarInspectionServiceTest {
 
         when(carInpectionRepos.existsById(id)).thenReturn(false);
 
-        assertThrows(InspectionNotFoundException.class,()-> carInspectionService.deleteInspectionById(id));
+        assertThrows(InspectionNotFoundException.class, () -> carInspectionService.deleteInspectionById(id));
     }
 
     @Test
-    void deleteInspectionById_ValidId(){
+    void deleteInspectionById_ValidId() {
         Long id = 1L;
 
         CarInspection inspection = new CarInspection();
@@ -362,11 +349,9 @@ class CarInspectionServiceTest {
 
         verify(carInpectionRepos).existsById(id);
         verify(carInpectionRepos).deleteById(id);
-        assertEquals("you deleted "+ count + " in the "+ id,result);
+        assertEquals("you deleted " + count + " in the " + id, result);
 
     }
-
-
 
 
     @Test
@@ -376,16 +361,16 @@ class CarInspectionServiceTest {
 
         String result = carInspectionService.deleteAllInspections();
 
-        verify(carInpectionRepos,times(1)).count();
-        verify(carInpectionRepos,times(1)).deleteAll();
+        verify(carInpectionRepos, times(1)).count();
+        verify(carInpectionRepos, times(1)).deleteAll();
 
-        assertEquals("We deleted 2 inspections",result );
+        assertEquals("We deleted 2 inspections", result);
     }
+
     @Test
     void dtoToCarInspection() {
 
         when(carInpectionRepos.save(carInspection1)).thenReturn(carInspection1);
-
 
 
         // Act
@@ -419,3 +404,4 @@ class CarInspectionServiceTest {
 
 
 }
+
