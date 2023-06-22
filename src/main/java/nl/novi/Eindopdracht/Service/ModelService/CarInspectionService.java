@@ -1,10 +1,10 @@
 package nl.novi.Eindopdracht.Service.ModelService;
 
-import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
+
 import nl.novi.Eindopdracht.Exceptions.CarStatusNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.InspectionNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
-import nl.novi.Eindopdracht.Models.Data.Car;
+
 import nl.novi.Eindopdracht.Models.Data.CarInspection;
 import nl.novi.Eindopdracht.Models.Data.CarRepair;
 import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
@@ -96,20 +96,17 @@ public class CarInspectionService {
         Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(id);
         if (optionalCarInspection.isEmpty()) {
             throw new CarStatusNotFoundException("status", "id", "id");
-        } else {
-            CarInspection latestInspection = optionalCarInspection.get();
-            latestInspection.setCarIsCorrect(carInspectionDto.carIsCorrect);
-
-            if (carInspectionDto.carIsCorrect) {
-                latestInspection.setCarIsFine(carInspectionDto.carIsFine);
-                latestInspection.setHasProblem(null);
-            } else {
-                latestInspection.setHasProblem(carInspectionDto.hasProblem);
-                latestInspection.setCarIsFine(null);
-            }
-
-            carInspectionRepos.save(latestInspection);
         }
+        CarInspection latestInspection = optionalCarInspection.get();
+        latestInspection.setCarIsCorrect(carInspectionDto.carIsCorrect);
+        if (!carInspectionDto.carIsCorrect) {
+            latestInspection.setHasProblem(carInspectionDto.hasProblem);
+            latestInspection.setCarIsFine(null);
+        }
+        latestInspection.setCarIsFine(carInspectionDto.carIsFine);
+        latestInspection.setHasProblem(null);
+        carInspectionRepos.save(latestInspection);
+
         CarInspectionOutputDto outputDto = new CarInspectionOutputDto();
         return outputDto;
     }
@@ -134,20 +131,18 @@ public class CarInspectionService {
 
     public String deleteInspectionById(Long id) {
         if (!carInspectionRepos.existsById(id)) {
-            throw new InspectionNotFoundException("Car","CarId", id);
+            throw new InspectionNotFoundException("Car", "CarId", id);
         } else {
             Long count = carInspectionRepos.count();
             carInspectionRepos.deleteById(id);
             return "you deleted " + count + " in the " + id;
         }
     }
-
     public String deleteAllInspections() {
         Long count = carInspectionRepos.count();
         carInspectionRepos.deleteAll();
         return "We deleted " + count + " inspections";
     }
-
     public CarInspection DtoToCarInspection(CarInspectionDto inspectionDto) {
         CarInspection inspection = new CarInspection();
         inspection.setId(inspectionDto.id);
@@ -161,11 +156,8 @@ public class CarInspectionService {
 
         return inspection;
     }
-
-
     public CarInspectionOutputDto inspectionToDto(CarInspection carInspection) {
         CarInspectionOutputDto dto = new CarInspectionOutputDto();
-
         dto.id = carInspection.getId();
         dto.mileAge = carInspection.getMileAge();
         dto.licensePlate = carInspection.getLicensePlate();
@@ -177,9 +169,4 @@ public class CarInspectionService {
         return dto;
 
     }
-
-
-
 }
-
-

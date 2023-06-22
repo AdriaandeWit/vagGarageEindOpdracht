@@ -1,5 +1,6 @@
 package nl.novi.Eindopdracht.Models.Data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,8 @@ public class Car {
     private Fuel fuel;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_accounts")
+    @JoinColumn(name = "owner_id")
+    @JsonIgnore
     private CustomerAccount account;
 
     @OneToMany(mappedBy = "Car")

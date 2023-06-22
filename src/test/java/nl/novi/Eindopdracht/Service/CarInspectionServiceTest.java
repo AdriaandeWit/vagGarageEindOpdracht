@@ -1,7 +1,6 @@
 package nl.novi.Eindopdracht.Service;
 
 
-import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.CarStatusNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.InspectionNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
@@ -79,8 +78,8 @@ class CarInspectionServiceTest {
         car2 = new Car(2L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.MANUAL, Fuel.DIESEL, account2, null);
 
 
-        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the car", "", car1, null);
-        carInspection2 = new CarInspection(2L, 15121, "A-311-QQ", LocalDate.of(2016, 2, 15), false, "", "The car has broken spark plugs.", car2, null);
+        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 15), true, "No problem with the car", null, car1, null);
+        carInspection2 = new CarInspection(2L, 15121, "A-311-QQ", LocalDate.of(2016, 2, 15), false, null, "The car has broken spark plugs.", car2, null);
 
         iDto = new CarInspectionDto();
         iDto.setId(1L);
@@ -89,7 +88,7 @@ class CarInspectionServiceTest {
         iDto.setInspectionDate(LocalDate.of(2023, 5, 15));
         iDto.setCarIsCorrect(true);
         iDto.setCarIsFine("No problem with the car");
-        iDto.setHasProblem("");
+        iDto.setHasProblem(null);
         iDto.setCar(car1);
         iDto.setCarRepairList(null);
 
@@ -270,8 +269,7 @@ class CarInspectionServiceTest {
     }
 
     @Test
-    void updateCarStatus_ValidId() {
-
+    void updateCarStatus_ValidId_CatStatusTrue() {
 
 
         when(carInpectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
@@ -281,13 +279,29 @@ class CarInspectionServiceTest {
         carInspectionService.updateCarStatus(carInspection1.getId(), iDto);
 
         assertTrue(carInspection1.isCarIsCorrect());
-        assertEquals(iDto.carIsFine,carInspection1.getCarIsFine());
+        assertEquals(iDto.carIsFine, carInspection1.getCarIsFine());
         assertNull(carInspection1.getHasProblem());
-
 
 
         verify(carInpectionRepos, times(1)).findById(carInspection1.getId());
         verify(carInpectionRepos, times(1)).save(carInspection1);
+    }
+    @Test
+    void updateCarStatus_ValidId_CatStatusFalse() {
+
+
+        when(carInpectionRepos.findById(carInspection2.getId())).thenReturn(Optional.of(carInspection2));
+        when(carInpectionRepos.save(carInspection2)).thenReturn(carInspection2);
+
+
+        carInspectionService.updateCarStatus(carInspection2.getId(), i2Dto);
+
+        assertFalse(carInspection2.isCarIsCorrect());
+        assertNull(carInspection2.getCarIsFine());
+
+
+        verify(carInpectionRepos, times(1)).findById(carInspection2.getId());
+        verify(carInpectionRepos, times(1)).save(carInspection2);
     }
 
     @Test
@@ -311,16 +325,16 @@ class CarInspectionServiceTest {
         when(carRepairRepos.findById(carRepair1.getId())).thenReturn(Optional.of(carRepair1));
         when(carInpectionRepos.save(any(CarInspection.class))).thenReturn(carInspection1);
 
-        // Reset the carInspection list of car1 to an empty list
+
         carInspection1.setCarRepair(new ArrayList<>());
 
-        // Call the addInspectionToCar method
+
         carInspectionService.addRepairToInspection(carInspection1.getId(), carRepair1.getId());
 
-        // Verify that the save method was called once
+
         verify(carInpectionRepos, times(1)).save(carInspection1);
 
-        // Assert that the Car object contains the added CarInspection
+
         assertTrue(carInspection1.getCarRepair().contains(carRepair1));
     }
 
