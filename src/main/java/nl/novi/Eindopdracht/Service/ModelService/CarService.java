@@ -152,6 +152,7 @@ public class CarService {
 
     public CarOutputDto carToDto(Car car) {
         CarOutputDto dto = new CarOutputDto();
+        dto.id = car.getId();
         dto.brand = car.getBrand();
         dto.model = car.getModel();
         dto.yearOfBuild = car.getYearOfBuild();

@@ -64,7 +64,6 @@ public class Car {
     private List<CarInspection>  carInspection;
 
 
-
 }
 
 
