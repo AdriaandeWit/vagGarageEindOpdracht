@@ -107,6 +107,16 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/car//add/owner").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/car/delete").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/car/delete/all").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                //----------------------------------------Endpoints costumerAccount     --------------------------------------
+                . requestMatchers(HttpMethod.POST, "/customer/create/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/find/all/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/find/byId/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/find/billing-address/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/find/car/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/customer/update/name/{id}").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/customer/update/address/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/customer/delete/by-name/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/customer/delete/all/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
