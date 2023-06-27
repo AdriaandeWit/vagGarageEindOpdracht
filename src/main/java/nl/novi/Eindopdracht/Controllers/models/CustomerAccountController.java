@@ -60,15 +60,15 @@ public class CustomerAccountController {
     }
 
     @PutMapping("/update/name/{id}")
-    public ResponseEntity<CustomerAccountDto> updateCustomerNameById(@PathVariable long id, @RequestParam String customerFirstname, @RequestParam String customerLastName){
+    public ResponseEntity<CustomerAccountDto> updateCustomerNameById(@PathVariable long id,@RequestBody CustomerAccountDto accountDto){
 
-        CustomerAccountDto customer =  cAService.updateCustomerNameById(id,customerFirstname,customerLastName);
+        CustomerAccountDto customer =  cAService.updateCustomerNameById(id,accountDto);
         return ResponseEntity.ok(customer);
     }
 
     @PutMapping("/update/address/")
-    public ResponseEntity<CustomerAccountDto> updateFinanceByCustomerName(@RequestParam String customerName, @RequestParam String billingAdress, @RequestParam String bankAccountNumber){
-        CustomerAccountDto customer = cAService.updateFinance(customerName,billingAdress,bankAccountNumber);
+    public ResponseEntity<CustomerAccountDto> updateFinanceByCustomerName(@RequestParam String customerName, @RequestBody CustomerAccountOutputDto.CustomerFinanceOutputDto customerFinanceOutputDto){
+        CustomerAccountDto customer = cAService.updateFinance(customerName,customerFinanceOutputDto);
         return ResponseEntity.ok(customer);
 
     }

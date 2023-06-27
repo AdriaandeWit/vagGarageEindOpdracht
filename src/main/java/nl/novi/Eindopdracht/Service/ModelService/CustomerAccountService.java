@@ -88,15 +88,15 @@ public class CustomerAccountService {
 
 
 
-    public CustomerAccountDto updateCustomerNameById(long id, String firstName, String LastName) {
+    public CustomerAccountDto updateCustomerNameById(long id,CustomerAccountDto accountDto) {
         Optional<CustomerAccount> accountOptional = cARepos.findById(id);
 
         if (accountOptional.isEmpty()) {
-            throw new RecordNotFoundException("Can not find " + firstName + LastName + "so please enter a anther carId ");
+            throw new RecordNotFoundException("Can not find "+ accountOptional + "so please enter a anther carId ");
         } else {
             CustomerAccount name = accountOptional.get();
-            name.setFirstName(firstName);
-            name.setLastName(LastName);
+            name.setFirstName(accountDto.firstName);
+            name.setLastName(accountDto.lastName);
             cARepos.save(name);
             return null;
         }
@@ -104,14 +104,14 @@ public class CustomerAccountService {
 
     }
 
-    public CustomerAccountDto updateFinance(String customerName, String billingAdress, String bankAccountNumber) {
+    public CustomerAccountDto updateFinance(String customerName, CustomerAccountOutputDto.CustomerFinanceOutputDto customerFinanceOutputDto) {
         Optional<CustomerAccount> accountOptional = cARepos.findAccountByCustomerName(customerName);
         if (accountOptional.isEmpty()) {
-            throw new RecordNotFoundException("cannot find the files, please give me anther carId");
+            throw new RecordNotFoundException("cannot find the files, please give me anther customer name");
         } else {
             CustomerAccount a = accountOptional.get();
-            a.setBankAccountNumber(bankAccountNumber);
-            a.setBillingAddress(billingAdress);
+            a.setBankAccountNumber(customerFinanceOutputDto.bankAccountNumber);
+            a.setBillingAddress(customerFinanceOutputDto.billingAddress);
             cARepos.save(a);
             return null;
         }
