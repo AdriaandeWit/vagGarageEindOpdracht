@@ -32,10 +32,10 @@ public class CarService {
         this.carInspectionRepos = carInspectionRepos;
     }
 
-    public Car createCar(CarDto carDto) {
+    public Long createCar(CarDto carDto) {
         Car car = transferDtoToCar(carDto);
         carRepos.save(car);
-        return car;
+        return car.getId();
     }
 
     public List<CarOutputDto> getAllCars() {
@@ -83,11 +83,22 @@ public class CarService {
     }
 
     public void addAccountToCar(String licensePlate, String customerName) {
-        Car car = getCarByLicensePlate(licensePlate);
-        CustomerAccount account = getAccountByCustomerName(customerName);
+        Optional<Car> optionalCar = Optional.ofNullable(getCarByLicensePlate(licensePlate));
+        Optional<CustomerAccount> optional = Optional.ofNullable(getAccountByCustomerName(customerName));
 
-        car.setAccount(account);
-        carRepos.save(car);
+        if (optionalCar.isEmpty()){
+            throw new CarNotFoundException("Car" ,"licensePlate", licensePlate);
+        }
+        if (optional.isEmpty()){
+            throw new AccountNotFoundException("account", "customerName", customerName);
+        }else {
+            Car car = optionalCar.get();
+            CustomerAccount account = optional.get();
+            car.setAccount(account);
+            carRepos.save(car);
+        }
+
+
     }
 
     public CarOutputDto updateCarMileage(String licensePlate, CarDto carDto) {

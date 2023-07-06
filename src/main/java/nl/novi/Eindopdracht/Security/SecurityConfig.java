@@ -45,11 +45,14 @@ public class SecurityConfig {
                 .csrf().disable()
                 .httpBasic().disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 //----------------------------------------Endpoints user --------------------------------------
+                .requestMatchers(HttpMethod.GET,"/users{username}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN", "MECHANIC", "SERVICE_SPECIALIST")
-                .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/{username}/authorities").hasAnyRole("ADMIN", "MECHANIC", "SERVICE_SPECIALIST")
+                .requestMatchers(HttpMethod.POST, "/users/{username}/authorities").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/users/{username}").hasAnyRole("ADMIN", "SERVICE_SPECIALIST")
                 .requestMatchers(HttpMethod.DELETE, "/users/{username}").hasRole("ADMIN")
 

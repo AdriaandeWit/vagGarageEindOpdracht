@@ -2,6 +2,7 @@ package nl.novi.Eindopdracht.Models.Data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
 
 
-import javax.naming.Name;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,10 +38,11 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private Colors color;
     @Id
-    @Column(unique = true,nullable = false)
-    @Pattern(regexp = "[A-Za-z0-9]{1,2}-[A-Za-z0-9]{2,3}-[A-Za-z0-9]{2}")
+    @Column
+    @Pattern(regexp = "[A-Za-z0-9]{1,2}-[A-Za-z0-9]{2,3}-[A-Za-z0-9]{1,2}")
     private String licensePlate;
     @Column
+    @Min(value = 0)
     private Integer mileAge;
     @Column
     @Enumerated(EnumType.STRING)

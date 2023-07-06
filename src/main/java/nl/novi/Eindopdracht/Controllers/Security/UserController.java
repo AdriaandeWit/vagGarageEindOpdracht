@@ -66,11 +66,11 @@ import java.util.Map;
             }
         }
         @PutMapping(value = "/{username}")
-        public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
+        public ResponseEntity<String> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
 
             userService.updateUser(username, dto);
 
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().body("user updated");
         }
 
         @DeleteMapping(value = "/{username}")
@@ -78,9 +78,6 @@ import java.util.Map;
             userService.deleteUser(username);
             return ResponseEntity.noContent().build();
         }
-
-
-
 
         @DeleteMapping(value = "/{username}/authorities/{authority}")
         public ResponseEntity<Object> deleteAuthority(@PathVariable("username") String username, @PathVariable("authority") String autority) {

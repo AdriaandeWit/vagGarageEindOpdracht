@@ -19,13 +19,12 @@ import java.util.List;
 @Table(name = "car_inspections")
 public class CarInspection {
     @Id
-    @Column
     @GeneratedValue
-
+    @Column
     private Long id;
     @Column
     private int mileAge;
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     @Pattern(regexp = "[A-Za-z0-9]{1,2}-[A-Za-z0-9]{2,3}-[A-Za-z0-9]{2}")
     private String licensePlate;
     @Column
@@ -36,7 +35,6 @@ public class CarInspection {
     private String carIsFine;
     @Column
     private String hasProblem;
-
 
 
     @ManyToOne
