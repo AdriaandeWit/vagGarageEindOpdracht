@@ -19,20 +19,21 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table(name = "car_repairs" )
+@Table(name = "car_repairs")
 public class CarRepair {
-@Id
-@GeneratedValue
-private Long id;
-private CarBrand car;
-private String carProblem;
-private LocalDate repairDate;
-private Double partCost;
-private Double laborCost;
-private Double totalCost;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    private CarBrand car;
+    private String carProblem;
+    private LocalDate repairDate;
+    private Double partCost;
+    private Double laborCost;
+    private Double totalCost;
 
-@OneToMany(mappedBy = "carRepair" )
-private List<CarParts> carParts;
+    @OneToMany(mappedBy = "carRepair")
+    private List<CarParts> carParts;
 
 
 }

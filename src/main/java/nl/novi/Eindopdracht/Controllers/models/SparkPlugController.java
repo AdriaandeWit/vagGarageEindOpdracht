@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import nl.novi.Eindopdracht.Service.ModelService.SparkPlugService;
 import nl.novi.Eindopdracht.dto.input.CarPartsDto.SparkPlugDto;
 import nl.novi.Eindopdracht.dto.output.CarPartsDto.SparkPlugOutputDto;
+import org.springframework.cglib.core.Block;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,19 +51,36 @@ public class SparkPlugController {
         return ResponseEntity.ok(sparkPlugOutputDto);
     }
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<SparkPlugOutputDto> updateAmountOfSparkPlugs(@PathVariable long id, @RequestBody SparkPlugDto sPDto){
-        sparkPlugService.updateAmountOfParts(id, sPDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAmountOfSparkPlugs(@PathVariable long id, @Valid @RequestBody SparkPlugDto sPDto,BindingResult br){
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            sparkPlugService.updateAmountOfParts(id, sPDto);
+            return ResponseEntity.ok().build();
+        }
     }
     @PutMapping("/update/price/{id}")
-    public ResponseEntity<SparkPlugOutputDto>updatePrice(@PathVariable long id,@RequestBody SparkPlugDto sPDto){
-        sparkPlugService.updatePrice(id, sPDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object>updatePrice(@PathVariable long id, @Valid @RequestBody SparkPlugDto sPDto, BindingResult br){
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            sparkPlugService.updatePrice(id, sPDto);
+            return ResponseEntity.ok().build();
+        }
     }
     @PutMapping("/update/part-number/{id}")
-    public ResponseEntity<Object>updatePartNumber(@PathVariable long id, @RequestBody SparkPlugDto sPDto){
-        sparkPlugService.updatePartNumber(id, sPDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object>updatePartNumber(@PathVariable long id,@Valid @RequestBody SparkPlugDto sPDto,BindingResult br){
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            sparkPlugService.updatePartNumber(id, sPDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @DeleteMapping("/delete/{id}")

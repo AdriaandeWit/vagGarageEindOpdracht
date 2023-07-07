@@ -1,5 +1,6 @@
 package nl.novi.Eindopdracht.Controllers.models;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
@@ -10,11 +11,14 @@ import nl.novi.Eindopdracht.dto.output.CarPartsDto.SparkPlugOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarRepairOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static nl.novi.Eindopdracht.Utils.Utillities.getErrorString;
 
 @AllArgsConstructor
 
@@ -25,16 +29,21 @@ public class CarRepairController {
     private final CarRepairService reparationService;
 
     @PostMapping("/create/")
-    public ResponseEntity<Object> createCarReport(@RequestBody CarRepairDto carRepairDto) {
-        Long id = reparationService.createCarReport(carRepairDto);
-        carRepairDto.id = id;
+    public ResponseEntity<Object> createCarReport(@Valid @RequestBody CarRepairDto carRepairDto, BindingResult br) {
+        if (br.hasErrors()) {
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString,HttpStatus.BAD_REQUEST);
+        } else {
+            Long id = reparationService.createCarReport(carRepairDto);
+            carRepairDto.id = id;
 
-        URI uri = URI.create(ServletUriComponentsBuilder.
-                fromCurrentRequest()
-                .path("/" + id)
-                .toUriString());
+            URI uri = URI.create(ServletUriComponentsBuilder.
+                    fromCurrentRequest()
+                    .path("/" + id)
+                    .toUriString());
 
-        return ResponseEntity.created(uri).body(carRepairDto);
+            return ResponseEntity.created(uri).body(carRepairDto);
+        }
     }
 
     @GetMapping("/find/all")
@@ -56,22 +65,32 @@ public class CarRepairController {
     }*/
 
     @PutMapping("/update/car-problem/{id}")
-    public ResponseEntity<CarRepairOutputDto> updateCarProblem(@PathVariable long id, @RequestBody CarRepairDto repairDto) {
-        CarRepairOutputDto dto = reparationService.updateCarProblem(id, repairDto);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<Object> updateCarProblem(@PathVariable long id,@Valid @RequestBody CarRepairDto repairDto ,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            CarRepairOutputDto dto = reparationService.updateCarProblem(id, repairDto);
+            return ResponseEntity.ok(dto);
+        }
     }
 
     @PutMapping("/update/repair-date/{id}")
-    public ResponseEntity<CarRepairOutputDto> updateRepairDate(@PathVariable long id, @RequestBody CarRepairDto repairDto) {
-        CarRepairOutputDto dto = reparationService.updateRepairDate(id, repairDto);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<Object> updateRepairDate(@PathVariable long id,@Valid @RequestBody CarRepairDto repairDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            CarRepairOutputDto dto = reparationService.updateRepairDate(id, repairDto);
+            return ResponseEntity.ok(dto);
+        }
     }
 
     @PutMapping("/{carRepairId}/add/parts")
     public ResponseEntity<String> addPartToCarRepair(
             @PathVariable long carRepairId,
             @RequestBody PartDto partDto
-            ) {
+    ) {
         try {
             reparationService.addPartToCarRepair(carRepairId, partDto);
             return ResponseEntity.ok("Part added successfully to car repair");
@@ -80,7 +99,7 @@ public class CarRepairController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        }
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteRepairById(@PathVariable long id) {

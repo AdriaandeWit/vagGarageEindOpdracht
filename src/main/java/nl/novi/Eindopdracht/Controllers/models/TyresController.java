@@ -54,21 +54,40 @@ public class TyresController {
     }
 
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfTyreSets(@PathVariable long id, @RequestBody TyresDto tDto) {
-        tyresService.updateAmountOfParts(id, tDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAmountOfTyreSets(@PathVariable long id,@Valid @RequestBody TyresDto tDto, BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            tyresService.updateAmountOfParts(id, tDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/update/price/{id}")
-    public ResponseEntity<Object> updatePrice(@PathVariable long id, @RequestBody TyresDto tDto) {
-        tyresService.updatePrice(id, tDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updatePrice(@PathVariable long id, @Valid @RequestBody TyresDto tDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            tyresService.updatePrice(id, tDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/update/part-number/{id}")
-    public ResponseEntity<Object> updatePartNumber(@PathVariable long id, @RequestBody TyresDto tDto) {
-        tyresService.updatePartNumber(id, tDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updatePartNumber(@PathVariable long id,@Valid @RequestBody TyresDto tDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            tyresService.updatePartNumber(id, tDto);
+            return ResponseEntity.ok().build();
+        }
+
     }
 
     @DeleteMapping("/delete/{id}")

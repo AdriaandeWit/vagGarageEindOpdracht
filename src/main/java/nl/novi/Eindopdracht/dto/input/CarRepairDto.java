@@ -19,8 +19,8 @@ import java.util.List;
 
 public class CarRepairDto {
     public Long id;
-    @Enumerated(EnumType.STRING)
     @NotBlank(message = "please enter a vag model with capital letters")
+    @Enumerated(EnumType.STRING)
     public CarBrand Car;
     @NotBlank(message = "please enter a problem")
     public String carProblem;

@@ -19,23 +19,23 @@ values (101, 'AUDI', 'A4', '2022-01-01', 'BLACK', 'AB-12-34', 10000, 'TSI', 'SED
 
 insert into "customer_accounts"(id, customer_name, first_name, last_name, address, phone_number, billing_address,
                                 bank_account_number)
-values (1, 'Jan de Vries', 'Jan', 'de Vries', 'Kerkstraat 1', '06-12345678', 'Postbus 123', 'NL12ABCD3456789012'),
-       (2, 'Linda Jansen', 'Linda', 'Jansen', 'Dorpsweg 2', '06-98765432', 'Postbus 456', 'NL98EFGH6789012345'),
-       (3, 'Pieter Bakker', 'Pieter', 'Bakker', 'Hoofdstraat 3', '06-55555555', 'Postbus 789', 'NL34IJKL9012345678');
+values (1, 'Jan de Vries', 'Jan', 'de Vries', 'Kerkstraat 1', '06-12345678', 'Postbus 123', 'NL12-ABCD-3456-7890-12'),
+       (2, 'Linda Jansen', 'Linda', 'Jansen', 'Dorpsweg 2', '06-98765432', 'Postbus 456', 'NL98-EFGH-6789-0123-45'),
+       (3, 'Pieter Bakker', 'Pieter', 'Bakker', 'Hoofdstraat 3', '06-55555555', 'Postbus 789', 'NL34-IJKL-9012-3456-78');
 
 insert into "car_repairs"(id, car, car_problem, repair_date, part_cost, labor_cost, total_cost)
-values (101, 'car1', 'car have two not working spark plug ', '2023-05-12', 140.00, 150.00, null),
-       (102, 'car2', 'car tyres have no profile', '2023-04-10', 300.00, 150.00, null);
+values (101, 'VOLKSWAGEN', 'car have two not working spark plug ', '2023-05-12', 140.00, 150.00, null),
+       (102, 'AUDI', 'car tyres have no profile', '2023-04-10', 300.00, 150.00, null);
 
 insert into "car_inspections"(id, mile_age, license_plate, inspection_date, car_is_Correct, car_is_fine, has_problem)
 values (101, 10999, 'AB-12-34', '2023-06-09', true, null, 'car has problems with the brakes'),
        (102, 10999, 'AB-12-34', '2023-06-12', true, 'car has new brakes and is now good to go', null);
 
 insert into "users" (username, password, email, enabled)
-values ('admin', '$2a$12$EMqaRwbOZNSces91akpqHOSVNqcqNB6P9s6xc7HW24/h/198Plw7a', 'admin@test.nl', true),
-       ('Ad', '$2a$12$kLJZKRU8FwARGPBJlc9ameXogsL0IY5E/cldaW6yF7CYUoumYrriO', 'MECHANIC-AD@test.nl', true),
-       ('Willem', '$2a$12$U/Xnw49qbMZReJakzX8vO.VDx.oF033L5WBZaeHn.CWTP/VggeuBq', 'BOE-Willem@test.nl', true),
-       ('Joep','$2a$12$/yv/NY0F6PTq6X3bVNSpueN3jNLtjL7o0xV6gpMhv71sMvID0bS6.','SP-Joep@test.nl',true );
+values ('admin', '$2a$12$oBbCZrhAMAJqszpO41ucW.pkPMr6aiZPOHERTKpeJifg1CSk.77ti', 'admin@test.nl', true),
+       ('Ad', '$2a$12$RqQzlb9m0ziRA4arkTLDquJsTw8FF34UIH8AmnMtmoDQLFc8.TuD6', 'MECHANIC-AD@test.nl', true),
+       ('Willem', '$2a$12$xlXSDCD37ndaIlx8nukGbu2hZfBomtQEuAsng3OSlllHkyi3r/LuW', 'BOE-Willem@test.nl', true),
+       ('Joep','$2a$12$7ap8dX/2I1L3f/.yliDF1.Ae.5oRY8xhX.GGpFEFpdQfGm7luVACq','SP-Joep@test.nl',true );
 insert into "authorities" (username, authority)
 values ('admin', 'ROLE_ADMIN'),
        ('Ad', 'ROLE_MECHANIC'),

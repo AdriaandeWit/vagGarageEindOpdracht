@@ -105,10 +105,9 @@ class CarInspectionServiceTest {
 
         carRepair1 = new CarRepair();
         carRepair1.setId(1L);
-        carRepair1.setCar("Volkswagen Golf");
+        carRepair1.setCar(CarBrand.valueOf("VOLKSWAGEN"));
         carRepair1.setCarProblem("spark plug defect");
         carRepair1.setRepairDate(LocalDate.of(2023, 4, 10));
-        carRepair1.setCarParts(null);
         carRepair1.setLaborCost(null);
         carRepair1.setTotalCost(null);
 

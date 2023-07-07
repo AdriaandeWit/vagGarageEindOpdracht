@@ -59,24 +59,41 @@ public class CarInspectionController {
         }
 
         @PutMapping("/update/mileage/{id}")
-        public ResponseEntity<CarInspectionOutputDto> updateMileAge (@PathVariable Long
-        id, @RequestBody CarInspectionDto carInspectionDto){
-            carInspectionService.updateMileAge(id, carInspectionDto);
-            return ResponseEntity.ok().build();
+        public ResponseEntity<Object> updateMileAge (@PathVariable Long
+        id, @Valid @RequestBody CarInspectionDto carInspectionDto ,BindingResult br){
+            if (br.hasErrors()){
+                String errorString = getErrorString(br);
+                return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+            }else {
+
+                carInspectionService.updateMileAge(id, carInspectionDto);
+                return ResponseEntity.ok().build();
+            }
         }
 
         @PutMapping("/update/inspectionDate/{id}")
-        public ResponseEntity<CarInspectionOutputDto> updateInspectionDate (@PathVariable Long
-        id, @RequestBody CarInspectionDto carInspectionDto){
-            carInspectionService.updateInspectionDate(id, carInspectionDto);
-            return ResponseEntity.ok().build();
+        public ResponseEntity<Object> updateInspectionDate (@PathVariable Long
+        id,@Valid @RequestBody CarInspectionDto carInspectionDto,BindingResult br){
+            if (br.hasErrors()){
+                String errorString = getErrorString(br);
+                return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+            }else {
+                carInspectionService.updateInspectionDate(id, carInspectionDto);
+                return ResponseEntity.ok().build();
+            }
         }
 
         @PutMapping("/update/carIsCorrect/{id}")
-        public ResponseEntity<Object> updateStatusCar (@PathVariable Long id, @RequestBody CarInspectionDto
-        carInspectionDto){
-            carInspectionService.updateCarStatus(id, carInspectionDto);
-            return ResponseEntity.ok().build();
+        public ResponseEntity<Object> updateStatusCar (@PathVariable Long id,@Valid @RequestBody CarInspectionDto
+        carInspectionDto,BindingResult br){
+            if (br.hasErrors()){
+                String errorString = getErrorString(br);
+                return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+            }else {
+
+                carInspectionService.updateCarStatus(id, carInspectionDto);
+                return ResponseEntity.ok().build();
+            }
         }
         @PutMapping("/add/repair/{id}/{repairId}")
         public ResponseEntity<String> addRepairToInspection ( @PathVariable long id, @PathVariable long repairId){

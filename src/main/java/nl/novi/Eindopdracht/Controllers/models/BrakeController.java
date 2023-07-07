@@ -60,21 +60,37 @@ public class BrakeController {
     }
 
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id, @RequestBody BrakesDto brakesDto) {
-        brakeService.updateAmountOfParts(id, brakesDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            brakeService.updateAmountOfParts(id, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/update/price/{brakeId}")
-    public ResponseEntity<Object> updatePrice(@PathVariable Long brakeId, @RequestBody BrakesDto brakesDto) {
-        brakeService.updatePrice(brakeId, brakesDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updatePrice(@PathVariable Long brakeId,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            brakeService.updatePrice(brakeId, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/update/part-number/{brakeId}")
-    public ResponseEntity<Object> updatePartNumber(@PathVariable Long brakeId, @RequestBody BrakesDto brakesDto) {
-        brakeService.updatePartNumber(brakeId, brakesDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updatePartNumber(@PathVariable Long brakeId,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            brakeService.updatePartNumber(brakeId, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
 

@@ -10,9 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
-    @NotBlank @Pattern(regexp = "[a-zA-Z]", message = "we need a user name")
+    @NotBlank @Pattern(regexp = "[a-zA-Z]{2,12}", message = "we need a user name and the username must be of 2 to 12 legth with no special characters")
     public String username;
-    @NotBlank @Pattern(regexp = )
+    @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,12}$",
+            message = "password must be min 4 and max 12 length containing atleast 1 uppercase, 1 lowercase, 1 special character and 1 digit " )
     public String password;
     @NotNull
     public Boolean enabled;

@@ -104,14 +104,14 @@ public class CustomerAccountService {
 
     }
 
-    public CustomerAccountDto updateFinance(String customerName, CustomerAccountOutputDto.CustomerFinanceOutputDto customerFinanceOutputDto) {
+    public CustomerAccountDto updateFinance(String customerName, CustomerAccountDto dto) {
         Optional<CustomerAccount> accountOptional = cARepos.findAccountByCustomerName(customerName);
         if (accountOptional.isEmpty()) {
             throw new RecordNotFoundException("cannot find the files, please give me anther customer name");
         } else {
             CustomerAccount a = accountOptional.get();
-            a.setBankAccountNumber(customerFinanceOutputDto.bankAccountNumber);
-            a.setBillingAddress(customerFinanceOutputDto.billingAddress);
+            a.setBankAccountNumber(dto.bankAccountNumber);
+            a.setBillingAddress(dto.billingAddress);
             cARepos.save(a);
             return null;
         }

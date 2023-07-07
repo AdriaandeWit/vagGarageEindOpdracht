@@ -63,23 +63,36 @@ public class CarController {
     }
 
     @PutMapping("/update/mileage")
-    public ResponseEntity<Object> updateCarMileage(@RequestParam String licensePlate, @RequestBody CarDto carDto) {
-
-        carService.updateCarMileage(licensePlate, carDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateCarMileage(@RequestParam String licensePlate,@Valid @RequestBody CarDto carDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            carService.updateCarMileage(licensePlate, carDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/update/engineType")
-    public ResponseEntity<Object> updateEngineType(@RequestParam String licensePlate, @RequestBody CarDto carDto) {
-        carService.updateEngineType(licensePlate, carDto);
-        return ResponseEntity.ok().build();
-
+    public ResponseEntity<Object> updateEngineType(@RequestParam String licensePlate,@Valid @RequestBody CarDto carDto , BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            carService.updateEngineType(licensePlate, carDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PutMapping("/add/owner")
-    public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate, @RequestParam String customerName) {
-        carService.addAccountToCar(licensePlate, customerName);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate,@Valid @RequestParam String customerName, BindingResult br ) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            carService.addAccountToCar(licensePlate, customerName);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @DeleteMapping("/delete")
