@@ -84,16 +84,16 @@ public class CarService {
 
     public void addAccountToCar(String licensePlate, String customerName) {
         Optional<Car> optionalCar = Optional.ofNullable(getCarByLicensePlate(licensePlate));
-        Optional<CustomerAccount> optional = Optional.ofNullable(getAccountByCustomerName(customerName));
+        Optional<CustomerAccount> optionalAccount = Optional.ofNullable(getAccountByCustomerName(customerName));
 
         if (optionalCar.isEmpty()){
-            throw new CarNotFoundException("Car" ,"licensePlate", licensePlate);
+            throw new CarNotFoundException("car" ,"licensePlate", licensePlate);
         }
-        if (optional.isEmpty()){
+        if (optionalAccount.isEmpty()){
             throw new AccountNotFoundException("account", "customerName", customerName);
         }else {
             Car car = optionalCar.get();
-            CustomerAccount account = optional.get();
+            CustomerAccount account = optionalAccount.get();
             car.setAccount(account);
             carRepos.save(car);
         }

@@ -40,11 +40,15 @@ public class CarRepairService {
     }
 
 
-    public Long createCarReport(CarRepairDto carRepairDto) {
+    public CarRepairOutputDto createCarReport(CarRepairDto carRepairDto) {
         CarRepair carRepair = DtoToRepair(carRepairDto);
+        Double totalCost = calculateTotalCost(carRepair.getPartCost(),carRepair.getLaborCost());
+        carRepair.setTotalCost(totalCost);
 
-        repairRepos.save(carRepair);
-        return carRepair.getId();
+        CarRepair savedCarRepair =repairRepos.save(carRepair);
+        CarRepairOutputDto outputDto = RepairToDto(savedCarRepair);
+
+        return outputDto;
     }
 
     public CarRepairOutputDto getRepairByID(Long id) {
@@ -98,7 +102,7 @@ public class CarRepairService {
         Long partId = partDto.partID;
         Optional<CarRepair> optionalCarRepair = repairRepos.findById(carRepairId);
         if (optionalCarRepair.isEmpty()) {
-            throw new RecordNotFoundException("Car repair not found");
+            throw new RecordNotFoundException("car repair not found");
         }
 
         CarRepair carRepair = optionalCarRepair.get();
@@ -152,6 +156,10 @@ public class CarRepairService {
 
     }
 
+    private Double calculateTotalCost(Double partCost, Double laborCost) {
+        return partCost + laborCost;
+    }
+
 
     public CarRepairOutputDto RepairToDto(CarRepair repair) {
         CarRepairOutputDto dto = new CarRepairOutputDto();
@@ -172,7 +180,7 @@ public class CarRepairService {
     public CarRepair DtoToRepair(CarRepairDto repairDto) {
         CarRepair carR = new CarRepair();
 
-        carR.setCar(repairDto.Car);
+        carR.setCar(repairDto.car);
         carR.setCarProblem(repairDto.carProblem);
         carR.setRepairDate(repairDto.repairDate);
         carR.setPartCost(repairDto.partCost);

@@ -116,10 +116,10 @@ public class CarInspectionService {
         Optional<CarRepair> optionalCarRepair = carRepairRepos.findById(repairId);
 
         if (optionalCarInspection.isEmpty()) {
-            throw new RecordNotFoundException("Car inspection", "id ", id);
+            throw new RecordNotFoundException("car inspection", "id ", id);
         }
         if (optionalCarRepair.isEmpty()) {
-            throw new RecordNotFoundException("Car repair", "repair id ", repairId);
+            throw new RecordNotFoundException("car repair", "repair id ", repairId);
         }
         CarInspection inspection = optionalCarInspection.get();
         CarRepair repair = optionalCarRepair.get();
@@ -131,7 +131,7 @@ public class CarInspectionService {
 
     public String deleteInspectionById(Long id) {
         if (!carInspectionRepos.existsById(id)) {
-            throw new InspectionNotFoundException("Car", "CarId", id);
+            throw new InspectionNotFoundException("car", "CarId", id);
         } else {
             Long count = carInspectionRepos.count();
             carInspectionRepos.deleteById(id);

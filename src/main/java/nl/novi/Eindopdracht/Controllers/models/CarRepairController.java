@@ -3,11 +3,9 @@ package nl.novi.Eindopdracht.Controllers.models;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
-import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 import nl.novi.Eindopdracht.Service.ModelService.CarRepairService;
 import nl.novi.Eindopdracht.dto.input.CarRepairDto;
 import nl.novi.Eindopdracht.dto.input.PartDto;
-import nl.novi.Eindopdracht.dto.output.CarPartsDto.SparkPlugOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarRepairOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +24,15 @@ import static nl.novi.Eindopdracht.Utils.Utillities.getErrorString;
 @RestController
 public class CarRepairController {
 
-    private final CarRepairService reparationService;
+    private final CarRepairService repairService;
 
-    @PostMapping("/create/")
+    @PostMapping("/create")
     public ResponseEntity<Object> createCarReport(@Valid @RequestBody CarRepairDto carRepairDto, BindingResult br) {
         if (br.hasErrors()) {
             String errorString = getErrorString(br);
             return new ResponseEntity<>(errorString,HttpStatus.BAD_REQUEST);
         } else {
-            Long id = reparationService.createCarReport(carRepairDto);
+            Long id = repairService.createCarReport(carRepairDto).getId();
             carRepairDto.id = id;
 
             URI uri = URI.create(ServletUriComponentsBuilder.
@@ -48,19 +46,19 @@ public class CarRepairController {
 
     @GetMapping("/find/all")
     public ResponseEntity<List<CarRepairOutputDto>> getAllRapairs() {
-        List<CarRepairOutputDto> carRepairOutputDtos = reparationService.getAllRapairs();
+        List<CarRepairOutputDto> carRepairOutputDtos = repairService.getAllRapairs();
         return ResponseEntity.ok(carRepairOutputDtos);
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<CarRepairOutputDto> getRepairById(@PathVariable Long id) {
-        CarRepairOutputDto dto = reparationService.getRepairByID(id);
+        CarRepairOutputDto dto = repairService.getRepairByID(id);
         return ResponseEntity.ok(dto);
     }
 
 /*    @GetMapping("/totalCost{id}")
     public ResponseEntity<CarRepairOutputDto> getTotalCostById(@PathVariable long id) {
-        CarRepairOutputDto dto = reparationService.getTotalCostByID(id);
+        CarRepairOutputDto dto = repairService.getTotalCostByID(id);
         return ResponseEntity.ok(dto);
     }*/
 
@@ -70,7 +68,7 @@ public class CarRepairController {
             String errorString = getErrorString(br);
             return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
         }else {
-            CarRepairOutputDto dto = reparationService.updateCarProblem(id, repairDto);
+            CarRepairOutputDto dto = repairService.updateCarProblem(id, repairDto);
             return ResponseEntity.ok(dto);
         }
     }
@@ -81,7 +79,7 @@ public class CarRepairController {
             String errorString = getErrorString(br);
             return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
         }else {
-            CarRepairOutputDto dto = reparationService.updateRepairDate(id, repairDto);
+            CarRepairOutputDto dto = repairService.updateRepairDate(id, repairDto);
             return ResponseEntity.ok(dto);
         }
     }
@@ -89,11 +87,16 @@ public class CarRepairController {
     @PutMapping("/{carRepairId}/add/parts")
     public ResponseEntity<String> addPartToCarRepair(
             @PathVariable long carRepairId,
-            @RequestBody PartDto partDto
+            @Valid @RequestBody PartDto partDto,BindingResult br
     ) {
         try {
-            reparationService.addPartToCarRepair(carRepairId, partDto);
-            return ResponseEntity.ok("Part added successfully to car repair");
+            if (br.hasErrors()){
+                String errorString = getErrorString(br);
+                return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+            }else {
+                repairService.addPartToCarRepair(carRepairId, partDto);
+                return ResponseEntity.ok("Part added successfully to car repair");
+            }
         } catch (RecordNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
@@ -103,13 +106,13 @@ public class CarRepairController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteRepairById(@PathVariable long id) {
-        reparationService.deleteRepairById(id);
+        repairService.deleteRepairById(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteAllRepairs() {
-        reparationService.deleteAllRepairs();
+        repairService.deleteAllRepairs();
         return ResponseEntity.noContent().build();
     }
 

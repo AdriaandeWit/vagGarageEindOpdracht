@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users/create").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 //----------------------------------------Endpoints user --------------------------------------
                 .requestMatchers(HttpMethod.GET,"/users{username}").permitAll()
@@ -96,7 +96,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/inspection/delete/all/inspections").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
                 //----------------------------------------Endpoints car repair   --------------------------------------
 
-                .requestMatchers(HttpMethod.POST, "/carRepair/create/").hasAnyRole("BACK_OFFICE_EMPLOYEE", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/carRepair/create/").hasAnyRole("MECHANIC","BACK_OFFICE_EMPLOYEE", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/carRepair/find/all").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/carRepair/find/{id}").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/carRepair/totalCost").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
@@ -107,7 +107,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/carRepair/delete/all").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
 
                 //----------------------------------------Endpoints car    --------------------------------------
-                .requestMatchers(HttpMethod.POST, "/inspection/create/").hasAnyRole("SERVICE_SPECIALIST", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/inspection/create/").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/car/find/all-cars").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/car/find/car").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/car/find/owner").hasAnyRole("MECHANIC","SERVICE_SPECIALIST", "ADMIN")
