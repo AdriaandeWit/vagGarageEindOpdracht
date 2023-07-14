@@ -112,6 +112,7 @@ public class TyresService {
         TyresOutputDto tyresOutputDto = new TyresOutputDto();
 
         tyresOutputDto.id = tyres.getId();
+        tyresOutputDto.partType = tyres.getPartType();
         tyresOutputDto.partName = tyres.getPartName();
         tyresOutputDto.partNumber = tyres.getPartNumber();
         tyresOutputDto.price = tyres.getPrice();

@@ -29,5 +29,4 @@ public class CarRepairOutputDto {
 
     public List<CarPartsOutputDto> carParts;
 
-    public PartType partType;
 }

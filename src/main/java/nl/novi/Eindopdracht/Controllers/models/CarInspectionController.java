@@ -37,10 +37,13 @@ public class CarInspectionController {
             return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
         } else {
             Long id = carInspectionService.createInspection(carInspectionDto);
+            carInspectionDto.getId();
             carInspectionDto.id = id;
 
             URI uri = URI.create(ServletUriComponentsBuilder.
-                    fromCurrentRequest().path("/" + id).toUriString());
+                    fromCurrentRequest()
+                    .path("/" + id)
+                    .toUriString());
 
             return ResponseEntity.created(uri).body(carInspectionDto);
         }

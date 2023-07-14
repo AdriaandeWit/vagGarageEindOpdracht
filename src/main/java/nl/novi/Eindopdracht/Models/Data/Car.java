@@ -9,11 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
-
+import nl.novi.Eindopdracht.Models.Security.Authority;
 
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -62,8 +64,16 @@ public class Car {
     @JsonIgnore
     private CustomerAccount account;
 
-    @OneToMany(mappedBy = "Car")
-    private List<CarInspection>  carInspection;
+    @OneToMany(targetEntity = CarInspection.class,
+            mappedBy = "Car")
+    private List<CarInspection>  carInspections;
+
+
+    public void addCarInspection(CarInspection carInspection){
+        this.carInspections.add(carInspection);
+    }
+
+
 
 
 }

@@ -61,9 +61,9 @@ public class CarIntegrationTest {
         car2 = new Car(2L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, MANUAL, Fuel.DIESEL, null, null);
         car3 = new Car(3L, CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.PETROL, null, null);
 
-        account1 = new CustomerAccount(1L, "Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
-        account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
-        account3 = new CustomerAccount(3L, "Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
+        account1 = new CustomerAccount("Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
+        account2 = new CustomerAccount("Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
+        account3 = new CustomerAccount("Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
 
         carOutputDto1 = new CarOutputDto();
         carOutputDto1.setId(car1.getId());
@@ -104,7 +104,7 @@ public class CarIntegrationTest {
         carOutputDto3.setTransmission(car3.getTransmission());
         carOutputDto3.setFuel(car3.getFuel());
         carOutputDto3.setAccount(car3.getAccount());
-        carOutputDto3.setCarInspection((CarInspection) car3.getCarInspection());
+        carOutputDto3.setCarInspectionOutputDtos((CarInspection) car3.getCarInspection());
 
 
         accountRepos.save(account1);

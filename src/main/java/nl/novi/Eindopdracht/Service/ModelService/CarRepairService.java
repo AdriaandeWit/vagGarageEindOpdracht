@@ -3,6 +3,7 @@ package nl.novi.Eindopdracht.Service.ModelService;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 
 import nl.novi.Eindopdracht.Models.Data.CarParts.Brakes;
+import nl.novi.Eindopdracht.Models.Data.CarParts.CarParts;
 import nl.novi.Eindopdracht.Models.Data.CarParts.SparkPlug;
 import nl.novi.Eindopdracht.Models.Data.CarParts.Tyres;
 import nl.novi.Eindopdracht.Models.Data.CarRepair;
@@ -15,12 +16,17 @@ import nl.novi.Eindopdracht.Repository.TyreRepository;
 import nl.novi.Eindopdracht.dto.input.CarRepairDto;
 
 import nl.novi.Eindopdracht.dto.input.PartDto;
+import nl.novi.Eindopdracht.dto.output.CarPartsDto.BrakesOutputDto;
+import nl.novi.Eindopdracht.dto.output.CarPartsDto.CarPartsOutputDto;
+import nl.novi.Eindopdracht.dto.output.CarPartsDto.SparkPlugOutputDto;
+import nl.novi.Eindopdracht.dto.output.CarPartsDto.TyresOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarRepairOutputDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ForkJoinPool;
 
 
 @Service
@@ -97,16 +103,15 @@ public class CarRepairService {
         }
 
     }
-    public void addPartToCarRepair(long carRepairId, PartDto partDto) {
-        PartType partType = partDto.partType;
-        Long partId = partDto.partID;
+    public void addPartToCarRepair(Long carRepairId, PartDto partDto) {
         Optional<CarRepair> optionalCarRepair = repairRepos.findById(carRepairId);
         if (optionalCarRepair.isEmpty()) {
             throw new RecordNotFoundException("car repair not found");
         }
 
         CarRepair carRepair = optionalCarRepair.get();
-
+        PartType partType = partDto.partType;
+        Long partId = partDto.partID;
         switch (partType) {
             case BRAKE -> {
                 Optional<Brakes> optionalBrakes = brakeRepos.findById(partId);
@@ -114,7 +119,9 @@ public class CarRepairService {
                     throw new RecordNotFoundException("Brakes", "brakeId", partId);
                 }
                 Brakes brakes = optionalBrakes.get();
-                carRepair.getCarParts().add(brakes);
+                brakes.setCarRepair(carRepair);
+                brakeRepos.save(brakes);
+
             }
             case SPARKPLUG -> {
                 Optional<SparkPlug> optionalSparkPlug = sprakPlugRepos.findById(partId);
@@ -122,7 +129,8 @@ public class CarRepairService {
                     throw new RecordNotFoundException("spark plug", "sparkPlugId", partId);
                 }
                 SparkPlug sparkPlug = optionalSparkPlug.get();
-                carRepair.getCarParts().add(sparkPlug);
+                sparkPlug.setCarRepair(carRepair);
+                sprakPlugRepos.save(sparkPlug);
             }
             case TYRES -> {
                 Optional<Tyres> optionalTyre = tyreRepos.findById(partId);
@@ -130,12 +138,12 @@ public class CarRepairService {
                     throw new RecordNotFoundException("tyre", "tyreId", partId);
                 }
                 Tyres tyres = optionalTyre.get();
-                carRepair.getCarParts().add(tyres);
+                tyres.setCarRepair(carRepair);
+                tyreRepos.save(tyres);
             }
             default -> throw new IllegalArgumentException("Invalid part type");
         }
 
-        repairRepos.save(carRepair);
     }
 
     public String deleteRepairById(long id) {
@@ -160,6 +168,91 @@ public class CarRepairService {
         return partCost + laborCost;
     }
 
+//    private List<CarPartsOutputDto> mapCarPartsToDtos(List<CarParts> carParts) {
+//        List<CarPartsOutputDto> partsDtos = new ArrayList<>();
+//        for (CarParts part : carParts) {
+//            CarPartsOutputDto partDto = createCarPartsOutputDto(part);
+//            if (partDto != null) {
+//                partsDtos.add(partDto);
+//            }
+//        }
+//        return partsDtos;
+//    }
+ private List<CarPartsOutputDto> mapCarPartsToDtos(List<CarParts> carParts) {
+       if(carParts == null){
+           return new ArrayList<>();
+       }
+       List<CarPartsOutputDto> partsDtos = new ArrayList<>();
+        for (CarParts parts : carParts){
+            CarPartsOutputDto partsOutputDto = createCarPartsOutputDto(parts);
+            if(partsOutputDto !=null){
+                partsDtos.add(partsOutputDto);
+            }
+        }
+        return partsDtos;
+    }
+
+    private CarPartsOutputDto createCarPartsOutputDto(CarParts part) {
+        if (part instanceof Brakes) {
+            BrakesOutputDto brakesDto = new BrakesOutputDto();
+            mapCommonProperties(brakesDto, part);
+            mapBrakesSpecificProperties(brakesDto, (Brakes) part);
+            return brakesDto;
+        } else if (part instanceof Tyres) {
+            TyresOutputDto tyresDto = new TyresOutputDto();
+            mapCommonProperties(tyresDto, part);
+            mapTyresSpecificProperties(tyresDto, (Tyres) part);
+            return tyresDto;
+        } else if (part instanceof SparkPlug) {
+            SparkPlugOutputDto sparkPlugDto = new SparkPlugOutputDto();
+            mapCommonProperties(sparkPlugDto, part);
+            mapSparkPlugSpecificProperties(sparkPlugDto, (SparkPlug) part);
+            return sparkPlugDto;
+        } else {
+            return null;
+        }
+    }
+
+    private void mapCommonProperties(CarPartsOutputDto partDto, CarParts part) {
+        partDto.setId(part.getId());
+        partDto.setPartType(part.getPartType());
+        partDto.setPartName(part.getPartName());
+        partDto.setPartNumber(part.getPartNumber());
+        partDto.setPrice(part.getPrice());
+        partDto.setAmountOfParts(part.getAmountOfParts());
+    }
+
+    private void mapBrakesSpecificProperties(BrakesOutputDto brakesDto, Brakes brakes) {
+        brakesDto.setOuterDiameter(brakes.getOuterDiameter());
+        brakesDto.setCenterDiameter(brakes.getCenterDiameter());
+        brakesDto.setHeight(brakes.getHeight());
+        brakesDto.setMinThickness(brakes.getMinThickness());
+        brakesDto.setSurface(brakes.getSurface());
+        brakesDto.setDiscThickness(brakes.getDiscThickness());
+        brakesDto.setBoreTypeNumberOfHoles(brakes.getBoreTypeNumberOfHoles());
+        brakesDto.setWheelStudDiameter(brakes.getWheelStudDiameter());
+        brakesDto.setWithoutWheelMountingBolts(brakes.getWithoutWheelMountingBolts());
+        brakesDto.setWithoutWheelHub(brakes.getWithoutWheelHub());
+    }
+
+    private void mapTyresSpecificProperties(TyresOutputDto tyresDto, Tyres tyres) {
+        tyresDto.setTyresHight(tyres.getTyresHight());
+        tyresDto.setTyresWidth(tyres.getTyresWidth());
+        tyresDto.setDiameter(tyres.getDiameter());
+        tyresDto.setLoadIndex(tyres.getLoadIndex());
+        tyresDto.setSpeedIndex(tyres.getSpeedIndex());
+        tyresDto.setProductionDate(tyres.getProductionDate());
+    }
+
+    private void mapSparkPlugSpecificProperties(SparkPlugOutputDto sparkPlugDto, SparkPlug sparkPlug) {
+        sparkPlugDto.setSpannerSize(sparkPlug.getSpannerSize());
+        sparkPlugDto.setQuality(sparkPlug.getQuality());
+        sparkPlugDto.setWarmthDegree(sparkPlug.getWarmthDegree());
+        sparkPlugDto.setThreadLength(sparkPlug.getThreadLength());
+        sparkPlugDto.setTorque(sparkPlug.getTorque());
+        sparkPlugDto.setSparkPosition(sparkPlug.getSparkPosition());
+    }
+
 
     public CarRepairOutputDto RepairToDto(CarRepair repair) {
         CarRepairOutputDto dto = new CarRepairOutputDto();
@@ -171,7 +264,7 @@ public class CarRepairService {
         dto.partCost = repair.getPartCost();
         dto.laborCost = repair.getLaborCost();
         dto.totalCost = repair.getTotalCost();
-        //dto.partType = repair.getPartType();
+        dto.carParts = mapCarPartsToDtos(repair.getCarParts());
 
 
         return dto;
@@ -186,7 +279,7 @@ public class CarRepairService {
         carR.setPartCost(repairDto.partCost);
         carR.setLaborCost(repairDto.laborCost);
         carR.setTotalCost(repairDto.totalCost);
-      //  carR.setPartType(repairDto.partType);
+
 
         return carR;
     }

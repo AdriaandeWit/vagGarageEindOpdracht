@@ -56,9 +56,9 @@ public class CarRepairController {
         return ResponseEntity.ok(dto);
     }
 
-/*    @GetMapping("/totalCost{id}")
-    public ResponseEntity<CarRepairOutputDto> getTotalCostById(@PathVariable long id) {
-        CarRepairOutputDto dto = repairService.getTotalCostByID(id);
+/*    @GetMapping("/totalCost{customerNumber}")
+    public ResponseEntity<CarRepairOutputDto> getTotalCostById(@PathVariable long customerNumber) {
+        CarRepairOutputDto dto = repairService.getTotalCostByID(customerNumber);
         return ResponseEntity.ok(dto);
     }*/
 
@@ -84,9 +84,9 @@ public class CarRepairController {
         }
     }
 
-    @PutMapping("/{carRepairId}/add/parts")
+    @PutMapping("/add/parts/{carRepairId}")
     public ResponseEntity<String> addPartToCarRepair(
-            @PathVariable long carRepairId,
+            @PathVariable Long carRepairId,
             @Valid @RequestBody PartDto partDto,BindingResult br
     ) {
         try {

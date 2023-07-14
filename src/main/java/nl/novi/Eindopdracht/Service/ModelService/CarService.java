@@ -11,6 +11,7 @@ import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 import nl.novi.Eindopdracht.dto.input.CarDto;
+import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarOutputDto;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,19 @@ public class CarService {
     private final CarRepository carRepos;
 
     private final CustomerAccountRepository cARepos;
+
+    private final CustomerAccountService customerAccountService;
     private final CarInspectionRepository carInspectionRepos;
+    private final CarInspectionService carInspectionService;
 
 
-    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos, CarInspectionRepository carInspectionRepos) {
+
+    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos, CustomerAccountService customerAccountService, CarInspectionRepository carInspectionRepos, CarInspectionService carInspectionService) {
         this.carRepos = carRepos;
         this.cARepos = cARepos;
+        this.customerAccountService = customerAccountService;
         this.carInspectionRepos = carInspectionRepos;
+        this.carInspectionService = carInspectionService;
     }
 
     public Long createCar(CarDto carDto) {
@@ -138,7 +145,7 @@ public class CarService {
             CarInspection inspection = optionalCarInspection.get();
             Car car = optionalCar.get();
 
-            car.getCarInspection().add(inspection);
+            car.addCarInspection(inspection);
             carRepos.save(car);
         }
     }
@@ -161,6 +168,7 @@ public class CarService {
         return "You deleted " + count + " cars";
     }
 
+
     public CarOutputDto carToDto(Car car) {
         CarOutputDto dto = new CarOutputDto();
         dto.id = car.getId();
@@ -174,7 +182,8 @@ public class CarService {
         dto.body = car.getBody();
         dto.transmission = car.getTransmission();
         dto.fuel = car.getFuel();
-        dto.account = car.getAccount();
+        dto.customerAccountOutputDto = car.getAccount() != null ? customerAccountService.mapToDTo1(car.getAccount()) : null;
+        dto.carInspectionOutputDtos = carInspectionService.mapCarInspectionsToDtos(car.getCarInspections());
 
         return dto;
     }

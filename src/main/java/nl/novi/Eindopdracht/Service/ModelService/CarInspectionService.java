@@ -5,6 +5,7 @@ import nl.novi.Eindopdracht.Exceptions.CarStatusNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.InspectionNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 
+import nl.novi.Eindopdracht.Models.Data.Car;
 import nl.novi.Eindopdracht.Models.Data.CarInspection;
 import nl.novi.Eindopdracht.Models.Data.CarRepair;
 import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarInspectionService {
@@ -51,15 +53,16 @@ public class CarInspectionService {
     }
 
     public List<CarInspectionOutputDto> getAllInspections() {
-        List<CarInspectionOutputDto> collectionOff = new ArrayList<>();
+        List<CarInspectionOutputDto> collectionOfDtos = new ArrayList<>();
         List<CarInspection> list = carInspectionRepos.findAll();
         if (list.isEmpty()) {
             throw new RecordNotFoundException("there are no records found on please check a anther carId");
         } else {
             for (CarInspection i : list) {
-                collectionOff.add(inspectionToDto(i));
+                CarInspectionOutputDto dto = inspectionToDto(i);
+                collectionOfDtos.add(dto);
             }
-            return collectionOff;
+            return collectionOfDtos;
         }
     }
 
@@ -116,10 +119,10 @@ public class CarInspectionService {
         Optional<CarRepair> optionalCarRepair = carRepairRepos.findById(repairId);
 
         if (optionalCarInspection.isEmpty()) {
-            throw new RecordNotFoundException("car inspection", "id ", id);
+            throw new RecordNotFoundException("car inspection", "customerNumber ", id);
         }
         if (optionalCarRepair.isEmpty()) {
-            throw new RecordNotFoundException("car repair", "repair id ", repairId);
+            throw new RecordNotFoundException("car repair", "repair customerNumber ", repairId);
         }
         CarInspection inspection = optionalCarInspection.get();
         CarRepair repair = optionalCarRepair.get();
@@ -143,6 +146,7 @@ public class CarInspectionService {
         carInspectionRepos.deleteAll();
         return "We deleted " + count + " inspections";
     }
+
     public CarInspection DtoToCarInspection(CarInspectionDto inspectionDto) {
         CarInspection inspection = new CarInspection();
         inspection.setId(inspectionDto.id);
@@ -168,5 +172,26 @@ public class CarInspectionService {
 
         return dto;
 
+    }
+
+    public List<CarInspectionOutputDto> mapCarInspectionsToDtos(List<CarInspection> inspections) {
+        List<CarInspectionOutputDto> inspectionDtos = new ArrayList<>();
+        for (CarInspection inspection : inspections) {
+            CarInspectionOutputDto inspectionDto = new CarInspectionOutputDto();
+
+            inspectionDto.setId(inspection.getId());
+            inspectionDto.setMileAge(inspection.getMileAge());
+            inspectionDto.setLicensePlate(inspection.getLicensePlate());
+            inspectionDto.setInspectionDate(inspection.getInspectionDate());
+            inspectionDto.setCarIsCorrect(inspection.isCarIsCorrect());
+            inspectionDto.setCarIsFine(inspection.getCarIsFine());
+            inspectionDto.setHasProblem(inspection.getHasProblem());
+
+
+            inspectionDtos.add(inspectionDto);
+
+            inspectionDtos.add(inspectionDto);
+        }
+        return inspectionDtos;
     }
 }

@@ -2,7 +2,6 @@ package nl.novi.Eindopdracht.dto.input;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,6 @@ import lombok.Setter;
 @Setter
 public class CustomerAccountDto {
 
-    public Long id;
     @NotBlank(message = "please enter a customer name ")
     public String customerName;
     @NotBlank(message = "please enter the firstname")@Pattern(regexp = "[A-Za-z]{2,15}")

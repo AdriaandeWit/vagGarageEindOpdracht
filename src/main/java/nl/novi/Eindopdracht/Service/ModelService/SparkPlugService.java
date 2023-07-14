@@ -113,6 +113,7 @@ public class SparkPlugService {
         SparkPlugOutputDto sparkPlugOutputDto = new SparkPlugOutputDto();
 
         sparkPlugOutputDto.id = sparkPlug.getId();
+        sparkPlugOutputDto.partType =sparkPlug.getPartType();
         sparkPlugOutputDto.partName = sparkPlug.getPartName();
         sparkPlugOutputDto.partNumber = sparkPlug.getPartNumber();
         sparkPlugOutputDto.price = sparkPlug.getPrice();

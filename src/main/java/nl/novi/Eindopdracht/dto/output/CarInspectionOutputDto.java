@@ -23,8 +23,9 @@ public class CarInspectionOutputDto {
 
     public String hasProblem;
 
-    private Car car;
 
-    private List<CarRepair> carRepairList;
+    public CarOutputDto carOutputDto;
+
+    public List<CarRepairOutputDto> carRepairOutputDtoList;
 
 }

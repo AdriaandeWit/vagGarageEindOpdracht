@@ -79,9 +79,9 @@ class CarServiceTest {
     void setUp() {
 
 
-        account1 = new CustomerAccount(1L, "Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
-        account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
-        account3 = new CustomerAccount(3L, "Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
+        account1 = new CustomerAccount("Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
+        account2 = new CustomerAccount("Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
+        account3 = new CustomerAccount("Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
 
         car1 = new Car(1L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSFI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
         car2 = new Car(2L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.MANUAL, Fuel.DIESEL, account2, null);
@@ -401,7 +401,7 @@ class CarServiceTest {
         when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.of(car1));
         when(carRepos.save(any(Car.class))).thenReturn(car1);
 
-        // Reset the carInspection list of car1 to an empty list
+        // Reset the carInspectionOutputDtos list of car1 to an empty list
         car1.setCarInspection(new ArrayList<>());
 
         // Call the addInspectionToCar method

@@ -85,14 +85,11 @@ public class CarController {
     }
 
     @PutMapping("/add/owner")
-    public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate,@Valid @RequestParam String customerName, BindingResult br ) {
-        if (br.hasErrors()){
-            String errorString = getErrorString(br);
-            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
-        }else {
+    public ResponseEntity<Object> addAccountToCar(@RequestParam String licensePlate,@RequestParam String customerName ) {
+
             carService.addAccountToCar(licensePlate, customerName);
             return ResponseEntity.ok().build();
-        }
+
     }
 
     @DeleteMapping("/delete")

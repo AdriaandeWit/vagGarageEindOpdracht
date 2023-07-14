@@ -25,44 +25,42 @@ import static nl.novi.Eindopdracht.Utils.Utillities.getErrorString;
 @RestController
 public class CustomerAccountController {
 
-    private final CustomerAccountService cAService;
+    private final CustomerAccountService customerAccountService;
 
     private final CarService carService;
 
 
     @PostMapping("/create/")
-    public ResponseEntity<Object> createCustomer(@Valid @RequestBody CustomerAccountDto cADto, BindingResult br){
+    public ResponseEntity<Object> createCustomer(@Valid @RequestBody CustomerAccountDto customerAccountDto, BindingResult br){
         if (br.hasErrors()){
             String errorString = getErrorString(br);
             return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
         }else {
 
-            Long id = cAService.createCostumer(cADto);
-            cADto.id = id;
-
+            CustomerAccountOutputDto costumer = customerAccountService.createCostumer(customerAccountDto);
 
             URI uri = URI.create(ServletUriComponentsBuilder.
-                    fromCurrentRequest().path("/" + id).toUriString());
+                    fromCurrentRequest().path("/" +costumer.customerName).toUriString());
 
-            return ResponseEntity.created(uri).body(cADto);
+            return ResponseEntity.created(uri).body(customerAccountDto);
         }
     }
 
     @GetMapping("/find/all/")
     public ResponseEntity<List<CustomerAccountOutputDto>> getAllCustomers(){
-        List<CustomerAccountOutputDto> customers = cAService.getAllCustomers();
+        List<CustomerAccountOutputDto> customers = customerAccountService.getAllCustomers();
         return ResponseEntity.ok(customers);
     }
 
     @GetMapping("/find/byId/")
     public ResponseEntity<CustomerAccountOutputDto > getCustomerByCustomerName(@RequestParam String customerName ){
-        CustomerAccountOutputDto customer = cAService.getCustomerByCustomerName(customerName);
+        CustomerAccountOutputDto customer = customerAccountService.getCustomerByCustomerName(customerName);
         return ResponseEntity.ok(customer);
     }
 
     @GetMapping("/find/billing-address/")
     public ResponseEntity<CustomerAccountOutputDto.CustomerFinanceOutputDto>getBillingAddressByCustomerName(@RequestParam String customerName){
-        CustomerAccountOutputDto.CustomerFinanceOutputDto customer = cAService.getBillingAddressByCustomerName(customerName);
+        CustomerAccountOutputDto.CustomerFinanceOutputDto customer = customerAccountService.getBillingAddressByCustomerName(customerName);
         return ResponseEntity.ok(customer);
     }
     @GetMapping("/find/car/")
@@ -71,17 +69,6 @@ public class CustomerAccountController {
         return ResponseEntity.ok(car);
     }
 
-    @PutMapping("/update/name/{id}")
-    public ResponseEntity<Object> updateCustomerNameById( @PathVariable long id,@Valid @RequestBody CustomerAccountDto accountDto,BindingResult br){
-        if (br.hasErrors()) {
-            String errorString = getErrorString(br);
-            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
-
-        }else {
-            CustomerAccountDto customer = cAService.updateCustomerNameById(id, accountDto);
-            return ResponseEntity.ok(customer);
-        }
-    }
 
     @PutMapping("/update/address/")
     public ResponseEntity<Object> updateFinanceByCustomerName( @RequestParam String customerName, @Valid @RequestBody CustomerAccountDto dto,BindingResult br){
@@ -89,20 +76,20 @@ public class CustomerAccountController {
             String errorString = getErrorString(br);
             return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
         }else{
-            CustomerAccountDto customer = cAService.updateFinance(customerName,dto);
+            CustomerAccountDto customer = customerAccountService.updateFinance(customerName,dto);
             return ResponseEntity.ok(customer);
         }
     }
 
     @DeleteMapping("/delete/by-name/")
     public ResponseEntity<String> deleteCustomerByCustomerName(@RequestParam String customerName){
-        cAService.deleteCustomerByCustomerName(customerName);
+        customerAccountService.deleteCustomerByCustomerName(customerName);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/all/")
     public ResponseEntity<String> deleteAllCustomers(){
-        cAService.deleteAllCustomers();
+        customerAccountService.deleteAllCustomers();
         return ResponseEntity.noContent().build();
 
     }

@@ -113,6 +113,7 @@ public class BrakeService {
         BrakesOutputDto brakesOutputDto = new BrakesOutputDto();
 
         brakesOutputDto.id = brakes.getId();
+        brakesOutputDto.partType = brakes.getPartType();
         brakesOutputDto.partName = brakes.getPartName();
         brakesOutputDto.partNumber = brakes.getPartNumber();
         brakesOutputDto.price = brakes.getPrice();
