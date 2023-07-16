@@ -168,16 +168,6 @@ public class CarRepairService {
         return partCost + laborCost;
     }
 
-//    private List<CarPartsOutputDto> mapCarPartsToDtos(List<CarParts> carParts) {
-//        List<CarPartsOutputDto> partsDtos = new ArrayList<>();
-//        for (CarParts part : carParts) {
-//            CarPartsOutputDto partDto = createCarPartsOutputDto(part);
-//            if (partDto != null) {
-//                partsDtos.add(partDto);
-//            }
-//        }
-//        return partsDtos;
-//    }
  private List<CarPartsOutputDto> mapCarPartsToDtos(List<CarParts> carParts) {
        if(carParts == null){
            return new ArrayList<>();

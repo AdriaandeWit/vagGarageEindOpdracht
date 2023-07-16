@@ -56,11 +56,6 @@ public class CarRepairController {
         return ResponseEntity.ok(dto);
     }
 
-/*    @GetMapping("/totalCost{customerNumber}")
-    public ResponseEntity<CarRepairOutputDto> getTotalCostById(@PathVariable long customerNumber) {
-        CarRepairOutputDto dto = repairService.getTotalCostByID(customerNumber);
-        return ResponseEntity.ok(dto);
-    }*/
 
     @PutMapping("/update/car-problem/{id}")
     public ResponseEntity<Object> updateCarProblem(@PathVariable long id,@Valid @RequestBody CarRepairDto repairDto ,BindingResult br) {

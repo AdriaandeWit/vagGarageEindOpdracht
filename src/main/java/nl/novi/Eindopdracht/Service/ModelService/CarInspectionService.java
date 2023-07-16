@@ -190,7 +190,6 @@ public class CarInspectionService {
 
             inspectionDtos.add(inspectionDto);
 
-            inspectionDtos.add(inspectionDto);
         }
         return inspectionDtos;
     }

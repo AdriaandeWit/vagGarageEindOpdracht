@@ -103,8 +103,7 @@ public class CarIntegrationTest {
         carOutputDto3.setBody(car3.getBody());
         carOutputDto3.setTransmission(car3.getTransmission());
         carOutputDto3.setFuel(car3.getFuel());
-        carOutputDto3.setAccount(car3.getAccount());
-        carOutputDto3.setCarInspectionOutputDtos((CarInspection) car3.getCarInspection());
+
 
 
         accountRepos.save(account1);

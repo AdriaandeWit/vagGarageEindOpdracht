@@ -9,8 +9,6 @@ insert into "tyres"(id, part_type, part_name, part_number, price, amount_of_part
 values (101, 'TYRES', 'Tyre', 'T-010', 67.00, 8, 26.5, 200, 300, '100', 'A', '2023-06-15'),
        (102, 'TYRES', 'Tyre', 'T-011', 72.50, 6, 28.0, 210, 310, '105', 'B', '2023-07-01'),
        (103, 'TYRES', 'Tyre', 'T-012', 82.00, 10, 25.0, 190, 290, '95', 'C', '2023-06-25');
-
-
 insert into "spark_plug" (id, part_Type, part_name, part_number, price, amount_of_parts, spanner_size, quality,
                           warmth_degree,
                           thread_length, torque, spark_position)

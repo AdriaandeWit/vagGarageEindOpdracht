@@ -10,8 +10,10 @@ import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 
+import nl.novi.Eindopdracht.Service.ModelService.CarInspectionService;
 import nl.novi.Eindopdracht.Service.ModelService.CarService;
 import nl.novi.Eindopdracht.dto.input.CarDto;
+import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarOutputDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,8 @@ class CarServiceTest {
 
     @InjectMocks
     CarService carService;
+    @InjectMocks
+    CarInspectionService carInspectionService;
 
 
     @Captor
@@ -74,6 +78,8 @@ class CarServiceTest {
 
     CarInspection carInspection1;
 
+    CarInspectionOutputDto carInspectionOutputDtos1;
+
 
     @BeforeEach
     void setUp() {
@@ -88,7 +94,7 @@ class CarServiceTest {
         car3 = new Car(3L, CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.PETROL, account3, null);
         car4 = new Car(4L, CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
 
-        carInspection1 = new CarInspection(1l, 10202, "D-899-PP", LocalDate.of(2023, 5, 14), false, null, "car has problem with spark plugs", car1, null);
+        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 14), false, null, "car has problem with spark plugs", car1, null);
 
         carDto1 = new CarDto();
         carDto1.setBrand(CarBrand.AUDI);
@@ -191,7 +197,14 @@ class CarServiceTest {
         carOutputDto4.setTransmission(Transmission.AUTOMATIC);
         carOutputDto4.setFuel(Fuel.PETROL);
 
-
+        carInspectionOutputDtos1 = new CarInspectionOutputDto();
+        carInspectionOutputDtos1.setId(carInspection1.getId());
+        carInspectionOutputDtos1.setMileAge(carInspection1.getMileAge());
+        carInspectionOutputDtos1.setLicensePlate(carInspection1.getLicensePlate());
+        carInspectionOutputDtos1.setInspectionDate(carInspection1.getInspectionDate());
+        carInspectionOutputDtos1.setCarIsCorrect(carInspection1.isCarIsCorrect());
+        carInspectionOutputDtos1.setCarIsFine(carInspection1.getCarIsFine());
+        carInspectionOutputDtos1.setHasProblem(carInspection1.getHasProblem());
     }
 
 
@@ -395,14 +408,15 @@ class CarServiceTest {
 
        assertThrows(CarNotFoundException.class,()-> carService.addInspectionToCar(carInspection1.getId(), car2.getLicensePlate()));
 
-    }@Test
+    }
+    @Test
     void AddInspectionToCar_ValidLicensePlate() {
         when(inspectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
         when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.of(car1));
         when(carRepos.save(any(Car.class))).thenReturn(car1);
 
         // Reset the carInspectionOutputDtos list of car1 to an empty list
-        car1.setCarInspection(new ArrayList<>());
+        car1.setCarInspections(new ArrayList<>());
 
         // Call the addInspectionToCar method
         carService.addInspectionToCar(carInspection1.getId(), car1.getLicensePlate());
@@ -411,7 +425,7 @@ class CarServiceTest {
         verify(carRepos, times(1)).save(car1);
 
         // Assert that the car object contains the added CarInspection
-        assertTrue(car1.getCarInspection().contains(carInspection1));
+        assertTrue(car1.getCarInspections().contains(carInspection1));
     }
 
 
@@ -471,17 +485,15 @@ class CarServiceTest {
         assertEquals(car1.getTransmission(), actualDto.transmission);
 
     }
-
     @Test
-        //@Disabled
     void dtoToCar() {
-
+        // Arrange
         when(carRepos.save(car1)).thenReturn(car1);
 
-
+        // Act
         Car car1 = carService.transferDtoToCar(carDto1);
 
-
+        // Assert
         assertEquals(car1.getBrand(), carDto1.brand);
         assertEquals(car1.getModel(), carDto1.model);
         assertEquals(car1.getYearOfBuild(), carDto1.yearOfBuild);
@@ -490,7 +502,49 @@ class CarServiceTest {
         assertEquals(car1.getMileAge(), carDto1.mileAge);
         assertEquals(car1.getEngineType(), carDto1.engineType);
         assertEquals(car1.getTransmission(), carDto1.transmission);
+        assertEquals(car1.getBody(), carDto1.body);
+        assertEquals(car1.getFuel(), carDto1.fuel);
 
+        // Check customer account
+        if (carDto1.account != null) {
+            assertNotNull(car1.getAccount());
+            // Add assertions for customer account properties
+            // ...
+        } else {
+            assertNull(car1.getAccount());
+        }
+
+        // Check car inspections
+        if (carDto1.carInspection != null) {
+            // Add assertions for car inspection properties
+            // ...
+        } else {
+            assertTrue(car1.getCarInspections().isEmpty());
+        }
     }
+
+
+
+
+//    @Test
+//        //@Disabled
+//    void dtoToCar() {
+//
+//        when(carRepos.save(car1)).thenReturn(car1);
+//
+//
+//        Car car1 = carService.transferDtoToCar(carDto1);
+//
+//
+//        assertEquals(car1.getBrand(), carDto1.brand);
+//        assertEquals(car1.getModel(), carDto1.model);
+//        assertEquals(car1.getYearOfBuild(), carDto1.yearOfBuild);
+//        assertEquals(car1.getColor(), carDto1.color);
+//        assertEquals(car1.getLicensePlate(), carDto1.licensePlate);
+//        assertEquals(car1.getMileAge(), carDto1.mileAge);
+//        assertEquals(car1.getEngineType(), carDto1.engineType);
+//        assertEquals(car1.getTransmission(), carDto1.transmission);
+//
+//    }
 }
 
