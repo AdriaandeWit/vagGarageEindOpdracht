@@ -2,7 +2,7 @@ package nl.novi.Eindopdracht.Controllers.Security;
 
 
 import nl.novi.Eindopdracht.Service.SecurityService.JwtService;
-import nl.novi.Eindopdracht.Service.SecurityService.MyUserDetailService;
+import nl.novi.Eindopdracht.Service.SecurityService.CustomUserDetailsService;
 import nl.novi.Eindopdracht.payload.AuthenticationRequest;
 import nl.novi.Eindopdracht.payload.AuthenticationResponse;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +21,14 @@ public class AuthController {
 
     private final AuthenticationManager authManager;
 
-    private final MyUserDetailService myUserDetailService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager man, JwtService service, MyUserDetailService myUserDetailService) {
+    public AuthController(AuthenticationManager man, JwtService service, CustomUserDetailsService customUserDetailsService) {
         this.authManager = man;
-        this.myUserDetailService = myUserDetailService;
+        this.customUserDetailsService = customUserDetailsService;
         this.jwtService = service;
-    }
-
-    @GetMapping(value = "/authenticated")
-    public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
-        return ResponseEntity.ok().body(principal);
     }
 
     @PostMapping(value = "/authenticate")
@@ -50,7 +45,7 @@ public class AuthController {
             throw new Exception("Incorrect username or password", ex);
         }
 
-        final UserDetails userDetails = myUserDetailService
+        final UserDetails userDetails = customUserDetailsService
                 .loadUserByUsername(username);
 
         final String jwt = jwtService.generateToken(userDetails);

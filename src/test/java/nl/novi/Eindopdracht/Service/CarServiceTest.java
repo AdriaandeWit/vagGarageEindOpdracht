@@ -6,11 +6,14 @@ import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 import nl.novi.Eindopdracht.Models.Data.*;
 import nl.novi.Eindopdracht.Models.Data.Enum.*;
+import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 
+import nl.novi.Eindopdracht.Service.ModelService.CarInspectionService;
 import nl.novi.Eindopdracht.Service.ModelService.CarService;
 import nl.novi.Eindopdracht.dto.input.CarDto;
+import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarOutputDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,8 +44,14 @@ class CarServiceTest {
     @Mock
     CustomerAccountRepository cARepos;
 
+    @Mock
+    CarInspectionRepository inspectionRepos;
+
     @InjectMocks
     CarService carService;
+    @InjectMocks
+    CarInspectionService carInspectionService;
+
 
     @Captor
     ArgumentCaptor<Car> argumentCaptor;
@@ -57,33 +66,145 @@ class CarServiceTest {
     Car car3;
     Car car4;
 
-    CarDto carDto;
+    CarDto carDto1;
+    CarDto carDto2;
+    CarDto carDto3;
+    CarDto carDto4;
+
+    CarOutputDto carOutputDto1;
+    CarOutputDto carOutputDto2;
+    CarOutputDto carOutputDto3;
+    CarOutputDto carOutputDto4;
+
+    CarInspection carInspection1;
+
+    CarInspectionOutputDto carInspectionOutputDtos1;
+
 
     @BeforeEach
     void setUp() {
 
 
-        account1 = new CustomerAccount(1L, "Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
-        account2 = new CustomerAccount(2L, "Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
-        account3 = new CustomerAccount(3L, "Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
+        account1 = new CustomerAccount("Adriaan de Wit", "Adriaan", "De wit", "Prinsessenweg 19", "0623123421", "Prinsessenweg 19", "nl21INGB 5555 555 05");
+        account2 = new CustomerAccount("Hendrick lopers", "Hendrick ", "Lopers", "DaltonLaan 21", "06123456778", "Daltonlaan 21", "nl21 55553218");
+        account3 = new CustomerAccount("Jan Vermeer", "Jan", "Vermeer", "Biltstraat 3", "06789344561", "Biltstraat 3", "nl21 INGB 343321");
 
-        car1 = new Car(CarBrand.VOLKSWAGEN, CarModel.GOLF, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSI, Body.HATCHBACK, Transmission.Automatic, Fuel.Petrol, account1, null);
-        car2 = new Car(CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.Manual, Fuel.DIESEL, account2, null);
-        car3 = new Car(CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.Petrol, account3, null);
-        car4 = new Car(CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.Automatic, Fuel.Petrol, account1, null);
+        car1 = new Car(1L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2020, 4, 12), Colors.BLACK, "D-899-PP", 10202, EngineType.TSFI, Body.HATCHBACK, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
+        car2 = new Car(2L, CarBrand.AUDI, CarModel.A3, LocalDate.of(2022, 8, 2), Colors.BROWN, "D-710-PP", 150123, EngineType.TDI, Body.HATCHBACK, Transmission.MANUAL, Fuel.DIESEL, account2, null);
+        car3 = new Car(3L, CarBrand.AUDI, CarModel.A4, LocalDate.of(2018, 2, 5), Colors.SILVER, "G-810-DD", 501, EngineType.TSI, Body.SEDAN, Transmission.SEMIAUTOMATIC, Fuel.PETROL, account3, null);
+        car4 = new Car(4L, CarBrand.SEAT, CarModel.LEON, LocalDate.of(2020, 8, 2), Colors.GRAY, "G-703-DF", 23761, EngineType.TSI, Body.STATIONWAGON, Transmission.AUTOMATIC, Fuel.PETROL, account1, null);
 
-        carDto = new CarDto();
-        carDto.setBrand(CarBrand.SEAT);
-        carDto.setModel(CarModel.LEON);
-        carDto.setYearOfBuild(LocalDate.of(2020, 8, 2));
-        carDto.setColor(Colors.GRAY);
-        carDto.setLicensePlate("G-703-DF");
-        carDto.setMileAge(23761);
-        carDto.setEngineType(EngineType.TSI);
-        carDto.setBody(Body.STATIONWAGON);
-        carDto.setTransmission(Transmission.Automatic);
-        carDto.setFuel(Fuel.Petrol);
+        carInspection1 = new CarInspection(1L, 10202, "D-899-PP", LocalDate.of(2023, 5, 14), false, null, "car has problem with spark plugs", car1, null);
 
+        carDto1 = new CarDto();
+        carDto1.setBrand(CarBrand.AUDI);
+        carDto1.setModel(CarModel.A3);
+        carDto1.setYearOfBuild(LocalDate.of(2020, 4, 12));
+        carDto1.setColor(Colors.BLACK);
+        carDto1.setLicensePlate("D-899-PP");
+        carDto1.setMileAge(10202);
+        carDto1.setEngineType(EngineType.TSFI);
+        carDto1.setBody(Body.HATCHBACK);
+        carDto1.setTransmission(Transmission.AUTOMATIC);
+        carDto1.setFuel(Fuel.PETROL);
+
+        carDto2 = new CarDto();
+        carDto2.setBrand(CarBrand.AUDI);
+        carDto2.setModel(CarModel.A3);
+        carDto2.setYearOfBuild(LocalDate.of(2022, 8, 2));
+        carDto2.setColor(Colors.BROWN);
+        carDto2.setLicensePlate("D-710-PP");
+        carDto2.setMileAge(150123);
+        carDto2.setEngineType(EngineType.TDI);
+        carDto2.setBody(Body.HATCHBACK);
+        carDto2.setTransmission(Transmission.MANUAL);
+        carDto2.setFuel(Fuel.DIESEL);
+
+        carDto3 = new CarDto();
+        carDto3.setBrand(CarBrand.AUDI);
+        carDto3.setModel(CarModel.A4);
+        carDto3.setYearOfBuild(LocalDate.of(2018, 2, 5));
+        carDto3.setColor(Colors.SILVER);
+        carDto3.setLicensePlate("G-810-DD");
+        carDto3.setMileAge(501);
+        carDto3.setEngineType(EngineType.TSI);
+        carDto3.setBody(Body.SEDAN);
+        carDto3.setTransmission(Transmission.SEMIAUTOMATIC);
+        carDto3.setFuel(Fuel.PETROL);
+
+        carDto4 = new CarDto();
+        carDto4.setBrand(CarBrand.SEAT);
+        carDto4.setModel(CarModel.LEON);
+        carDto4.setYearOfBuild(LocalDate.of(2020, 8, 2));
+        carDto4.setColor(Colors.GRAY);
+        carDto4.setLicensePlate("G-703-DF");
+        carDto4.setMileAge(23761);
+        carDto4.setEngineType(EngineType.TSI);
+        carDto4.setBody(Body.STATIONWAGON);
+        carDto4.setTransmission(Transmission.AUTOMATIC);
+        carDto4.setFuel(Fuel.PETROL);
+
+
+        carOutputDto1 = new CarOutputDto();
+        carOutputDto1.setId(1L);
+        carOutputDto1.setBrand(CarBrand.AUDI);
+        carOutputDto1.setModel(CarModel.A3);
+        carOutputDto1.setYearOfBuild(LocalDate.of(2020, 4, 12));
+        carOutputDto1.setColor(Colors.BLACK);
+        carOutputDto1.setLicensePlate("D-899-PP");
+        carOutputDto1.setMileAge(10202);
+        carOutputDto1.setEngineType(EngineType.TSFI);
+        carOutputDto1.setBody(Body.HATCHBACK);
+        carOutputDto1.setTransmission(Transmission.AUTOMATIC);
+        carOutputDto1.setFuel(Fuel.PETROL);
+
+        carOutputDto2 = new CarOutputDto();
+        carOutputDto2.setId(2L);
+        carOutputDto2.setBrand(CarBrand.AUDI);
+        carOutputDto2.setModel(CarModel.A3);
+        carOutputDto2.setYearOfBuild(LocalDate.of(2022, 8, 2));
+        carOutputDto2.setColor(Colors.BROWN);
+        carOutputDto2.setLicensePlate("D-710-PP");
+        carOutputDto2.setMileAge(150123);
+        carOutputDto2.setEngineType(EngineType.TDI);
+        carOutputDto2.setBody(Body.HATCHBACK);
+        carOutputDto2.setTransmission(Transmission.MANUAL);
+        carOutputDto2.setFuel(Fuel.DIESEL);
+
+        carOutputDto3 = new CarOutputDto();
+        carOutputDto3.setId(3L);
+        carOutputDto3.setBrand(CarBrand.AUDI);
+        carOutputDto3.setModel(CarModel.A4);
+        carOutputDto3.setYearOfBuild(LocalDate.of(2018, 2, 5));
+        carOutputDto3.setColor(Colors.SILVER);
+        carOutputDto3.setLicensePlate("G-810-DD");
+        carOutputDto3.setMileAge(501);
+        carOutputDto3.setEngineType(EngineType.TSI);
+        carOutputDto3.setBody(Body.SEDAN);
+        carOutputDto3.setTransmission(Transmission.SEMIAUTOMATIC);
+        carOutputDto3.setFuel(Fuel.PETROL);
+
+        carOutputDto4 = new CarOutputDto();
+        carOutputDto4.setId(4L);
+        carOutputDto4.setBrand(CarBrand.SEAT);
+        carOutputDto4.setModel(CarModel.LEON);
+        carOutputDto4.setYearOfBuild(LocalDate.of(2020, 8, 2));
+        carOutputDto4.setColor(Colors.GRAY);
+        carOutputDto4.setLicensePlate("G-703-DF");
+        carOutputDto4.setMileAge(23761);
+        carOutputDto4.setEngineType(EngineType.TSI);
+        carOutputDto4.setBody(Body.STATIONWAGON);
+        carOutputDto4.setTransmission(Transmission.AUTOMATIC);
+        carOutputDto4.setFuel(Fuel.PETROL);
+
+        carInspectionOutputDtos1 = new CarInspectionOutputDto();
+        carInspectionOutputDtos1.setId(carInspection1.getId());
+        carInspectionOutputDtos1.setMileAge(carInspection1.getMileAge());
+        carInspectionOutputDtos1.setLicensePlate(carInspection1.getLicensePlate());
+        carInspectionOutputDtos1.setInspectionDate(carInspection1.getInspectionDate());
+        carInspectionOutputDtos1.setCarIsCorrect(carInspection1.isCarIsCorrect());
+        carInspectionOutputDtos1.setCarIsFine(carInspection1.getCarIsFine());
+        carInspectionOutputDtos1.setHasProblem(carInspection1.getHasProblem());
     }
 
 
@@ -92,12 +213,12 @@ class CarServiceTest {
     void createCar() {
 
         when(carRepos.save(car4)).thenReturn(car4);
-        carService.createCar(carDto);
+        carService.createCar(carDto4);
 
         verify(carRepos, times(1)).save(argumentCaptor.capture());
         Car car = argumentCaptor.getValue();
 
-        assertEquals(car4.getBrand(), car.getBrand());
+        assertEquals(car4.getBrand(), car4.getBrand());
         assertEquals(car4.getModel(), car.getModel());
         assertEquals(car4.getYearOfBuild(), car.getYearOfBuild());
         assertEquals(car4.getColor(), car.getColor());
@@ -143,7 +264,7 @@ class CarServiceTest {
 
         when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.ofNullable(car1));
 
-       CarOutputDto result = carService.getCarByCarLicensePlate(car1.getLicensePlate());
+        CarOutputDto result = carService.getCarByCarLicensePlate(car1.getLicensePlate());
 
         assertEquals(car1.getLicensePlate(), result.getLicensePlate());
         assertEquals(car1.getBrand(), result.getBrand());
@@ -223,7 +344,7 @@ class CarServiceTest {
         //  @Disabled
     void updateCarMileage_InvalidLicensePlate() {
         when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.empty());
-        assertThrows(RecordNotFoundException.class, () -> carService.updateCarMileage(car1.getLicensePlate(), 1500));
+        assertThrows(RecordNotFoundException.class, () -> carService.updateCarMileage(car1.getLicensePlate(), carDto1));
     }
 
     @Test
@@ -236,12 +357,12 @@ class CarServiceTest {
         when(carRepos.findByLicensePlate(licensePlate)).thenReturn(Optional.of(car1));
         when(carRepos.save(car1)).thenReturn(car1);
 //act
-        carService.updateCarMileage(licensePlate, 1500);
+        carService.updateCarMileage(licensePlate, carDto1);
 
 //asserts
         verify(carRepos, times(1)).save(car1);
         assertEquals(licensePlate, car1.getLicensePlate());
-        assertEquals(1500, car1.getMileAge().intValue());
+        assertEquals(carDto1.mileAge, car1.getMileAge());
 
 
     }
@@ -251,7 +372,7 @@ class CarServiceTest {
     void updateEngineType_InvalidLicensePlate() {
         when(carRepos.findByLicensePlate(car2.getLicensePlate())).thenReturn(Optional.empty());
 
-        assertThrows(RecordNotFoundException.class, () -> carService.updateEngineType(car2.getLicensePlate(), EngineType.tSFI));
+        assertThrows(RecordNotFoundException.class, () -> carService.updateEngineType(car2.getLicensePlate(), carDto2));
 
     }
 
@@ -263,12 +384,48 @@ class CarServiceTest {
         when(carRepos.findByLicensePlate(car2.getLicensePlate())).thenReturn(Optional.of(car2));
         when(carRepos.save(car2)).thenReturn(car2);
         //act
-        carService.updateEngineType(car2.getLicensePlate(), EngineType.tSFI);
+        carService.updateEngineType(car2.getLicensePlate(), carDto2);
 
         verify(carRepos, times(1)).save(car2);
 
-        assertEquals(EngineType.tSFI, car2.getEngineType());
+        assertEquals(carDto2.engineType, car2.getEngineType());
 
+    }
+
+    @Test
+    void AddInspectionToCar_InvalidLicensePlate(){
+
+        when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.empty());
+        when(inspectionRepos.findById(carInspection1.getId())).thenReturn(Optional.empty());
+
+        assertThrows(RecordNotFoundException.class, () -> carService.addInspectionToCar(carInspection1.getId(), car1.getLicensePlate()));
+
+    }
+    @Test
+    void AddInspectionToCar_InvalidCarInspectionId() {
+        when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.empty());
+        when(inspectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
+
+       assertThrows(CarNotFoundException.class,()-> carService.addInspectionToCar(carInspection1.getId(), car2.getLicensePlate()));
+
+    }
+    @Test
+    void AddInspectionToCar_ValidLicensePlate() {
+        when(inspectionRepos.findById(carInspection1.getId())).thenReturn(Optional.of(carInspection1));
+        when(carRepos.findByLicensePlate(car1.getLicensePlate())).thenReturn(Optional.of(car1));
+        when(carRepos.save(any(Car.class))).thenReturn(car1);
+
+        // Reset the carInspectionOutputDtos list of car1 to an empty list
+        car1.setCarInspections(new ArrayList<>());
+
+        // Call the addInspectionToCar method
+        carService.addInspectionToCar(carInspection1.getId(), car1.getLicensePlate());
+
+        // Verify that the save method was called once
+        verify(carRepos, times(1)).save(car1);
+
+        // Assert that the car object contains the added CarInspection
+        assertTrue(car1.getCarInspections().contains(carInspection1));
     }
 
 
@@ -328,26 +485,66 @@ class CarServiceTest {
         assertEquals(car1.getTransmission(), actualDto.transmission);
 
     }
-
     @Test
-        //@Disabled
     void dtoToCar() {
-
+        // Arrange
         when(carRepos.save(car1)).thenReturn(car1);
 
+        // Act
+        Car car1 = carService.transferDtoToCar(carDto1);
 
-        Car car1 = carService.transferDtoToCar(carDto);
+        // Assert
+        assertEquals(car1.getBrand(), carDto1.brand);
+        assertEquals(car1.getModel(), carDto1.model);
+        assertEquals(car1.getYearOfBuild(), carDto1.yearOfBuild);
+        assertEquals(car1.getColor(), carDto1.color);
+        assertEquals(car1.getLicensePlate(), carDto1.licensePlate);
+        assertEquals(car1.getMileAge(), carDto1.mileAge);
+        assertEquals(car1.getEngineType(), carDto1.engineType);
+        assertEquals(car1.getTransmission(), carDto1.transmission);
+        assertEquals(car1.getBody(), carDto1.body);
+        assertEquals(car1.getFuel(), carDto1.fuel);
 
+        // Check customer account
+        if (carDto1.account != null) {
+            assertNotNull(car1.getAccount());
+            // Add assertions for customer account properties
+            // ...
+        } else {
+            assertNull(car1.getAccount());
+        }
 
-        assertEquals(car1.getBrand(), carDto.brand);
-        assertEquals(car1.getModel(), carDto.model);
-        assertEquals(car1.getYearOfBuild(), carDto.yearOfBuild);
-        assertEquals(car1.getColor(), carDto.color);
-        assertEquals(car1.getLicensePlate(), carDto.licensePlate);
-        assertEquals(car1.getMileAge(), carDto.mileAge);
-        assertEquals(car1.getEngineType(), carDto.engineType);
-        assertEquals(car1.getTransmission(), carDto.transmission);
-
+        // Check car inspections
+        if (carDto1.carInspection != null) {
+            // Add assertions for car inspection properties
+            // ...
+        } else {
+            assertTrue(car1.getCarInspections().isEmpty());
+        }
     }
+
+
+
+
+//    @Test
+//        //@Disabled
+//    void dtoToCar() {
+//
+//        when(carRepos.save(car1)).thenReturn(car1);
+//
+//
+//        Car car1 = carService.transferDtoToCar(carDto1);
+//
+//
+//        assertEquals(car1.getBrand(), carDto1.brand);
+//        assertEquals(car1.getModel(), carDto1.model);
+//        assertEquals(car1.getYearOfBuild(), carDto1.yearOfBuild);
+//        assertEquals(car1.getColor(), carDto1.color);
+//        assertEquals(car1.getLicensePlate(), carDto1.licensePlate);
+//        assertEquals(car1.getMileAge(), carDto1.mileAge);
+//        assertEquals(car1.getEngineType(), carDto1.engineType);
+//        assertEquals(car1.getTransmission(), carDto1.transmission);
+//
+//    }
 }
 

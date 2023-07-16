@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import lombok.Setter;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
 
 @JsonTypeInfo(
@@ -13,19 +14,18 @@ import lombok.Setter;
         visible = true
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = BrakesOutputDto.class, name = "Brake"),
-        @JsonSubTypes.Type(value = TyresOutputDto.class, name = "Tyres"),
-        @JsonSubTypes.Type(value = SparkPlugOutputDto.class,name = "SparkPlug")
+        @JsonSubTypes.Type(value = BrakesOutputDto.class, name = "BRAKE"),
+        @JsonSubTypes.Type(value = TyresOutputDto.class, name = "TYRES"),
+        @JsonSubTypes.Type(value = SparkPlugOutputDto.class,name = "SPARKPLUG")
 })
 @Getter
 @Setter
 public abstract class CarPartsOutputDto {
     public Long id;
+    public PartType partType;
     public String partName;
     public String partNumber;
     public Double price;
     public Integer amountOfParts;
-
-
 
 }

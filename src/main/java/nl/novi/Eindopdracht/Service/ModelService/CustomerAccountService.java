@@ -9,7 +9,6 @@ import nl.novi.Eindopdracht.Models.Data.CustomerAccount;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 import nl.novi.Eindopdracht.dto.input.CustomerAccountDto;
-import nl.novi.Eindopdracht.dto.output.CarOutputDto;
 import nl.novi.Eindopdracht.dto.output.CustomerAccountOutputDto;
 import org.springframework.stereotype.Service;
 
@@ -19,57 +18,58 @@ import java.util.*;
 public class CustomerAccountService {
 
 
-    private final CustomerAccountRepository cARepos;
+    private final CustomerAccountRepository customerAccountRepos;
 
     private final CarRepository carRepos;
 
 
 
 
-    public Long createCostumer(CustomerAccountDto cADto) {
-        CustomerAccount account = DtoToAccount(cADto);
+    public CustomerAccountOutputDto createCostumer(CustomerAccountDto cADto) {
+        CustomerAccount account = mapToAccount(cADto);
+        account = customerAccountRepos.save(account);
 
-        cARepos.save(account);
-        return account.getId();
+        CustomerAccountOutputDto savedAccountDto = mapToDTo1(account);
+        return savedAccountDto;
     }
 
     public List<CustomerAccountOutputDto> getAllCustomers() {
         List<CustomerAccountOutputDto> collection = new ArrayList<>();
-        List<CustomerAccount> list = cARepos.findAll();
+        List<CustomerAccount> list = customerAccountRepos.findAll();
         for (CustomerAccount account : list) {
-            collection.add(accountToDTo1(account));
+            collection.add(mapToDTo1(account));
         }
         return collection;
     }
 
     public CustomerAccountOutputDto getCustomerByCustomerName(String customerName) {
-        Optional<CustomerAccount> account = cARepos.findAccountByCustomerName(customerName);
+        Optional<CustomerAccount> account = customerAccountRepos.findAccountByCustomerName(customerName);
         if (account.isEmpty()) {
             throw new RecordNotFoundException("cannot find customer please enter a new carId ");
         } else {
             CustomerAccount a = account.get();
-            return accountToDTo1(a);
+            return mapToDTo1(a);
         }
     }
 
     public CustomerAccountOutputDto.CustomerNameOutputDto getCustomerByLastName(String customerLastName) {
-        Optional<List<CustomerAccount>> optionalAccounts = cARepos.findByLastName(customerLastName);
+        Optional<List<CustomerAccount>> optionalAccounts = customerAccountRepos.findByLastName(customerLastName);
         if (!optionalAccounts.isPresent()) {
             throw new RecordNotFoundException("cannot find customer please enter a anther name");
         } else {
             CustomerAccount a = (CustomerAccount) optionalAccounts.get();
-            return accountToDTo2(a);
+            return mapToDTo2(a);
         }
 
     }
 
     public CustomerAccountOutputDto.CustomerFinanceOutputDto getBillingAddressByCustomerName(String customerName) {
-        Optional<CustomerAccount> accountOptional = cARepos.findAllByCustomerName(customerName);
+        Optional<CustomerAccount> accountOptional = customerAccountRepos.findAllByCustomerName(customerName);
         if (!accountOptional.isPresent()) {
-            throw new RecordNotFoundException("cannot find the billing address so please enter a anther carId");
+            throw new RecordNotFoundException("cannot find the billing address so please enter a anther name");
         } else {
             CustomerAccount a = accountOptional.get();
-            return accountToDTo3(a);
+            return mapToDTo3(a);
         }
     }
     public CustomerAccountOutputDto getAccountByLicensePlate(String licensePlate) {
@@ -80,64 +80,45 @@ public class CustomerAccountService {
         } else {
             Car car = carOptional.get();
             CustomerAccount account = car.getAccount();
-            return accountToDTo1(account);
+            return mapToDTo1(account);
         }
         }
 
 
 
-
-
-    public CustomerAccountDto updateCustomerNameById(long id, String firstName, String LastName) {
-        Optional<CustomerAccount> accountOptional = cARepos.findById(id);
-
+    public CustomerAccountDto updateFinance(String customerName, CustomerAccountDto dto) {
+        Optional<CustomerAccount> accountOptional = customerAccountRepos.findAccountByCustomerName(customerName);
         if (accountOptional.isEmpty()) {
-            throw new RecordNotFoundException("Can not find " + firstName + LastName + "so please enter a anther carId ");
-        } else {
-            CustomerAccount name = accountOptional.get();
-            name.setFirstName(firstName);
-            name.setLastName(LastName);
-            cARepos.save(name);
-            return null;
-        }
-
-
-    }
-
-    public CustomerAccountDto updateFinance(String customerName, String billingAdress, String bankAccountNumber) {
-        Optional<CustomerAccount> accountOptional = cARepos.findAccountByCustomerName(customerName);
-        if (accountOptional.isEmpty()) {
-            throw new RecordNotFoundException("cannot find the files, please give me anther carId");
+            throw new RecordNotFoundException("cannot find the files, please give me anther customer name");
         } else {
             CustomerAccount a = accountOptional.get();
-            a.setBankAccountNumber(bankAccountNumber);
-            a.setBillingAddress(billingAdress);
-            cARepos.save(a);
+            a.setBankAccountNumber(dto.bankAccountNumber);
+            a.setBillingAddress(dto.billingAddress);
+            customerAccountRepos.save(a);
             return null;
         }
     }
 
     public String deleteCustomerByCustomerName(String customerName) {
-        if (!cARepos.existsById(customerName)) {
-            throw new CarNotFoundException("Car  off customer:" + customerName + "is not found");
+        if (!customerAccountRepos.existsById(customerName)) {
+            throw new CarNotFoundException("car  off customer:" + customerName + "is not found");
         } else {
-            long count = cARepos.count();
-            cARepos.deleteById(customerName);
+            long count = customerAccountRepos.count();
+            customerAccountRepos.deleteById(customerName);
             return "You delete" + count + "in the de name" + customerName;
         }
     }
 
     public String deleteAllCustomers() {
-        long count = cARepos.count();
-        cARepos.deleteAll();
+        long count = customerAccountRepos.count();
+        customerAccountRepos.deleteAll();
         return "You deleted " + count + "cars";
     }
 
 
-    public CustomerAccountOutputDto accountToDTo1(CustomerAccount account) {
+    public CustomerAccountOutputDto mapToDTo1(CustomerAccount account) {
         CustomerAccountOutputDto dto = new CustomerAccountOutputDto();
 
-        dto.id = account.getId();
         dto.customerName = account.getCustomerName();
         dto.firstName = account.getFirstName();
         dto.lastName = account.getLastName();
@@ -149,7 +130,7 @@ public class CustomerAccountService {
         return dto;
     }
 
-    public CustomerAccountOutputDto.CustomerNameOutputDto accountToDTo2(CustomerAccount account) {
+    public CustomerAccountOutputDto.CustomerNameOutputDto mapToDTo2(CustomerAccount account) {
         CustomerAccountOutputDto.CustomerNameOutputDto dto = new CustomerAccountOutputDto.CustomerNameOutputDto();
 
 
@@ -160,7 +141,7 @@ public class CustomerAccountService {
         return dto;
     }
 
-    public CustomerAccountOutputDto.CustomerFinanceOutputDto accountToDTo3(CustomerAccount account) {
+    public CustomerAccountOutputDto.CustomerFinanceOutputDto mapToDTo3(CustomerAccount account) {
         CustomerAccountOutputDto.CustomerFinanceOutputDto dto = new CustomerAccountOutputDto.CustomerFinanceOutputDto();
 
         dto.billingAddress = account.getBillingAddress();
@@ -169,7 +150,7 @@ public class CustomerAccountService {
         return dto;
     }
 
-    public CustomerAccount DtoToAccount(CustomerAccountDto accountDto) {
+    public CustomerAccount mapToAccount(CustomerAccountDto accountDto) {
         CustomerAccount account = new CustomerAccount();
 
         account.setCustomerName(accountDto.customerName);

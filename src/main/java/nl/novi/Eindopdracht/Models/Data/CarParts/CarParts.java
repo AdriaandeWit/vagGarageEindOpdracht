@@ -4,6 +4,7 @@ package nl.novi.Eindopdracht.Models.Data.CarParts;
 import jakarta.persistence.*;
 import lombok.*;
 import nl.novi.Eindopdracht.Models.Data.CarRepair;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
 import java.util.List;
 @Entity
@@ -15,8 +16,10 @@ import java.util.List;
 public abstract class CarParts {
     @Id
     @GeneratedValue
-    @NonNull
     private Long id;
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    private PartType partType;
     @NonNull
     private String partName;
     @NonNull
@@ -27,7 +30,8 @@ public abstract class CarParts {
     private Integer amountOfParts;
 
 
-    @ManyToMany
-    private List<CarRepair> carRepair;
+    @ManyToOne
+    @JoinColumn(name = "car_repair_id")
+    private CarRepair carRepair;
 
 }

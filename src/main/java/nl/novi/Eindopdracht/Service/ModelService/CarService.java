@@ -5,11 +5,13 @@ import nl.novi.Eindopdracht.Exceptions.AccountNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.CarNotFoundException;
 import nl.novi.Eindopdracht.Exceptions.RecordNotFoundException;
 import nl.novi.Eindopdracht.Models.Data.Car;
+import nl.novi.Eindopdracht.Models.Data.CarInspection;
 import nl.novi.Eindopdracht.Models.Data.CustomerAccount;
-import nl.novi.Eindopdracht.Models.Data.Enum.EngineType;
+import nl.novi.Eindopdracht.Repository.CarInspectionRepository;
 import nl.novi.Eindopdracht.Repository.CarRepository;
 import nl.novi.Eindopdracht.Repository.CustomerAccountRepository;
 import nl.novi.Eindopdracht.dto.input.CarDto;
+import nl.novi.Eindopdracht.dto.output.CarInspectionOutputDto;
 import nl.novi.Eindopdracht.dto.output.CarOutputDto;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +25,26 @@ public class CarService {
 
     private final CustomerAccountRepository cARepos;
 
+    private final CustomerAccountService customerAccountService;
+    private final CarInspectionRepository carInspectionRepos;
+    private final CarInspectionService carInspectionService;
 
-    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos) {
+
+
+    public CarService(CarRepository carRepos, CustomerAccountRepository cARepos, CustomerAccountService customerAccountService, CarInspectionRepository carInspectionRepos, CarInspectionService carInspectionService) {
         this.carRepos = carRepos;
         this.cARepos = cARepos;
+        this.customerAccountService = customerAccountService;
+        this.carInspectionRepos = carInspectionRepos;
+        this.carInspectionService = carInspectionService;
     }
 
-    public Car createCar(CarDto carDto) {
+    public Long createCar(CarDto carDto) {
         Car car = transferDtoToCar(carDto);
         carRepos.save(car);
-        return car;
+        return car.getId();
     }
+
     public List<CarOutputDto> getAllCars() {
         List<CarOutputDto> collection = new ArrayList<>();
         List<Car> list = carRepos.findAll();
@@ -42,6 +53,7 @@ public class CarService {
         }
         return collection;
     }
+
     public CarOutputDto getCarByCarLicensePlate(String licensePlate) {
         Optional<Car> carOptional = carRepos.findByLicensePlate(licensePlate);
         if (carOptional.isEmpty()) {
@@ -51,6 +63,7 @@ public class CarService {
             return carToDto(c);
         }
     }
+
     public List<CarOutputDto> getAllCarsByCustomerName(String customerName) {
         Optional<CustomerAccount> optionalAccount = cARepos.findAccountByCustomerName(customerName);
         if (optionalAccount.isEmpty()) {
@@ -63,49 +76,85 @@ public class CarService {
         }
         return carOutputDtos;
     }
+
     public Car getCarByLicensePlate(String licensePlate) {
         Optional<Car> optionalCar = Optional.ofNullable(carRepos.findByLicensePlate(licensePlate)
-                .orElseThrow(() -> new CarNotFoundException("Car", "licensePlate", licensePlate)));
+                .orElseThrow(() -> new CarNotFoundException("car", "licensePlate", licensePlate)));
         return optionalCar.get();
     }
+
     public CustomerAccount getAccountByCustomerName(String customerName) {
         Optional<CustomerAccount> optionalAccount = Optional.ofNullable(cARepos.findAccountByCustomerName(customerName)
                 .orElseThrow(() -> new AccountNotFoundException("account", "customerName", customerName)));
         return optionalAccount.get();
     }
+
     public void addAccountToCar(String licensePlate, String customerName) {
-        Car car = getCarByLicensePlate(licensePlate);
-        CustomerAccount account = getAccountByCustomerName(customerName);
-        car.setAccount(account);
-        carRepos.save(car);
+        Optional<Car> optionalCar = Optional.ofNullable(getCarByLicensePlate(licensePlate));
+        Optional<CustomerAccount> optionalAccount = Optional.ofNullable(getAccountByCustomerName(customerName));
+
+        if (optionalCar.isEmpty()){
+            throw new CarNotFoundException("car" ,"licensePlate", licensePlate);
+        }
+        if (optionalAccount.isEmpty()){
+            throw new AccountNotFoundException("account", "customerName", customerName);
+        }else {
+            Car car = optionalCar.get();
+            CustomerAccount account = optionalAccount.get();
+            car.setAccount(account);
+            carRepos.save(car);
+        }
+
+
     }
-    public CarOutputDto updateCarMileage(String licensePlate, Integer mileage) {
+
+    public CarOutputDto updateCarMileage(String licensePlate, CarDto carDto) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
             throw new RecordNotFoundException("Can find " + optionalCar + " please enter a anther onwername");
         } else {
             Car car = optionalCar.get();
-            car.setMileAge(mileage);
+            car.setMileAge(carDto.mileAge);
             Car car1 = carRepos.save(car);
             return carToDto(car1);
         }
     }
-    public CarOutputDto updateEngineType(String licensePlate, EngineType engineType) {
+
+    public CarOutputDto updateEngineType(String licensePlate, CarDto carDto) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         if (optionalCar.isEmpty()) {
             throw new RecordNotFoundException("Can find " + optionalCar + " please enter a anther onwername");
         } else {
             Car car = optionalCar.get();
-            car.setEngineType(engineType);
+            car.setEngineType(carDto.engineType);
             Car car1 = carRepos.save(car);
             return carToDto(car1);
         }
     }
+
+    public void addInspectionToCar(long inspectionId, String licensePlate) {
+        Optional<CarInspection> optionalCarInspection = carInspectionRepos.findById(inspectionId);
+        Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
+
+        if (optionalCarInspection.isEmpty()) {
+            throw new RecordNotFoundException("Inspection", "inspectionId", inspectionId);
+        }
+        if (optionalCar.isEmpty()) {
+            throw new CarNotFoundException("car", "car license plate", licensePlate);
+        } else {
+            CarInspection inspection = optionalCarInspection.get();
+            Car car = optionalCar.get();
+
+            car.addCarInspection(inspection);
+            carRepos.save(car);
+        }
+    }
+
     public String deleteCarByLicensePlate(String licensePlate) {
         Optional<Car> optionalCar = carRepos.findByLicensePlate(licensePlate);
         long count;
         if (optionalCar.isEmpty()) {
-            throw new CarNotFoundException("Car with carId:" + licensePlate + "is not found");
+            throw new CarNotFoundException("car with carId:" + licensePlate + "is not found");
         } else {
             count = carRepos.count();
             carRepos.deleteByLicensePlate(licensePlate);
@@ -118,8 +167,11 @@ public class CarService {
         carRepos.deleteAll();
         return "You deleted " + count + " cars";
     }
+
+
     public CarOutputDto carToDto(Car car) {
         CarOutputDto dto = new CarOutputDto();
+        dto.id = car.getId();
         dto.brand = car.getBrand();
         dto.model = car.getModel();
         dto.yearOfBuild = car.getYearOfBuild();
@@ -130,10 +182,12 @@ public class CarService {
         dto.body = car.getBody();
         dto.transmission = car.getTransmission();
         dto.fuel = car.getFuel();
-        dto.account = car.getAccount();
+        dto.customerAccountOutputDto = car.getAccount() != null ? customerAccountService.mapToDTo1(car.getAccount()) : null;
+        dto.carInspectionOutputDtos = carInspectionService.mapCarInspectionsToDtos(car.getCarInspections());
 
         return dto;
     }
+
     public Car transferDtoToCar(CarDto carDto) {
         Car car = new Car();
         car.setBrand(carDto.brand);

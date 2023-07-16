@@ -1,10 +1,13 @@
 package nl.novi.Eindopdracht.Controllers.Security;
 
+import jakarta.validation.Valid;
 import nl.novi.Eindopdracht.Exceptions.BadRequestException;
 import nl.novi.Eindopdracht.Service.SecurityService.UserService;
 import nl.novi.Eindopdracht.dto.input.UserDto;
 import nl.novi.Eindopdracht.dto.output.UserOutputDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -12,7 +15,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-    @RestController
+import static nl.novi.Eindopdracht.Utils.Utillities.getErrorString;
+
+@RestController
     @RequestMapping(value = "/users")
     public class UserController {
 
@@ -42,18 +47,25 @@ import java.util.Map;
 
 
         @PostMapping("/create")
-        public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-            String newUsername = userService.createUser(userDto);
-            userService.addAuthority(newUsername, "ROLE_USER");
+        public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
+          if (br.hasErrors()) {
+              String errorString = getErrorString(br);
+              return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
 
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{username}")
-                    .buildAndExpand(userDto.username)
-                    .toUri();
+          }else {
+              String newUsername = userService.createUser(userDto);
+              userService.addAuthority(newUsername, "ROLE_USER");
 
 
-            return ResponseEntity.created(location).build();
+              URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                      .path("/{username}")
+                      .buildAndExpand(userDto.username)
+                      .toUri();
+
+
+              return ResponseEntity.created(location).build();
+          }
         }
         @PostMapping(value = "/{username}/authorities")
         public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
@@ -66,11 +78,16 @@ import java.util.Map;
             }
         }
         @PutMapping(value = "/{username}")
-        public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
+        public ResponseEntity<String> updateUser(@Valid @PathVariable("username") String username, @RequestBody UserDto dto,BindingResult br) {
+        if (br.hasErrors()) {
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
 
+        }else {
             userService.updateUser(username, dto);
 
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().body("user updated");
+        }
         }
 
         @DeleteMapping(value = "/{username}")
@@ -78,9 +95,6 @@ import java.util.Map;
             userService.deleteUser(username);
             return ResponseEntity.noContent().build();
         }
-
-
-
 
         @DeleteMapping(value = "/{username}/authorities/{authority}")
         public ResponseEntity<Object> deleteAuthority(@PathVariable("username") String username, @PathVariable("authority") String autority) {

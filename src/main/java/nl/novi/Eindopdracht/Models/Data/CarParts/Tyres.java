@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +20,6 @@ public class Tyres extends CarParts {
     private int Diameter;
     private String loadIndex;
     private String speedIndex;
-    private Date productionDate;
+    private LocalDate productionDate;
 
 }

@@ -1,15 +1,20 @@
 package nl.novi.Eindopdracht.Controllers.models;
 
+import jakarta.validation.Valid;
 import nl.novi.Eindopdracht.Service.ModelService.BrakeService;
 import nl.novi.Eindopdracht.Service.ModelService.CarService;
 import nl.novi.Eindopdracht.dto.input.CarPartsDto.BrakesDto;
 import nl.novi.Eindopdracht.dto.output.CarPartsDto.BrakesOutputDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static nl.novi.Eindopdracht.Utils.Utillities.getErrorString;
 
 @RequestMapping("/parts/brakes")
 @RestController
@@ -27,14 +32,19 @@ public class BrakeController {
 
 
     @PostMapping("create")
-    public ResponseEntity<Object> createBrake(@RequestBody BrakesDto brakesDto) {
-        Long id = brakeService.createBrake(brakesDto);
-        brakesDto.id = id;
+    public ResponseEntity<Object> createBrake(@Valid @RequestBody BrakesDto brakesDto, BindingResult br) {
+        if (br.hasErrors()) {
+           String errorString = getErrorString(br);
+           return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
 
-        URI uri = URI.create(ServletUriComponentsBuilder.
-                fromCurrentRequest().path("/" + id).toUriString());
-        return ResponseEntity.created(uri).body(brakesDto);
+        } else {
+            Long id = brakeService.createBrake(brakesDto);
+            brakesDto.id = id;
 
+            URI uri = URI.create(ServletUriComponentsBuilder.
+                    fromCurrentRequest().path("/" + id).toUriString());
+            return ResponseEntity.created(uri).body(brakesDto);
+        }
     }
 
     @GetMapping("/find/all")
@@ -50,28 +60,39 @@ public class BrakeController {
     }
 
     @PutMapping("/update/amountOfParts/{id}")
-    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id, @RequestParam Integer amountOfParts) {
-        brakeService.updateAmountOfParts(id, amountOfParts);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAmountOfParts(@PathVariable Long id,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+
+            brakeService.updateAmountOfParts(id, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
-    @PutMapping("/update/price/{id}/")
-    public ResponseEntity<Object> updatePrice(@PathVariable Long id, @RequestParam Double price) {
-        brakeService.updatePrice(id, price);
-        return ResponseEntity.ok().build();
+    @PutMapping("/update/price/{brakeId}")
+    public ResponseEntity<Object> updatePrice(@PathVariable Long brakeId,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            brakeService.updatePrice(brakeId, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
-    @PutMapping("/update/partNumber/{id}")
-    public ResponseEntity<Object> updatePartNumber(@PathVariable Long id, @RequestParam String partNumber) {
-        brakeService.updatePartNumber(id, partNumber);
-        return ResponseEntity.ok().build();
+    @PutMapping("/update/part-number/{brakeId}")
+    public ResponseEntity<Object> updatePartNumber(@PathVariable Long brakeId,@Valid @RequestBody BrakesDto brakesDto,BindingResult br) {
+        if (br.hasErrors()){
+            String errorString = getErrorString(br);
+            return new ResponseEntity<>(errorString, HttpStatus.BAD_REQUEST);
+        }else {
+            brakeService.updatePartNumber(brakeId, brakesDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
-    //  @PutMapping("/add/brake/{carId}/car/{carId}")
-    //  public ResponseEntity<Object>addBrakeToCar(@PathVariable Long carId,@PathVariable ("carId") Long carId){
-    //      brakeService.addBrakeToCar(carId,carId);
-    //      return  ResponseEntity.ok().build();brakes
-    //  }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBrakeById(@PathVariable Long id) {
@@ -79,7 +100,7 @@ public class BrakeController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/All")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteAllBrakes() {
         brakeService.deleteAllBrakes();
         return ResponseEntity.noContent().build();

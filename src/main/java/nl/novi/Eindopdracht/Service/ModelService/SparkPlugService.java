@@ -19,8 +19,7 @@ public class SparkPlugService {
 
     private final SprakPlugRepository SPRepos;
 
-    private final CarRepository  carRepos;
-
+    private final CarRepository carRepos;
 
 
     public Long createSparkPlug(SparkPlugDto sparkPlugDto) {
@@ -33,72 +32,64 @@ public class SparkPlugService {
     }
 
     public List<SparkPlugOutputDto> getAllSparkPlugs() {
-        List<SparkPlugOutputDto> collectionSparkPlugs =new ArrayList<>();
-        List<SparkPlug> sparkPlugList= SPRepos.findAll();
-        for (SparkPlug sparkPlug: sparkPlugList){
+        List<SparkPlugOutputDto> collectionSparkPlugs = new ArrayList<>();
+        List<SparkPlug> sparkPlugList = SPRepos.findAll();
+        for (SparkPlug sparkPlug : sparkPlugList) {
             collectionSparkPlugs.add(mapToSPDto(sparkPlug));
         }
         return collectionSparkPlugs;
 
 
     }
+
     public SparkPlugOutputDto getSparkPlugById(long id) {
         SparkPlug Sp = SPRepos.findById(id).orElseThrow(
-                ()-> new RecordNotFoundException("Tyres","id",id )
+                () -> new RecordNotFoundException("Tyres", "id", id)
         );
         return mapToSPDto(Sp);
     }
-    /* public List<BrakesOutputDto> getAllBrakesByCarId(long carId) {
 
-return
-    }
-*/
-    public Object updateAmountOfParts(Long id, Integer amountOfParts) {
+    public void updateAmountOfParts(Long id, SparkPlugDto sparkPlugDto) {
         Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if(optionalSparkPlug.isPresent()){
+        if (optionalSparkPlug.isEmpty()) {
+            throw new RecordNotFoundException("amountOfParts", "id", id);
+
+        } else {
             SparkPlug sparkPlug = optionalSparkPlug.get();
-            sparkPlug.setAmountOfParts(amountOfParts);
+            sparkPlug.setAmountOfParts(sparkPlugDto.amountOfParts);
             SPRepos.save(sparkPlug);
-        }else {
-            throw new RecordNotFoundException("amountOfParts","id",id);
+
         }
-        return null;
     }
 
-    public Object updatePrice(Long id, Double price){
+    public void updatePrice(Long id, SparkPlugDto sparkPlugDto) {
         Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if(optionalSparkPlug.isPresent()){
-        SparkPlug sparkPlug = optionalSparkPlug.get();
-        sparkPlug.setPrice(price);
-        SPRepos.save(sparkPlug);
-    }else {
-        throw new RecordNotFoundException("price","id",id);
-    }
-        return null;
-    }
-
-
-    public Object updatePartNumber(Long id, String partNumber) {
-        Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
-        if(optionalSparkPlug.isPresent()){
+        if (optionalSparkPlug.isEmpty()) {
+            throw new RecordNotFoundException("price", "id", id);
+        } else {
             SparkPlug sparkPlug = optionalSparkPlug.get();
-            sparkPlug.setPartNumber(partNumber);
+            sparkPlug.setPrice(sparkPlugDto.price);
             SPRepos.save(sparkPlug);
-        }else {
-            throw new RecordNotFoundException("partNumber","id",id);
         }
-        return null;
+
     }
-        
 
 
- //   public void addBrakeToCar(Long carId, Long carId) {
+    public void updatePartNumber(Long id, SparkPlugDto sparkPlugDto) {
+        Optional<SparkPlug> optionalSparkPlug = SPRepos.findById(id);
+        if (optionalSparkPlug.isEmpty()) {
+            throw new RecordNotFoundException("partNumber", "id", id);
+        } else {
+            SparkPlug sparkPlug = optionalSparkPlug.get();
+            sparkPlug.setPartNumber(sparkPlugDto.partNumber);
+            SPRepos.save(sparkPlug);
+        }
+    }
 
-//}
 
     public String deleteSparkPlugById(Long id) {
-        SparkPlug existing = SPRepos.findById(id).orElseThrow(
-                () -> new RecordNotFoundException("Tyres", "id",id)
+        SPRepos.findById(id).orElseThrow(
+                () -> new RecordNotFoundException("Tyres", "id", id)
         );
 
         SPRepos.deleteById(id);
@@ -108,27 +99,26 @@ return
     }
 
     public String deleteAllBrakes() {
-    long count = SPRepos.count();
-    SPRepos.deleteAll();
-    return "You deleted"+ count+ "Sparkplugs";
+        long count = SPRepos.count();
+        SPRepos.deleteAll();
+        return "You deleted" + count + "Sparkplugs";
     }
 
 
-
-
     public SparkPlugOutputDto mapToSPDto(SparkPlug sparkPlug) {
-        if ( sparkPlug == null ) {
+        if (sparkPlug == null) {
             return null;
         }
 
         SparkPlugOutputDto sparkPlugOutputDto = new SparkPlugOutputDto();
 
         sparkPlugOutputDto.id = sparkPlug.getId();
+        sparkPlugOutputDto.partType =sparkPlug.getPartType();
         sparkPlugOutputDto.partName = sparkPlug.getPartName();
         sparkPlugOutputDto.partNumber = sparkPlug.getPartNumber();
         sparkPlugOutputDto.price = sparkPlug.getPrice();
         sparkPlugOutputDto.amountOfParts = sparkPlug.getAmountOfParts();
-        sparkPlugOutputDto.spannerSize =sparkPlug.getSpannerSize();
+        sparkPlugOutputDto.spannerSize = sparkPlug.getSpannerSize();
         sparkPlugOutputDto.quality = sparkPlug.getQuality();
         sparkPlugOutputDto.warmthDegree = sparkPlug.getWarmthDegree();
         sparkPlugOutputDto.threadLength = sparkPlug.getThreadLength();
@@ -139,23 +129,23 @@ return
     }
 
     public SparkPlug mapToSparkPlug(SparkPlugDto SPDto) {
-        if ( SPDto == null ) {
+        if (SPDto == null) {
             return null;
         }
 
-        SparkPlug sp  = new SparkPlug();
+        SparkPlug sp = new SparkPlug();
 
-        sp.setId( SPDto.id );
-        sp.setPartName( SPDto.partName );
-        sp.setPartNumber( SPDto.partNumber );
-        sp.setPrice( SPDto.price );
-        sp.setAmountOfParts( SPDto.amountOfParts );
-        sp.setSpannerSize( SPDto.spannerSize );
-        sp.setQuality( SPDto.quality );
-        sp.setWarmthDegree( SPDto.warmthDegree );
-        sp.setThreadLength( SPDto.threadLength);
-        sp.setTorque( SPDto.torque);
-        sp.setSparkPosition( SPDto.sparkPosition );
+        sp.setId(SPDto.id);
+        sp.setPartName(SPDto.partName);
+        sp.setPartNumber(SPDto.partNumber);
+        sp.setPrice(SPDto.price);
+        sp.setAmountOfParts(SPDto.amountOfParts);
+        sp.setSpannerSize(SPDto.spannerSize);
+        sp.setQuality(SPDto.quality);
+        sp.setWarmthDegree(SPDto.warmthDegree);
+        sp.setThreadLength(SPDto.threadLength);
+        sp.setTorque(SPDto.torque);
+        sp.setSparkPosition(SPDto.sparkPosition);
 
 
         return sp;

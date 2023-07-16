@@ -8,7 +8,6 @@ import lombok.Setter;
 public class CustomerAccountOutputDto {
 
 
-    public Long id;
     public String customerName;
     public String firstName;
     public String lastName;

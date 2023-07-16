@@ -1,15 +1,15 @@
 package nl.novi.Eindopdracht.Models.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.novi.Eindopdracht.Models.Data.CarParts.CarParts;
+import nl.novi.Eindopdracht.Models.Data.Enum.CarBrand;
+import nl.novi.Eindopdracht.Models.Data.Enum.PartType;
 
+import javax.naming.Name;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,18 +19,21 @@ import java.util.List;
 @Setter
 
 @Entity
+@Table(name = "car_repairs")
 public class CarRepair {
-@Id
-private Long id;
-private String car;
-private String carProblem;
-private LocalDate repairDate;
-private Double partCost;
-private Double laborCost;
-private Double totalCost;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    private CarBrand car;
+    private String carProblem;
+    private LocalDate repairDate;
+    private Double partCost;
+    private Double laborCost;
+    private Double totalCost;
 
-@ManyToMany
-private List<CarParts> carParts;
+    @OneToMany(mappedBy = "carRepair")
+    private List<CarParts> carParts;
 
 
 }

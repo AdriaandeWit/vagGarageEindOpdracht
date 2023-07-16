@@ -1,7 +1,16 @@
 package nl.novi.Eindopdracht.dto.output;
 
-import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+import nl.novi.Eindopdracht.Models.Data.Car;
+import nl.novi.Eindopdracht.Models.Data.CarRepair;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Getter
+@Setter
 public class CarInspectionOutputDto {
 
 
@@ -13,5 +22,10 @@ public class CarInspectionOutputDto {
     public String carIsFine;
 
     public String hasProblem;
+
+
+    public CarOutputDto carOutputDto;
+
+    public List<CarRepairOutputDto> carRepairOutputDtoList;
 
 }
